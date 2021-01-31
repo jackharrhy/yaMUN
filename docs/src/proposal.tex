@@ -1,0 +1,37 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage{indentfirst}
+
+\setlength{\parindent}{10ex}
+
+\begin{document}
+\begin{titlepage}
+    \begin{center}
+        \vspace*{1cm}
+            
+        \Huge
+        \textbf{Group 13 - Project Proposal}
+            
+        \vspace{0.5cm}
+        \LARGE
+        A course planning system for MUN students
+            
+        \vspace{1.5cm}
+            
+        \textbf{Jack Harrhy}, \textttt{201732922} \texttt{(jaharrhy@mun.ca)} \\
+        \textbf{Genadi Valyeyev}, \textttt{201921376} \texttt{(aplanger@mun.ca)}\\
+        \textbf{Aidan Langer}, \textttt{201735677} \texttt{(gvalyeyev@mun.ca)}\\
+            
+        \vfill
+    \end{center}
+\end{titlepage}
+\section{Introduction}
+While putting together a course schedule for a semester, it can be tedious to figure out what's being offered for an entire department/semester. You have to view each subject in its own context and then view each course with its offerings on its own dedicated page. Even then, once you've found a course, you're told when it occurs on what days, but not if it conflicts with another course you want to take, only once you are inserting multiple CRNs into the final step do you become informed there are issues with your selection. \par
+Our goal is to design a system that makes searching for courses to construct a schedule by different fields more ergonomic and comfortable. To achieve our goal, we need to collect publicly available data from the Memorial University website; this includes course descriptions from the University Calendar and information about courses from the course offerings pages and Banner, which are published by the registrar's office each semester.
+\section{Proposal}
+As mentioned in the introduction, our team wants to design and create a dashboard that would make planning and constructing course schedules more ergonomic and comfortable for Memorial University students. Unfortunately, the data we need is not available for download, but published on the university website. In order to work around that, we will need to create a program that would crawl the required pages and extract the data using regular expressions. \par
+Our system will mainly work with the data that we will collect from the course offering pages. This data contains available subjects, course names, course codes, sections, CRNs, course dates, times and days during which the course requires attendance, the amount of credit hours a course is, and the name of the instructor. \par
+Additionally, we would like to enrich the course offerings data with course descriptions from the Memorial University calendar and instructor contact information from the "People Search" API that is publicly available. We believe that this extra data will provide our users with great convenience, eliminating the need to be constantly switching between web pages to gather information on a course.  
+\end{document}
+
