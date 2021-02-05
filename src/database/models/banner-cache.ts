@@ -1,12 +1,14 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-export interface IBannerCache extends Document {
+export interface IBannerCache {
   year: number;
   term: number;
   level: number;
   data: string;
   lastUpdated: Date;
 }
+
+export interface IBannerCacheDocument extends Document, IBannerCache {}
 
 const BannerCacheSchema = new Schema({
   year: { type: Number, required: true },
@@ -20,4 +22,7 @@ const BannerCacheSchema = new Schema({
   },
 });
 
-export default mongoose.model<IBannerCache>("BannerCache", BannerCacheSchema);
+export default mongoose.model<IBannerCacheDocument>(
+  "BannerCache",
+  BannerCacheSchema
+);

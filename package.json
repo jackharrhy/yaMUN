@@ -9,6 +9,7 @@
     "start": "tsc && node -r ts-node/register ./src/index.ts"
   },
   "dependencies": {
+    "ajv": "^7.0.4",
     "express": "^4.17.1",
     "jsdom": "^16.4.0",
     "mongodb": "^3.6.3",

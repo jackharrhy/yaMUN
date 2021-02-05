@@ -1,5 +1,7 @@
 import { JSDOM } from "jsdom";
-import fs from "fs";
+import Ajv, { JSONSchemaType } from "ajv";
+
+const ajv = new Ajv();
 
 import {
   COURSE_REGEX,
@@ -7,6 +9,27 @@ import {
   SLOT_REGEX,
   LAB_SECTION_REGEX,
 } from "./regular-expressions";
+import { ICourse } from "../../database/models/course";
+
+const courseSchema: JSONSchemaType<ICourse> = {
+  type: "object",
+  properties: {
+    subject: { type: "string" },
+    name: { type: "string" },
+    number: { type: "string" },
+  },
+  required: ["subject", "name", "number"],
+  additionalProperties: false,
+};
+
+const validateCourse = ajv.compile(courseSchema);
+
+function handleCourseMatch(courseMatch: RegExpExecArray): ICourse {
+  if (validateCourse(courseMatch.groups)) {
+    return courseMatch.groups;
+  }
+  throw JSON.stringify(validateCourse.errors, null, 2);
+}
 
 const parseData = (data: string) => {
   const dom = new JSDOM(data);
@@ -38,34 +61,35 @@ const parseData = (data: string) => {
     }
 
     const courseMatch = COURSE_REGEX.exec(line);
-    const didMatchCourse = courseMatch !== null;
-    if (didMatchCourse) {
-      // handle course match
+    if (courseMatch !== null) {
+      console.log(courseMatch);
+      const course = handleCourseMatch(courseMatch);
+      console.log(course);
     } else {
       // handle course failure?
     }
 
     const sectionMatch = SECTION_REGEX.exec(line);
-    const didMatchSection = sectionMatch !== null;
-    if (didMatchSection) {
+    if (sectionMatch !== null) {
       // handle section match
     } else {
-      if (didMatchCourse) {
+      if (courseMatch !== null) {
         throw new Error("Matched course without section");
       }
     }
 
     const slotMatch = SLOT_REGEX.exec(line);
-    const didMatchSlot = slotMatch !== null;
-    if (didMatchSlot) {
+    if (slotMatch !== null) {
       // handle slot match
     } else {
-      if (didMatchSection) {
+      if (sectionMatch !== null) {
         throw new Error("Matched section without slot");
       }
     }
 
-    const matchedNothing = !(didMatchCourse || didMatchSection || didMatchSlot);
+    const matchedNothing =
+      courseMatch === null && sectionMatch === null && slotMatch === null;
+
     if (matchedNothing) {
       // handle no match, assume is either meta or context markings
     }
