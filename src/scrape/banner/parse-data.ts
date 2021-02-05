@@ -65,8 +65,8 @@ const parseData = (data: string) => {
       }
     }
 
-    const matchedAtLeastOneThing = didMatchCourse || didMatchSection || didMatchSlot;
-    if (!matchedAtLeastOneThing) {
+    const matchedNothing = !(didMatchCourse || didMatchSection || didMatchSlot);
+    if (matchedNothing) {
       // handle no match, assume is either meta or context markings
     }
   }
