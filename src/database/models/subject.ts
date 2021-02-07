@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface ISubject {
-  name: String;
+  name: string;
 }
 
 export interface ISubjectDocument extends Document, ISubject {}

@@ -3,7 +3,7 @@ import mongoose, { Schema, Document } from "mongoose";
 import { SemesterSchema } from "./semester";
 
 export interface ISession {
-  name: String;
+  name: string;
 }
 
 export interface ISessionDocument extends Document, ISession {}
