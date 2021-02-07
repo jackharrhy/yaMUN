@@ -1,7 +1,8 @@
 import mongoose, { Schema, Document } from "mongoose";
-
 export interface ISemester {
-  year: Number;
+  year: number;
+  term: number;
+  level: number;
 }
 
 export interface ISemesterDocument extends Document, ISemester {}
