@@ -1,7 +1,4 @@
 import { JSDOM } from "jsdom";
-import Ajv, { JSONSchemaType } from "ajv";
-
-const ajv = new Ajv();
 
 import {
   COURSE_REGEX,
@@ -9,35 +6,23 @@ import {
   SLOT_REGEX,
   LAB_SECTION_REGEX,
 } from "./regular-expressions";
-import { ICourse } from "../../database/models/course";
 
-const courseSchema: JSONSchemaType<ICourse> = {
-  type: "object",
-  properties: {
-    subject: { type: "string" },
-    name: { type: "string" },
-    number: { type: "string" },
-  },
-  required: ["subject", "name", "number"],
-  additionalProperties: false,
-};
+import { ISemester } from "../../database/models/semester";
+import { ICampus } from "../../database/models/campus";
+import { ISession } from "../../database/models/session";
+import { ISubject } from "../../database/models/subject";
+import { ICourse, courseSchema } from "../../database/models/course";
+import { handleMatch } from "../../utils/ajv";
 
-const validateCourse = ajv.compile(courseSchema);
-
-function handleCourseMatch(courseMatch: RegExpExecArray): ICourse {
-  if (validateCourse(courseMatch.groups)) {
-    return courseMatch.groups;
-  }
-  throw JSON.stringify(validateCourse.errors, null, 2);
-}
-
-const parseData = (data: string) => {
+const parseData = (semester: ISemester, data: string) => {
   const dom = new JSDOM(data);
   const pre = dom.window.document.querySelector("pre");
 
-  let campus = null;
-  let session = null;
-  let subject = null;
+  let campus: ICampus | null = null;
+  let session: ISession | null = null;
+  let subject: ISubject | null = null;
+
+  let course: ICourse | null = null;
 
   let counter = 0;
   for (const line of pre.textContent.split("\n")) {
@@ -62,9 +47,8 @@ const parseData = (data: string) => {
 
     const courseMatch = COURSE_REGEX.exec(line);
     if (courseMatch !== null) {
-      console.log(courseMatch);
-      const course = handleCourseMatch(courseMatch);
-      console.log(course);
+      // TODO package last course somehow
+      course = handleMatch<ICourse>(courseSchema, courseMatch);
     } else {
       // handle course failure?
     }
