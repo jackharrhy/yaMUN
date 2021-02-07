@@ -3,7 +3,7 @@ import { ISlot } from "./slot";
 export interface ISection {
   section: string;
   crn: number;
-  scheduleType: string;
+  scheduleType: string | null; // TODO enum?
   phoneOne: string; // TODO enum
   phoneTwo: string; // TODO enum
   waitList: boolean;

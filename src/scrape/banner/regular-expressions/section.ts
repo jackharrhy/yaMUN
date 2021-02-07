@@ -9,7 +9,7 @@ export const SECTION_REGEX = /^.{37} (?<section>(\d|[A-Z]){3}) (?<crn>\d{5}) .{3
 interface ISectionMatch {
   section: string;
   crn: string;
-  scheduleType: string;
+  scheduleType: string | null;
   phoneOne: string;
   phoneTwo: string;
   waitList: string;
@@ -42,7 +42,6 @@ const sectionSchema: JSONSchemaType<ISectionMatch> = {
   required: [
     "section",
     "crn",
-    "scheduleType",
     "phoneOne",
     "phoneTwo",
     "waitList",

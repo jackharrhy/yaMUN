@@ -79,8 +79,7 @@ const parseData = (data: string) => {
       courseMatch === null && sectionMatch === null && slotMatch === null;
 
     if (matchedNothing) {
-      console.log(line);
-      // handle no match, assume is either meta or context markings
+      // TODO handle no match, assume is either meta or context markings
     }
   }
 };
