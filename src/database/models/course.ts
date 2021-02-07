@@ -1,26 +1,16 @@
-import { JSONSchemaType } from "ajv";
 import mongoose, { Schema, Document } from "mongoose";
 
 import { ISemesterDocument, SemesterSchema } from "./semester";
 import { ICampusDocument, CampusSchema } from "./campus";
 import { ISessionDocument, SessionSchema } from "./session";
+import { ISection } from "./section";
 
 export interface ICourse {
   subject: string;
   name: string;
   number: string;
+  sections: ISection[];
 }
-
-export const courseSchema: JSONSchemaType<ICourse> = {
-  type: "object",
-  properties: {
-    subject: { type: "string" },
-    name: { type: "string" },
-    number: { type: "string" },
-  },
-  required: ["subject", "name", "number"],
-  additionalProperties: false,
-};
 
 export interface ICourseDocument extends Document, ICourse {
   semester: ISemesterDocument;

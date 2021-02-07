@@ -11,7 +11,6 @@ import { ISubject } from "../../database/models/subject";
 import { ICourse } from "../../database/models/course";
 import { ISection } from "../../database/models/section";
 import { ISlot } from "../../database/models/slot";
-import { handleMatch } from "../../utils/ajv";
 
 const parseData = (data: string) => {
   const dom = new JSDOM(data);
@@ -73,6 +72,8 @@ const parseData = (data: string) => {
         throw new Error("Matched section without slot");
       }
     }
+
+    // TODO match lab section
 
     const matchedNothing =
       courseMatch === null && sectionMatch === null && slotMatch === null;

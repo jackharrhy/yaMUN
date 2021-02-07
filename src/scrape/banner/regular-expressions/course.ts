@@ -23,5 +23,8 @@ const courseSchema: JSONSchemaType<ICourseMatch> = {
 };
 
 export function matchToCourse(match: RegExpExecArray): ICourse {
-  return handleMatch(courseSchema, match);
+  return {
+    ...handleMatch(courseSchema, match),
+    sections: [],
+  };
 }

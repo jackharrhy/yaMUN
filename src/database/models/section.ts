@@ -1,3 +1,5 @@
+import { ISlot } from "./slot";
+
 export interface ISection {
   section: string;
   crn: number;
@@ -12,4 +14,5 @@ export interface ISection {
   billedHours: number;
   primaryInstructor: string | null;
   secondaryInstructor: string | null;
+  slots: ISlot[];
 }
