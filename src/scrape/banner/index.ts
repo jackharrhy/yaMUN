@@ -2,6 +2,7 @@ import { ISemester } from "../../database/models/semester";
 
 import fetchData from "./fetch-data";
 import parseData from "./parse-data";
+import insertData from "./insert-data";
 
 export const tempInvoke = async () => {
   const semester: ISemester = {
@@ -10,6 +11,7 @@ export const tempInvoke = async () => {
     level: 1,
   };
 
-  const testData = await fetchData(semester);
-  parseData(semester, testData);
+  const unprocessedData = await fetchData(semester);
+  const courses = parseData(semester, unprocessedData);
+  await insertData(courses);
 };
