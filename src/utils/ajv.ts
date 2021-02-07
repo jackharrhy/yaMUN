@@ -12,5 +12,6 @@ export function handleMatch<T>(
   if (validate(match.groups)) {
     return match.groups;
   }
+  console.error(match);
   throw JSON.stringify(validate.errors, null, 2);
 }

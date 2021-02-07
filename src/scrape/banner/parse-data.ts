@@ -12,9 +12,11 @@ import { ICampus } from "../../database/models/campus";
 import { ISession } from "../../database/models/session";
 import { ISubject } from "../../database/models/subject";
 import { ICourse, courseSchema } from "../../database/models/course";
+import { ISection, sectionSchema } from "../../database/models/section";
+import { ISlot, slotSchema } from "../../database/models/slot";
 import { handleMatch } from "../../utils/ajv";
 
-const parseData = (semester: ISemester, data: string) => {
+const parseData = (data: string) => {
   const dom = new JSDOM(data);
   const pre = dom.window.document.querySelector("pre");
 
@@ -23,6 +25,8 @@ const parseData = (semester: ISemester, data: string) => {
   let subject: ISubject | null = null;
 
   let course: ICourse | null = null;
+  let section: ISection | null = null;
+  let slot: ISlot | null = null;
 
   let counter = 0;
   for (const line of pre.textContent.split("\n")) {
@@ -47,7 +51,7 @@ const parseData = (semester: ISemester, data: string) => {
 
     const courseMatch = COURSE_REGEX.exec(line);
     if (courseMatch !== null) {
-      // TODO package last course somehow
+      // TODO package last course
       course = handleMatch<ICourse>(courseSchema, courseMatch);
     } else {
       // handle course failure?
@@ -55,7 +59,8 @@ const parseData = (semester: ISemester, data: string) => {
 
     const sectionMatch = SECTION_REGEX.exec(line);
     if (sectionMatch !== null) {
-      // handle section match
+      // TODO package last slot
+      section = handleMatch<ISection>(sectionSchema, sectionMatch);
     } else {
       if (courseMatch !== null) {
         throw new Error("Matched course without section");
@@ -64,7 +69,8 @@ const parseData = (semester: ISemester, data: string) => {
 
     const slotMatch = SLOT_REGEX.exec(line);
     if (slotMatch !== null) {
-      // handle slot match
+      // TODO package last slot
+      slot = handleMatch<ISlot>(slotSchema, slotMatch);
     } else {
       if (sectionMatch !== null) {
         throw new Error("Matched section without slot");
@@ -75,6 +81,7 @@ const parseData = (semester: ISemester, data: string) => {
       courseMatch === null && sectionMatch === null && slotMatch === null;
 
     if (matchedNothing) {
+      console.log(line);
       // handle no match, assume is either meta or context markings
     }
   }

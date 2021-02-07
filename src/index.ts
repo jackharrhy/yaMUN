@@ -3,5 +3,9 @@ import { tempInvoke } from "./scrape/banner";
 
 (async () => {
   await connect("development", "development", "localhost");
-  await tempInvoke();
+  try {
+    await tempInvoke();
+  } catch (err) {
+    console.error(err);
+  }
 })();

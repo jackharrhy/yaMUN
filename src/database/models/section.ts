@@ -16,7 +16,7 @@ export interface ISection {
   secondaryInstructor: string;
 }
 
-export const courseSchema: JSONSchemaType<ISection> = {
+export const sectionSchema: JSONSchemaType<ISection> = {
   type: "object",
   properties: {
     section: { type: "string" },
