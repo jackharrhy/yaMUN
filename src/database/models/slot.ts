@@ -1,3 +1,5 @@
+import { Schema } from "mongoose";
+
 export enum DayOfWeek {
   Monday = "Monday",
   Tuesday = "Tuesday",
@@ -15,3 +17,24 @@ export interface ISlot {
   endTime: number | null;
   room: string | null;
 }
+
+export const SlotSchema = new Schema({
+  slot: { type: String, required: true },
+  days: [
+    {
+      type: String,
+      enum: [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+      ],
+    },
+  ],
+  beginTime: { type: Number },
+  endTime: { type: Number },
+  room: { type: String },
+});

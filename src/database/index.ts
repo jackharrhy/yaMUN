@@ -1,6 +1,6 @@
 import Mongoose from "mongoose";
 
-let database: Mongoose.Connection;
+export let database: Mongoose.Connection;
 
 export const connect = (
   username: string,

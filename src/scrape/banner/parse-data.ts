@@ -27,14 +27,12 @@ const parseData = (semester: ISemester, data: string): ICourse[] => {
 
   const courses: ICourse[] = [];
 
-  let counter = 0;
   for (const line of pre.textContent.split("\n")) {
     const trimmed = line.trim();
-    counter++;
-    // if (counter > 50) break;
 
     if (trimmed.startsWith("Campus: ")) {
-      campus = { name: trimmed.slice("Campus: ".length) };
+      const name = trimmed.slice("Campus: ".length);
+      campus = { name };
       course = null;
       section = null;
       slot = null;
@@ -42,7 +40,8 @@ const parseData = (semester: ISemester, data: string): ICourse[] => {
     }
 
     if (trimmed.startsWith("Session: ")) {
-      session = { name: trimmed.slice("Session: ".length) };
+      const name = trimmed.slice("Session: ".length);
+      session = { name };
       course = null;
       section = null;
       slot = null;
@@ -50,7 +49,8 @@ const parseData = (semester: ISemester, data: string): ICourse[] => {
     }
 
     if (trimmed.startsWith("Subject: ")) {
-      subject = { name: trimmed.slice("Subject: ".length) };
+      const name = trimmed.slice("Subject: ".length);
+      subject = { name };
       course = null;
       section = null;
       slot = null;

@@ -1,4 +1,6 @@
-import { ISlot } from "./slot";
+import { Schema } from "mongoose";
+
+import { ISlot, SlotSchema } from "./slot";
 
 export interface ISection {
   section: string;
@@ -10,9 +12,26 @@ export interface ISection {
   preCheck: boolean;
   reserved: string | null; // TODO enum
   attr: string; // TODO enum
-  creditHours: number;
-  billedHours: number;
+  creditHours: number | null;
+  billedHours: number | null;
   primaryInstructor: string | null;
   secondaryInstructor: string | null;
   slots: ISlot[];
 }
+
+export const SectionSchema = new Schema({
+  section: { type: String, required: true },
+  crn: { type: Number, required: true },
+  scheduleType: { type: String },
+  phoneOne: { type: String, required: true },
+  phoneTwo: { type: String, required: true },
+  waitList: { type: Boolean, required: true },
+  preCheck: { type: Boolean, required: true },
+  reserved: { type: String },
+  attr: { type: String, required: true },
+  creditHours: { type: Number },
+  billedHours: { type: Number },
+  primaryInstructor: { type: String },
+  secondaryInstructor: { type: String },
+  slots: [SlotSchema],
+});

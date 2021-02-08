@@ -1,5 +1,12 @@
-import { ICourse } from "../../database/models/course";
+import { database } from "../../database";
+import Course, { ICourse } from "../../database/models/course";
 
-export default function insertData(courses: ICourse[]) {
-  // TODO courses -> mongo!
+export default async function insertData(courses: ICourse[]) {
+  const session = await database.startSession();
+  session.startTransaction();
+
+  await Course.create(courses);
+
+  await session.commitTransaction();
+  session.endSession();
 }

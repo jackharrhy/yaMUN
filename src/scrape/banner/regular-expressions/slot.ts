@@ -30,7 +30,9 @@ export function matchToSlot(match: RegExpExecArray): ISlot {
   const slotMatch = handleMatch(slotSchema, match);
 
   const stringDays = slotMatch.days.split(" ");
-  const enumDays = stringDays.map<DayOfWeek>((day) => (<any>DayOfWeek)[day]);
+  const enumDays = stringDays
+    .map<DayOfWeek>((day) => (<any>DayOfWeek)[day])
+    .filter((day) => day !== undefined);
 
   return {
     ...slotMatch,
