@@ -6,11 +6,9 @@ const debug = debugFactory("backend/api/controllers/courses");
 
 const coursesController = {
   async courseByCrn(req: express.Request, res: express.Response) {
-    const crn = req.params.crn;
+    const crn = Number(req.params.crn);
     debug("crn", crn);
-    const course = await Course.findOne({
-      sections: { $elemMatch: { crn } },
-    }).exec();
+    const course = await Course.findOneByCrn(crn);
     debug("course", course);
 
     if (course === null) {
