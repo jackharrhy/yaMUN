@@ -1,16 +1,13 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-import { ISemester, SemesterSchema } from "./semester";
-import { ICampus, CampusSchema } from "./campus";
-import { ISession, SessionSchema } from "./session";
-import { ISubject, SubjectSchema } from "./subject";
 import { ISection, SectionSchema } from "./section";
+import { ISemester, SemesterSchema } from "./semester";
 
 export interface ICourse {
   semester: ISemester;
-  campus: ICampus;
-  session: ISession;
-  subject: ISubject;
+  campus: string;
+  session: string;
+  subject: string;
   name: string;
   number: string;
   sections: ISection[];
@@ -20,9 +17,9 @@ export interface ICourseDocument extends Document, ICourse {}
 
 export const CourseSchema = new Schema({
   semester: SemesterSchema,
-  campus: CampusSchema,
-  session: SessionSchema,
-  subject: SubjectSchema,
+  campus: { type: String, required: true },
+  session: { type: String, required: true },
+  subject: { type: String, required: true },
   name: { type: String, required: true },
   number: { type: String, required: true },
   sections: [SectionSchema],

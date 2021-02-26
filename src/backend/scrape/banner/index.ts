@@ -1,17 +1,9 @@
 import { ISemester } from "../../database/models/semester";
-
+import { ICourse } from "../../database/models/course";
 import fetchData from "./fetch-data";
-import parseData from "./parse-data";
-import insertData from "./insert-data";
+import parsePageData from "./parse-page-data";
 
-export const tempInvoke = async () => {
-  const semester: ISemester = {
-    year: 2020,
-    term: 2,
-    level: 1,
-  };
-
+export const coursesFromSemester = async (semester: ISemester) : Promise<ICourse[]> => {
   const unprocessedData = await fetchData(semester);
-  const courses = parseData(semester, unprocessedData);
-  await insertData(courses);
-};
+  return parsePageData(semester, unprocessedData);
+}

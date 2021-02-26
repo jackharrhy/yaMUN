@@ -1,10 +1,7 @@
 import { JSONSchemaType } from "ajv";
 
-import { ICampus } from "../../../database/models/campus";
 import { ICourse } from "../../../database/models/course";
 import { ISemester } from "../../../database/models/semester";
-import { ISession } from "../../../database/models/session";
-import { ISubject } from "../../../database/models/subject";
 import { handleMatch } from "../../../utils/ajv";
 
 export const COURSE_REGEX = /^(?<subject>([A-Z]|&|\.| ){4}) (?<number>(\d|[A-Z]){4}) (?<name>.{27})/;
@@ -28,8 +25,8 @@ const courseSchema: JSONSchemaType<ICourseMatch> = {
 
 export function matchToCourse(
   semester: ISemester,
-  campus: ICampus,
-  session: ISession,
+  campus: string,
+  session: string,
   match: RegExpExecArray
 ): ICourse {
   const courseMatch = handleMatch(courseSchema, match);
@@ -39,7 +36,7 @@ export function matchToCourse(
     campus,
     session,
     ...courseMatch,
-    subject: { name: courseMatch.subject },
+    subject: courseMatch.subject,
     sections: [],
   };
 }
