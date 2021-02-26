@@ -1,6 +1,15 @@
+import debugFactory from "debug";
 import Mongoose from "mongoose";
 
+const debug = debugFactory("backend/database");
+
 export let database: Mongoose.Connection;
+
+export const dropDatabase = () => {
+  debug("dropping database");
+  database.dropDatabase();
+  debug("database dropped");
+};
 
 export const connect = (
   username: string,
@@ -18,11 +27,13 @@ export const connect = (
   Mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   database = Mongoose.connection;
 
+  dropDatabase(); // TODO remove this after we wish to keep the database
+
   database.once("open", async () => {
-    console.log("Connected to database");
+    console.log(`connected to database at ${endpoint}`);
   });
-  database.on("error", () => {
-    console.log("Error connecting to database");
+  database.on("error", (err) => {
+    console.log("error connecting to database", err);
   });
 };
 

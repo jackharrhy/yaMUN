@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo } from "react";
 
 import { ISemester } from "../../../backend/database/models/semester";
 import parseData from "../../../backend/scrape/banner/parse-data";
@@ -17,7 +17,7 @@ function BannerTest() {
       term: term,
       level: level,
     };
-   
+
     try {
       const freshData = parseData(testSemester, data.split("\n"));
       setError(null);
@@ -27,7 +27,9 @@ function BannerTest() {
     }
   }, [year, term, level, data]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) : void => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ): void => {
     setData(event.target.value);
   };
 

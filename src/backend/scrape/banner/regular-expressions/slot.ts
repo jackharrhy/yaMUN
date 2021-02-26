@@ -1,6 +1,6 @@
 import { JSONSchemaType } from "ajv";
 
-import { ISlot, DayOfWeek } from "../../../database/models/slot";
+import { ISlot, DayOfWeek } from "../../../models/slot";
 import { handleMatch } from "../../../utils/ajv";
 
 export const SLOT_REGEX = /^.{48}(?<slot>( |\d|[A-Z]){4}) (?<days>(M| ) (T| ) (W| ) (R| ) (F| ) (S| ) (U| )) ((?<beginTime>\d{4})|    ) ((?<endTime>\d{4})|   ) ((?<room>(([A-Z]  )|([A-Z]{2} )|([A-Z]{3}))((\d){4}([A-Z])?))|)/;

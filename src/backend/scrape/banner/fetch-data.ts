@@ -1,8 +1,8 @@
 import { URLSearchParams } from "url";
 import fetch from "node-fetch";
 
-import BannerCache from "../../database/models/banner-cache";
-import { ISemester } from "../../database/models/semester";
+import BannerCache from "../../models/banner-cache";
+import { ISemester } from "../../models/semester";
 
 const HEADERS = {
   "User-Agent": "comp3100-group3",

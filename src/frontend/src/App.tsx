@@ -1,9 +1,7 @@
-import React from 'react';
+import React from "react";
 
 import BannerTest from "./BannerTest";
 
 export default function App() {
-  return (
-    <BannerTest />
-  );
+  return <BannerTest />;
 }
