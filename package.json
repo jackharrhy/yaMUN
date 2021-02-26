@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "tslint -c tslint.json -p tsconfig.json --fix",
     "dev": "nodemon -e ts --exec \"npm run start\"",
-    "start": "tsc && node -r ts-node/register ./src/index.ts"
+    "start": "tsc && node -r ts-node/register ./src/backend/index.ts"
   },
   "dependencies": {
     "ajv": "^7.0.4",

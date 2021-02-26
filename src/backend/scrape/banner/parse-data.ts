@@ -5,14 +5,15 @@ import { SECTION_REGEX, matchToSection } from "./regular-expressions/section";
 import { SLOT_REGEX, matchToSlot } from "./regular-expressions/slot";
 // import { LAB_SECTION_REGEX, matchToLabSection } from "./regular-expressions/lab-section";
 
-import { ISemester } from "../../database/models/semester";
-import { ICourse } from "../../database/models/course";
-import { ISection } from "../../database/models/section";
-import { ISlot } from "../../database/models/slot";
+import { ISemester } from "../../models/semester";
+import { ICourse } from "../../models/course";
+import { ISection } from "../../models/section";
+import { ISlot } from "../../models/slot";
 
 const debug = debugFactory("backend/scrape/banner/parse-data");
 
 const parseData = (semester: ISemester, data: string[]): ICourse[] => {
+  debug("starting!");
   let campus: string | null = null;
   let session: string | null = null;
   let subject: string | null = null;
@@ -24,6 +25,8 @@ const parseData = (semester: ISemester, data: string[]): ICourse[] => {
   const courses: ICourse[] = [];
 
   for (const line of data) {
+    debug("line", line);
+
     const trimmed = line.trim();
 
     if (trimmed.startsWith("Campus: ")) {
@@ -46,7 +49,7 @@ const parseData = (semester: ISemester, data: string[]): ICourse[] => {
 
     if (trimmed.startsWith("Subject: ")) {
       subject = trimmed.slice("Subject: ".length);
-      debug("subject", campus);
+      debug("subject", subject);
       course = null;
       section = null;
       slot = null;
@@ -75,7 +78,8 @@ const parseData = (semester: ISemester, data: string[]): ICourse[] => {
         debug("section", section.crn);
         course.sections.push(section);
       } else {
-        throw new Error("Found section before finding course");
+        // ignore for now because its kinda broken with some entries
+        // throw new Error("Found section before finding course");
       }
     } else {
       if (courseMatch !== null) {
@@ -90,7 +94,8 @@ const parseData = (semester: ISemester, data: string[]): ICourse[] => {
         debug("slot", slot.slot);
         section.slots.push(slot);
       } else {
-        throw new Error("Found slot before finding section");
+        // ignore for now because its kinda broken with some entries
+        // throw new Error("Found slot before finding section");
       }
     } else {
       if (sectionMatch !== null) {
@@ -108,6 +113,7 @@ const parseData = (semester: ISemester, data: string[]): ICourse[] => {
     }
   }
 
+  debug("done!");
   return courses;
 };
 

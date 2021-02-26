@@ -1,6 +1,6 @@
 import { JSONSchemaType } from "ajv";
 
-import { ISection } from "../../../database/models/section";
+import { ISection } from "../../../models/section";
 import { handleMatch } from "../../../utils/ajv";
 import { stringToBool, stringToNumber } from "../../../utils/misc";
 

@@ -13,7 +13,9 @@ export interface ICourse {
   sections: ISection[];
 }
 
-export interface ICourseDocument extends Document, ICourse {}
+export interface ICourseDocument extends Document, ICourse {
+  byCrn(): ICourse;
+}
 
 export const CourseSchema = new Schema({
   semester: SemesterSchema,
@@ -25,4 +27,6 @@ export const CourseSchema = new Schema({
   sections: [SectionSchema],
 });
 
-export default mongoose.model<ICourseDocument>("Course", CourseSchema);
+const Course = mongoose.model<ICourseDocument>("Course", CourseSchema);
+
+export default Course;

@@ -1,7 +1,7 @@
 import { JSONSchemaType } from "ajv";
 
-import { ICourse } from "../../../database/models/course";
-import { ISemester } from "../../../database/models/semester";
+import { ICourse } from "../../../models/course";
+import { ISemester } from "../../../models/semester";
 import { handleMatch } from "../../../utils/ajv";
 
 export const COURSE_REGEX = /^(?<subject>([A-Z]|&|\.| ){4}) (?<number>(\d|[A-Z]){4}) (?<name>.{27})/;

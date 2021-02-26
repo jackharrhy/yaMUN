@@ -1,6 +1,6 @@
 import { JSDOM } from "jsdom";
-import { ICourse } from "../../database/models/course";
-import { ISemester } from "../../database/models/semester";
+import { ICourse } from "../../models/course";
+import { ISemester } from "../../models/semester";
 import parseData from "./parse-data";
 
 const parsePageData = (semester: ISemester, data: string): ICourse[] => {
@@ -11,4 +11,3 @@ const parsePageData = (semester: ISemester, data: string): ICourse[] => {
 };
 
 export default parsePageData;
-
