@@ -7,9 +7,9 @@ const debug = debugFactory("backend/api/controllers/users");
 const ajv = new Ajv();
 
 interface ICreateUserInput {
-  username: IUser['username'];
-  password: IUser['password'];
-  email: IUser['email'];
+  username: IUser["username"];
+  password: IUser["password"];
+  email: IUser["email"];
 }
 
 const UserValidator: JSONSchemaType<ICreateUserInput> = {
@@ -27,7 +27,7 @@ const validate = ajv.compile(UserValidator);
 
 const usersController = {
   async create(req: express.Request, res: express.Response) {
-    if(validate(req.body)) {
+    if (validate(req.body)) {
       const user = await User.create(req.body);
       debug("user", user);
       res.json(user);

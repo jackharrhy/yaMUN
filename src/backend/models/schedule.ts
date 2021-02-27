@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-import { ISemester, SemesterSchema } from "./semester"; 
+import { ISemester, SemesterSchema } from "./semester";
 import { IUser } from "./user";
 
 export interface ISchedule extends Document {
@@ -8,7 +8,7 @@ export interface ISchedule extends Document {
   description: string;
   semester: ISemester;
   courses: number[];
-  owner: IUser['_id'];
+  owner: IUser["_id"];
 }
 
 export const ScheduleSchema = new Schema({
@@ -18,8 +18,8 @@ export const ScheduleSchema = new Schema({
   courses: [Number],
   owner: {
     type: Schema.Types.ObjectId,
-    ref: "User"
-  }
+    ref: "User",
+  },
 });
 
 const Schedule = mongoose.model<ISchedule>("Schedule", ScheduleSchema);

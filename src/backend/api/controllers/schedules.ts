@@ -10,10 +10,10 @@ const debug = debugFactory("backend/api/controllers/schedules");
 const ajv = new Ajv();
 
 interface ICreateSchemaInput {
-  title: ISchedule['title'];
-  description: ISchedule['description'];
+  title: ISchedule["title"];
+  description: ISchedule["description"];
   semester: ISemester;
-  courses: ISchedule['courses'];
+  courses: ISchedule["courses"];
   ownerId: string;
 }
 
@@ -32,8 +32,8 @@ const ScheduleValidator: JSONSchemaType<ICreateSchemaInput> = {
       required: ["year", "term", "level"],
       additionalProperties: false,
     },
-    courses: { type: "array", items: {type: "number"} },
-    ownerId: { type: "string" }
+    courses: { type: "array", items: { type: "number" } },
+    ownerId: { type: "string" },
   },
   required: ["title", "description", "semester", "ownerId"],
   additionalProperties: false,
@@ -43,9 +43,9 @@ const validate = ajv.compile(ScheduleValidator);
 
 const schedulesController = {
   async create(req: express.Request, res: express.Response) {
-    if(validate(req.body)) {
+    if (validate(req.body)) {
       const user = await User.findById(req.body.ownerId);
-      if(user) {
+      if (user) {
         const schedule = await Schedule.create(req.body);
         debug("schedule", schedule);
         res.json(schedule);
@@ -61,15 +61,15 @@ const schedulesController = {
     const scheduleId = req.params.scheduleId;
     const crn = Number(req.params.crn);
     const schedule = await Schedule.findById(scheduleId);
-    if(schedule) {
-      if((await Course.findOneByCrn(crn))) {
-        if(schedule.courses === undefined) {
-          schedule.courses = [crn]
+    if (schedule) {
+      if (await Course.findOneByCrn(crn)) {
+        if (schedule.courses === undefined) {
+          schedule.courses = [crn];
         } else {
           schedule.courses.push(crn);
         }
         const save = await schedule.save();
-        if(save === schedule) {
+        if (save === schedule) {
           res.send(schedule);
         } else {
           res.sendStatus(500);
@@ -80,7 +80,7 @@ const schedulesController = {
     } else {
       res.sendStatus(400);
     }
-  }
+  },
 };
 
 export default schedulesController;

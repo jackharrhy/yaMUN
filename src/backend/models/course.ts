@@ -21,7 +21,6 @@ export interface ICourseModel extends Model<ICourseDocument> {
   findOneByCrn(crn: Number): ICourse;
 }
 
-
 export const CourseSchema = new Schema({
   semester: SemesterSchema,
   campus: { type: String, required: true },
@@ -32,12 +31,15 @@ export const CourseSchema = new Schema({
   sections: [SectionSchema],
 });
 
-CourseSchema.statics.findOneByCrn = async function(crn: Number) {
+CourseSchema.statics.findOneByCrn = async function (crn: Number) {
   return await this.findOne({
     sections: { $elemMatch: { crn } },
   }).exec();
 };
 
-const Course = mongoose.model<ICourseDocument, ICourseModel>("Course", CourseSchema);
+const Course = mongoose.model<ICourseDocument, ICourseModel>(
+  "Course",
+  CourseSchema
+);
 
 export default Course;

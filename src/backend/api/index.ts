@@ -11,7 +11,7 @@ export default async ({ port = 4000 } = {}) => {
   app.post("/users", usersController.create);
   app.post("/schedules", schedulesController.create);
   app.put("/schedules/:scheduleId/:crn", schedulesController.addCourse);
-  
+
   return {
     listen: () => {
       app.listen(port, () => {
