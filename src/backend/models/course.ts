@@ -32,11 +32,11 @@ export const CourseSchema = new Schema({
   sections: [SectionSchema],
 });
 
-CourseSchema.statics.findOneByCrn = (async function(crn: Number) {
+CourseSchema.statics.findOneByCrn = async function(crn: Number) {
   return await this.findOne({
     sections: { $elemMatch: { crn } },
   }).exec();
-});
+};
 
 const Course = mongoose.model<ICourseDocument, ICourseModel>("Course", CourseSchema);
 
