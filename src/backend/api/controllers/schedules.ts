@@ -62,7 +62,7 @@ const schedulesController = {
     const crn = Number(req.params.crn);
     const schedule = await Schedule.findById(scheduleId);
     if (schedule) {
-      const added = schedule.addCourse(crn);
+      const added = await schedule.addCourse(crn);
       if (added) {
         res.json(schedule);
       } else {
