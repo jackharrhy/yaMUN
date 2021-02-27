@@ -1,20 +1,14 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 import { ISemester, SemesterSchema } from "./semester"; 
+import { IUser } from "./user";
 
-export interface ISchedule {
+export interface ISchedule extends Document {
   title: string;
   description: string;
   semester: ISemester;
-  courses: Number[];
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: "User"
-  }
-}
-
-export interface IScheduleDocument extends Document, ISchedule {
-
+  courses: number[];
+  owner: IUser['_id'];
 }
 
 export const ScheduleSchema = new Schema({
@@ -28,6 +22,6 @@ export const ScheduleSchema = new Schema({
   }
 });
 
-const Schedule = mongoose.model<IScheduleDocument>("Schedule", ScheduleSchema);
+const Schedule = mongoose.model<ISchedule>("Schedule", ScheduleSchema);
 
 export default Schedule;
