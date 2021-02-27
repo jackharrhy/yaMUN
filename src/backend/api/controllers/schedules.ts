@@ -62,23 +62,12 @@ const schedulesController = {
     const crn = Number(req.params.crn);
     const schedule = await Schedule.findById(scheduleId);
     if (schedule) {
-      if (await Course.findOneByCrn(crn)) {
-        if (schedule.courses === undefined) {
-          schedule.courses = [crn];
-        } else {
-          schedule.courses.push(crn);
-        }
-        const save = await schedule.save();
-        if (save === schedule) {
-          res.send(schedule);
-        } else {
-          res.sendStatus(500);
-        }
+      const added = schedule.addCourse(crn);
+      if (added) {
+        res.json(schedule);
       } else {
         res.sendStatus(400);
       }
-    } else {
-      res.sendStatus(400);
     }
   },
 };

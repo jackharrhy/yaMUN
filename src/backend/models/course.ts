@@ -13,9 +13,7 @@ export interface ICourse {
   sections: ISection[];
 }
 
-export interface ICourseDocument extends Document, ICourse {
-  findOneByCrn(crn: Number): ICourse;
-}
+export interface ICourseDocument extends Document {}
 
 export interface ICourseModel extends Model<ICourseDocument> {
   findOneByCrn(crn: Number): ICourse;
