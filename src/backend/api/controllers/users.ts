@@ -28,6 +28,7 @@ const validate = ajv.compile(UserValidator);
 const usersController = {
   async create(req: express.Request, res: express.Response) {
     if (validate(req.body)) {
+      // TODO proper password handling!
       const user = await User.create(req.body);
       debug("user", user);
       res.json(user);
