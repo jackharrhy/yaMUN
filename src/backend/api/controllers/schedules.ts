@@ -70,7 +70,7 @@ const schedulesController = {
     const scheduleId = req.params.scheduleId;
     const deleted = await Schedule.findByIdAndDelete(scheduleId);
     if (deleted) {
-      res.json(deleted);
+      res.sendStatus(204);
     } else {
       res.sendStatus(400);
     }
