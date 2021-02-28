@@ -1,7 +1,7 @@
 import { URLSearchParams } from "url";
 import fetch from "node-fetch";
 
-import BannerCache from "../../models/banner-cache";
+import BannerCache, { IBannerCacheDocument } from "../../models/banner-cache";
 import { ISemester } from "../../models/semester";
 
 const HEADERS = {
@@ -13,7 +13,11 @@ const HEADERS = {
 const ENDPOINT = "https://www5.mun.ca/admit/hwswsltb.P_CourseResults";
 
 const fetchData = async ({ year, term, level }: ISemester) => {
-  const cached = await BannerCache.findOne({ year, term, level }).exec();
+  const cached: IBannerCacheDocument | null = await BannerCache.findOne({
+    year,
+    term,
+    level,
+  }).exec();
   if (cached !== null) return cached.data;
 
   const formData = {

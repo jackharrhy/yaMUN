@@ -1,20 +1,28 @@
-import express from "express";
+import express, { Express } from "express";
 import coursesController from "./controllers/courses";
 import schedulesController from "./controllers/schedules";
 import usersController from "./controllers/users";
 
-export default async ({ port = 4000 } = {}) => {
-  const app = express();
-  app.use(express.json());
-
+const defineRoutes = (app: Express) => {
+  // courses
+  app.get("/courses", coursesController.search);
   app.get("/courses/:crn", coursesController.courseByCrn);
+
+  // users
   app.post("/users", usersController.create);
 
-  app.get("/schedules/:scheduleId", schedulesController.get);
+  // schedules
   app.post("/schedules", schedulesController.create);
+  app.get("/schedules/:scheduleId", schedulesController.get);
   app.put("/schedules/:scheduleId/:crn", schedulesController.addCourse);
   app.delete("/schedules/:scheduleId/:crn", schedulesController.removeCourse);
   app.delete("/schedules/:scheduleId", schedulesController.delete);
+};
+
+export default async ({ port = 4000 } = {}) => {
+  const app = express();
+  app.use(express.json());
+  defineRoutes(app);
 
   return {
     listen: () => {
