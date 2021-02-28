@@ -58,6 +58,8 @@ export function matchToSection(match: RegExpExecArray): ISection {
 
   return {
     ...sectionMatch,
+    primaryInstructor: sectionMatch.primaryInstructor?.trim() ?? null,
+    secondaryInstructor: sectionMatch.secondaryInstructor?.trim() ?? null,
     crn: parseInt(sectionMatch.crn, 10),
     waitList: stringToBool(sectionMatch.waitList),
     preCheck: stringToBool(sectionMatch.preCheck),

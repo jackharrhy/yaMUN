@@ -1,7 +1,7 @@
 import debugFactory from "debug";
 import express from "express";
 
-import Course, { ICourseDocument } from "../../models/course";
+import Course from "../../models/course";
 
 const debug = debugFactory("backend/api/controllers/courses");
 

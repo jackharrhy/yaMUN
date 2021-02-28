@@ -19,7 +19,7 @@ export interface ICourse {
 export interface ICourseDocument extends Document, ICourse {}
 
 export interface ICourseModel extends Model<ICourseDocument> {
-  findOneByCrn(crn: Number): Promise<ICourse>;
+  findOneByCrn(crn: number): Promise<ICourse>;
 }
 
 export interface ICourseModelSearch {
@@ -43,6 +43,11 @@ export interface ICourseModelSearchQuery {
   subject?: string;
   number?: string;
   name?: string;
+  sections?: {
+    $elemMatch: {
+      $or: [{ primaryInstructor?: string }, { secondaryInstructor?: string }];
+    };
+  };
 }
 
 export interface ICourseModel extends Model<ICourseDocument> {
@@ -60,7 +65,7 @@ export const CourseSchema = new Schema({
 });
 
 CourseSchema.statics.findOneByCrn = async function (
-  crn: Number
+  crn: number
 ): Promise<ICourse> {
   return await this.findOne({
     sections: { $elemMatch: { crn } },
@@ -92,12 +97,22 @@ CourseSchema.statics.search = async function (
     );
   }
 
-  // TODO handle args.prof
+  if (args.prof !== undefined) {
+    query.sections = {
+      $elemMatch: {
+        $or: [
+          { primaryInstructor: args.prof },
+          { secondaryInstructor: args.prof },
+        ],
+      },
+    };
+  }
+
   // TODO handle args.days
   // TODO handle args.beginTime
   // TODO handle args.endTime
 
-  debug("query", query);
+  debug("query", JSON.stringify(query, null, 2));
   return this.find(query)
     .skip(args.page * args.limit)
     .limit(args.limit)
