@@ -46,7 +46,7 @@ ScheduleSchema.methods.removeCourse = async function (crn: number) {
   const course = await Course.findOneByCrn(crn);
   if (course) {
     if(Array.isArray(this.courses)) {
-      this.courses = this.courses.filter((courseCrn) => {courseCrn !== crn})
+      this.courses = this.courses.filter((courseCrn) => courseCrn !== crn)
       const saved = await this.save();
       if(saved === this) {
         return true;
