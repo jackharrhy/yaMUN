@@ -1,7 +1,10 @@
 import express, { Express } from "express";
+
 import coursesController from "./controllers/courses";
 import schedulesController from "./controllers/schedules";
 import usersController from "./controllers/users";
+import bookmarksController from "./controllers/bookmarks";
+import exportsController from "./controllers/exports";
 
 const defineRoutes = (app: Express) => {
   // courses
@@ -17,6 +20,17 @@ const defineRoutes = (app: Express) => {
   app.put("/schedules/:scheduleId/:crn", schedulesController.addCourse);
   app.delete("/schedules/:scheduleId/:crn", schedulesController.removeCourse);
   app.delete("/schedules/:scheduleId", schedulesController.delete);
+
+  // bookmarks
+  app.get("/bookmarks/courses", bookmarksController.getCourseBookmarks);
+  app.put("/bookmarks/courses/:crn", bookmarksController.addCourseBookmark);
+  app.delete(
+    "/bookmarks/courses/:crn",
+    bookmarksController.deleteCourseBookmark
+  );
+
+  // exports
+  app.get("/export/schedules/:scheduleId/ics", exportsController.scheduleToICS);
 };
 
 export default async ({ port = 4000 } = {}) => {

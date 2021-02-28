@@ -40,12 +40,21 @@ Courses themselves, with all data embedded.
 
 - include - `string[]` - Fields to fetch, rather than all fields, for a condensed view.
 
+---
+
 - `GET /courses/:crn` - Get course by its crn
+
+### Users
+
+Users of the site.
+
+- `POST /users` - Create a user account.
 
 ### Schedule
 
 A saved list of courses users can keep to track what they wish to take.
 
+- `POST /schedules` - Create a new schedule.
 - `GET /schedules/:scheduleId` - Get schedule by id.
 - `PUT /schedules/:scheduleId/courses/:crn` - Add course to user schedule.
 - `DELETE /schedules/:scheduleId/courses/:crn` - Remove course from user schedule.
