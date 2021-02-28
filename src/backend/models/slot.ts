@@ -12,7 +12,7 @@ export enum DayOfWeek {
 
 export interface ISlot {
   slot: string;
-  days: DayOfWeek[];
+  days: string[]; // DayOfWeek[];
   beginTime: number | null;
   endTime: number | null;
   room: string | null;
@@ -20,20 +20,7 @@ export interface ISlot {
 
 export const SlotSchema = new Schema({
   slot: { type: String, required: true },
-  days: [
-    {
-      type: String,
-      enum: [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday",
-      ],
-    },
-  ],
+  days: [{ type: String }],
   beginTime: { type: Number },
   endTime: { type: Number },
   room: { type: String },

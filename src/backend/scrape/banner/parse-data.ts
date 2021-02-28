@@ -83,7 +83,8 @@ const parseData = (semester: ISemester, data: string[]): ICourse[] => {
       }
     } else {
       if (courseMatch !== null) {
-        throw new Error("Matched course without section");
+        // ignore for now because its kinda broken with some entries
+        // throw new Error("Matched course without section");
       }
     }
 

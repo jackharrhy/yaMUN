@@ -29,14 +29,9 @@ const slotSchema: JSONSchemaType<ISlotMatch> = {
 export function matchToSlot(match: RegExpExecArray): ISlot {
   const slotMatch = handleMatch(slotSchema, match);
 
-  const stringDays = slotMatch.days.split(" ");
-  const enumDays = stringDays
-    .map<DayOfWeek>((day) => (<any>DayOfWeek)[day])
-    .filter((day) => day !== undefined);
-
   return {
     ...slotMatch,
-    days: enumDays,
+    days: slotMatch.days.split(" ").filter((s) => s !== ""),
     beginTime: slotMatch.beginTime ? parseInt(slotMatch.beginTime, 10) : null,
     endTime: slotMatch.endTime ? parseInt(slotMatch.endTime, 10) : null,
   };

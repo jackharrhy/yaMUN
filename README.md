@@ -31,8 +31,10 @@ Courses themselves, with all data embedded.
 - name - `string`
 - prof - `string`
 - days - `string[]`
-- beginTime - `number`
-- endTime - `number`
+- beginTimeMin - `number`
+- beginTimeMax - `number`
+- endTimeMin - `number`
+- endTimeMax - `number`
 
 ##### Other
 
