@@ -34,8 +34,11 @@ const coursesController = {
 
     const prof = req.query.prof?.toString();
     const days = req.query.days?.toString().split(",");
-    const beginTime = Number(req.query.beginTime);
-    const endTime = Number(req.query.beginTime);
+
+    const beginTimeMax = Number(req.query.beginTimeMax);
+    const beginTimeMin = Number(req.query.beginTimeMin);
+    const endTimeMax = Number(req.query.beginTimeMax);
+    const endTimeMin = Number(req.query.beginTimeMin);
 
     const results = await Course.search({
       page,
@@ -49,8 +52,10 @@ const coursesController = {
       name,
       prof,
       days,
-      beginTime: Number.isNaN(beginTime) ? undefined : beginTime,
-      endTime: Number.isNaN(beginTime) ? undefined : endTime,
+      beginTimeMin: Number.isNaN(beginTimeMin) ? undefined : beginTimeMin,
+      beginTimeMax: Number.isNaN(beginTimeMax) ? undefined : beginTimeMax,
+      endTimeMin: Number.isNaN(beginTimeMin) ? undefined : endTimeMin,
+      endTimeMax: Number.isNaN(beginTimeMax) ? undefined : endTimeMax,
     });
 
     res.json(results);

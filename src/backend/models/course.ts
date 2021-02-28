@@ -34,8 +34,10 @@ export interface ICourseModelSearch {
   name?: string;
   prof?: string;
   days?: string[];
-  beginTime?: number;
-  endTime?: number;
+  beginTimeMin?: number;
+  beginTimeMax?: number;
+  endTimeMin?: number;
+  endTimeMax?: number;
 }
 
 export interface ICourseModelSearchQuery {
@@ -48,6 +50,14 @@ export interface ICourseModelSearchQuery {
       $or?: [{ primaryInstructor?: string }, { secondaryInstructor?: string }];
       slots?: {
         $elemMatch: {
+          beginTime?: {
+            $gte?: number;
+            $lte?: number;
+          };
+          endTime?: {
+            $gte?: number;
+            $lte?: number;
+          };
           days?: {
             $in: string[];
           };
@@ -104,7 +114,13 @@ CourseSchema.statics.search = async function (
     );
   }
 
-  if (args.prof || args.days || args.beginTime || args.endTime) {
+  const hasBeginEndFields =
+    args.beginTimeMin ||
+    args.beginTimeMax ||
+    args.endTimeMin ||
+    args.endTimeMax;
+
+  if (args.prof || args.days || hasBeginEndFields) {
     query.sections = { $elemMatch: {} };
 
     if (args.prof !== undefined) {
@@ -117,18 +133,53 @@ CourseSchema.statics.search = async function (
       };
     }
 
-    if (args.days || args.beginTime || args.endTime) {
+    if (args.days || hasBeginEndFields) {
       query.sections.$elemMatch.slots = { $elemMatch: {} };
 
-      if (args.days) {
+      if (args.days !== undefined) {
         query.sections.$elemMatch.slots.$elemMatch = {
           ...query.sections.$elemMatch.slots.$elemMatch,
           days: { $in: args.days },
         };
       }
 
-      // TODO handle args.beginTime
-      // TODO handle args.endTime
+      if (hasBeginEndFields) {
+        query.sections.$elemMatch.slots.$elemMatch = {
+          ...query.sections.$elemMatch.slots.$elemMatch,
+        };
+
+        if (args.beginTimeMin || args.beginTimeMax) {
+          query.sections.$elemMatch.slots.$elemMatch.beginTime = {
+            ...query.sections.$elemMatch.slots.$elemMatch.beginTime,
+          };
+
+          if (args.beginTimeMin !== undefined) {
+            query.sections.$elemMatch.slots.$elemMatch.beginTime.$gte =
+              args.beginTimeMin;
+          }
+
+          if (args.beginTimeMax !== undefined) {
+            query.sections.$elemMatch.slots.$elemMatch.beginTime.$lte =
+              args.beginTimeMax;
+          }
+        }
+
+        if (args.endTimeMin || args.endTimeMax) {
+          query.sections.$elemMatch.slots.$elemMatch.endTime = {
+            ...query.sections.$elemMatch.slots.$elemMatch.endTime,
+          };
+
+          if (args.beginTimeMin !== undefined) {
+            query.sections.$elemMatch.slots.$elemMatch.endTime.$gte =
+              args.endTimeMin;
+          }
+
+          if (args.beginTimeMax !== undefined) {
+            query.sections.$elemMatch.slots.$elemMatch.endTime.$lte =
+              args.endTimeMax;
+          }
+        }
+      }
     }
   }
 
