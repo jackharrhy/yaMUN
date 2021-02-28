@@ -32,6 +32,10 @@ export interface ICourseModelSearch {
   subject?: string;
   number?: string;
   name?: string;
+  prof?: string;
+  day?: string[];
+  beginTime?: number;
+  endTime?: number;
 }
 
 export interface ICourseModelSearchQuery {
@@ -55,11 +59,13 @@ export const CourseSchema = new Schema({
   sections: [SectionSchema],
 });
 
-CourseSchema.statics.findOneByCrn = async function (crn: Number) : Promise<ICourse> {
+CourseSchema.statics.findOneByCrn = async function (
+  crn: Number
+): Promise<ICourse> {
   return await this.findOne({
     sections: { $elemMatch: { crn } },
   }).exec();
-}
+};
 
 CourseSchema.statics.search = async function (
   args: ICourseModelSearch
@@ -85,6 +91,11 @@ CourseSchema.statics.search = async function (
       }).filter(([k, v]) => v !== undefined)
     );
   }
+
+  // TODO handle args.prof
+  // TODO handle args.days
+  // TODO handle args.beginTime
+  // TODO handle args.endTime
 
   debug("query", query);
   return this.find(query)

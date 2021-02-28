@@ -32,6 +32,11 @@ const coursesController = {
     const number = req.query.number?.toString();
     const name = req.query.name?.toString();
 
+    const prof = req.query.prof?.toString();
+    const day = req.query.day?.toString().split(",");
+    const beginTime = Number(req.query.beginTime);
+    const endTime = Number(req.query.beginTime);
+
     const results = await Course.search({
       page,
       limit,
@@ -42,6 +47,10 @@ const coursesController = {
       subject,
       number,
       name,
+      prof,
+      day,
+      beginTime: Number.isNaN(beginTime) ? undefined : beginTime,
+      endTime: Number.isNaN(beginTime) ? undefined : endTime,
     });
 
     res.json(results);
