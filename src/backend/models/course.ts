@@ -33,7 +33,7 @@ export interface ICourseModelSearch {
   number?: string;
   name?: string;
   prof?: string;
-  day?: string[];
+  days?: string[];
   beginTime?: number;
   endTime?: number;
 }
@@ -45,7 +45,14 @@ export interface ICourseModelSearchQuery {
   name?: string;
   sections?: {
     $elemMatch: {
-      $or: [{ primaryInstructor?: string }, { secondaryInstructor?: string }];
+      $or?: [{ primaryInstructor?: string }, { secondaryInstructor?: string }];
+      slots?: {
+        $elemMatch: {
+          days?: {
+            $in: string[];
+          };
+        };
+      };
     };
   };
 }
@@ -97,20 +104,33 @@ CourseSchema.statics.search = async function (
     );
   }
 
-  if (args.prof !== undefined) {
-    query.sections = {
-      $elemMatch: {
+  if (args.prof || args.days || args.beginTime || args.endTime) {
+    query.sections = { $elemMatch: {} };
+
+    if (args.prof !== undefined) {
+      query.sections.$elemMatch = {
+        ...query.sections.$elemMatch,
         $or: [
           { primaryInstructor: args.prof },
           { secondaryInstructor: args.prof },
         ],
-      },
-    };
-  }
+      };
+    }
 
-  // TODO handle args.days
-  // TODO handle args.beginTime
-  // TODO handle args.endTime
+    if (args.days || args.beginTime || args.endTime) {
+      query.sections.$elemMatch.slots = { $elemMatch: {} };
+
+      if (args.days) {
+        query.sections.$elemMatch.slots.$elemMatch = {
+          ...query.sections.$elemMatch.slots.$elemMatch,
+          days: { $in: args.days },
+        };
+      }
+
+      // TODO handle args.beginTime
+      // TODO handle args.endTime
+    }
+  }
 
   debug("query", JSON.stringify(query, null, 2));
   return this.find(query)

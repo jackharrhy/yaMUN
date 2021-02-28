@@ -6,7 +6,7 @@ import api from "./api";
 
 async function test() {
   const testSemester: ISemester = {
-    year: 2020,
+    year: 2019,
     term: 2,
     level: 1,
   };

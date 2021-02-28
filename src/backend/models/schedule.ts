@@ -45,16 +45,16 @@ ScheduleSchema.methods.addCourse = async function (crn: number) {
 ScheduleSchema.methods.removeCourse = async function (crn: number) {
   const course = await Course.findOneByCrn(crn);
   if (course) {
-    if(Array.isArray(this.courses)) {
-      this.courses = this.courses.filter((courseCrn) => courseCrn !== crn)
+    if (Array.isArray(this.courses)) {
+      this.courses = this.courses.filter((courseCrn) => courseCrn !== crn);
       const saved = await this.save();
-      if(saved === this) {
+      if (saved === this) {
         return true;
       }
     }
   }
   return false;
-}
+};
 
 const Schedule = mongoose.model<ISchedule>("Schedule", ScheduleSchema);
 
