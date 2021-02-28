@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, Model } from "mongoose";
 
 import { ISection, SectionSchema } from "./section";
 import { ISemester, SemesterSchema } from "./semester";
@@ -13,8 +13,10 @@ export interface ICourse {
   sections: ISection[];
 }
 
-export interface ICourseDocument extends Document, ICourse {
-  byCrn(): ICourse;
+export interface ICourseDocument extends Document {}
+
+export interface ICourseModel extends Model<ICourseDocument> {
+  findOneByCrn(crn: Number): ICourse;
 }
 
 export const CourseSchema = new Schema({
@@ -27,6 +29,15 @@ export const CourseSchema = new Schema({
   sections: [SectionSchema],
 });
 
-const Course = mongoose.model<ICourseDocument>("Course", CourseSchema);
+CourseSchema.statics.findOneByCrn = async function (crn: Number) {
+  return await this.findOne({
+    sections: { $elemMatch: { crn } },
+  }).exec();
+};
+
+const Course = mongoose.model<ICourseDocument, ICourseModel>(
+  "Course",
+  CourseSchema
+);
 
 export default Course;
