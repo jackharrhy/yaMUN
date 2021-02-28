@@ -99,7 +99,7 @@ const schedulesController = {
     if (schedule) {
       const removed = await schedule.removeCourse(crn);
       if (removed) {
-        res.json(schedule);
+        res.sendStatus(204);
       } else {
         res.sendStatus(400);
       }
