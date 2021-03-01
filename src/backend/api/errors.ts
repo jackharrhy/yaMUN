@@ -13,15 +13,19 @@ export const errorHandlerMiddleware = async (
   next: express.NextFunction
 ) => {
   let status: number;
+  let message: string;
   if (error instanceof BadRequest) {
+    message = error.toString();
     status = 400;
   } else if (error instanceof NotFoundError) {
+    message = error.toString();
     status = 404;
   } else {
     console.error(error);
+    message = "Internal Server Error";
     status = 500;
   }
 
   debug("error", error.toString());
-  res.status(status).json({ error: error.toString() });
+  res.status(status).json({ error: message });
 };

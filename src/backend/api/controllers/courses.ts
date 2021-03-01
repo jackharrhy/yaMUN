@@ -61,8 +61,8 @@ const coursesController = {
   async courseByCrn(req: express.Request, res: express.Response) {
     const crn = Number(req.params.crn);
 
-    if (crn === NaN) {
-      res.sendStatus(400);
+    if (Number.isNaN(crn)) {
+      throw new BadRequest("crn wasn't a valid number");
     }
 
     const course = await Course.findOneByCrn(crn);
