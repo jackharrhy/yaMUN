@@ -18,10 +18,6 @@ export interface ICourse {
 
 export interface ICourseDocument extends Document, ICourse {}
 
-export interface ICourseModel extends Model<ICourseDocument> {
-  findOneByCrn(crn: number): Promise<ICourse>;
-}
-
 export interface ICourseModelSearch {
   page: number;
   limit: number;
@@ -68,6 +64,7 @@ export interface ICourseModelSearchQuery {
 }
 
 export interface ICourseModel extends Model<ICourseDocument> {
+  findOneByCrn(crn: number): Promise<ICourse>;
   search(args: ICourseModelSearch): Promise<ICourse[]>;
 }
 
