@@ -2,6 +2,8 @@ import Ajv, { JSONSchemaType } from "ajv";
 import debugFactory from "debug";
 import express from "express";
 import User, { IUser } from "../../models/user";
+import { handleRequestBody } from "../../utils/ajv";
+import { BadRequest } from "../errors";
 
 const debug = debugFactory("backend/api/controllers/users");
 const ajv = new Ajv();
@@ -12,7 +14,7 @@ interface ICreateUserInput {
   email: IUser["email"];
 }
 
-const UserValidator: JSONSchemaType<ICreateUserInput> = {
+const createUserInputSchema: JSONSchemaType<ICreateUserInput> = {
   type: "object",
   properties: {
     username: { type: "string" },
@@ -23,18 +25,13 @@ const UserValidator: JSONSchemaType<ICreateUserInput> = {
   additionalProperties: false,
 };
 
-const validate = ajv.compile(UserValidator);
-
 const usersController = {
   async create(req: express.Request, res: express.Response) {
-    if (validate(req.body)) {
-      // TODO proper password handling!
-      const user = await User.create(req.body);
-      debug("user", user);
-      res.json(user);
-    } else {
-      res.sendStatus(400);
-    }
+    const createUserInput = handleRequestBody(createUserInputSchema, req.body);
+    // TODO properly store password with hasing and salting and all that good stuff
+    const user = await User.create(createUserInput);
+    debug("user", user);
+    res.json(user);
   },
 };
 

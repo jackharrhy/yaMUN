@@ -1,4 +1,6 @@
+import express from "express";
 import Ajv, { JSONSchemaType } from "ajv";
+import { BadRequest } from "../api/errors";
 
 const ajv = new Ajv();
 
@@ -14,4 +16,16 @@ export function handleMatch<T>(
   }
   console.error(match);
   throw JSON.stringify(validate.errors, null, 2);
+}
+
+export function handleRequestBody<T>(
+  schema: JSONSchemaType<T>,
+  requestBody: express.Request
+): T {
+  const validate = ajv.compile(schema);
+  if (validate(requestBody)) {
+    return requestBody;
+  }
+  const errorsAsString = JSON.stringify(validate.errors, null, 2);
+  throw new BadRequest(errorsAsString);
 }

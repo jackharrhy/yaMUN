@@ -1,14 +1,15 @@
-import Ajv, { JSONSchemaType } from "ajv";
+import { JSONSchemaType } from "ajv";
 import debugFactory from "debug";
 import express from "express";
 import Schedule, { ISchedule } from "../../models/schedule";
 import { ISemester } from "../../models/semester";
 import User from "../../models/user";
+import { handleRequestBody } from "../../utils/ajv";
+import { BadRequest, NotFoundError } from "../errors";
 
 const debug = debugFactory("backend/api/controllers/schedules");
-const ajv = new Ajv();
 
-interface ICreateSchemaInput {
+interface ICreateScheduleInput {
   title: ISchedule["title"];
   description: ISchedule["description"];
   semester: ISemester;
@@ -16,7 +17,7 @@ interface ICreateSchemaInput {
   ownerId: string;
 }
 
-const ScheduleValidator: JSONSchemaType<ICreateSchemaInput> = {
+const createScheduleInputSchema: JSONSchemaType<ICreateScheduleInput> = {
   type: "object",
   properties: {
     title: { type: "string" },
@@ -38,31 +39,30 @@ const ScheduleValidator: JSONSchemaType<ICreateSchemaInput> = {
   additionalProperties: false,
 };
 
-const validate = ajv.compile(ScheduleValidator);
-
 const schedulesController = {
   async get(req: express.Request, res: express.Response) {
     const scheduleId = req.params.scheduleId;
     const schedule = await Schedule.findById(scheduleId);
-    if (schedule) {
-      res.json(schedule);
+    if (schedule === null) {
+      throw new NotFoundError("schedule not found");
     } else {
-      res.sendStatus(404);
+      res.json(schedule);
     }
   },
 
   async create(req: express.Request, res: express.Response) {
-    if (validate(req.body)) {
-      const user = await User.findById(req.body.ownerId);
-      if (user) {
-        const schedule = await Schedule.create(req.body);
-        debug("schedule", schedule);
-        res.json(schedule);
-      } else {
-        res.sendStatus(400);
-      }
+    const createScheduleInput = handleRequestBody(
+      createScheduleInputSchema,
+      req.body
+    );
+    const user = await User.findById(createScheduleInput);
+
+    if (user) {
+      const schedule = await Schedule.create(req.body);
+      debug("schedule", schedule);
+      res.json(schedule);
     } else {
-      res.sendStatus(400);
+      throw new BadRequest("can't create schedule, user not found");
     }
   },
 
@@ -72,7 +72,7 @@ const schedulesController = {
     if (deleted) {
       res.sendStatus(204);
     } else {
-      res.sendStatus(400);
+      throw new BadRequest("could not delete schedule");
     }
   },
 
@@ -81,14 +81,10 @@ const schedulesController = {
     const crn = Number(req.params.crn);
     const schedule = await Schedule.findById(scheduleId);
     if (schedule) {
-      const added = await schedule.addCourse(crn);
-      if (added) {
-        res.json(schedule);
-      } else {
-        res.sendStatus(400);
-      }
+      await schedule.addCourse(crn);
+      res.sendStatus(204);
     } else {
-      res.sendStatus(400);
+      throw new NotFoundError("schedule not found");
     }
   },
 
@@ -97,14 +93,10 @@ const schedulesController = {
     const crn = Number(req.params.crn);
     const schedule = await Schedule.findById(scheduleId);
     if (schedule) {
-      const removed = await schedule.removeCourse(crn);
-      if (removed) {
-        res.sendStatus(204);
-      } else {
-        res.sendStatus(400);
-      }
+      await schedule.removeCourse(crn);
+      res.sendStatus(204);
     } else {
-      res.sendStatus(400);
+      throw new NotFoundError("schedule not found");
     }
   },
 };
