@@ -28,6 +28,7 @@ const createUserInputSchema: JSONSchemaType<ICreateUserInput> = {
 const usersController = {
   async create(req: express.Request, res: express.Response) {
     const createUserInput = handleRequestBody(createUserInputSchema, req.body);
+    // TODO properly store password with hasing and salting and all that good stuff
     const user = await User.create(createUserInput);
     debug("user", user);
     res.json(user);
