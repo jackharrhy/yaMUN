@@ -28,7 +28,7 @@ export const BookmarkSchema = new Schema<IBookmarkDocument>({
   courses: [Number],
 });
 
-BookmarkSchema.statics.findOrcreate = async function (userId: string) {
+BookmarkSchema.statics.findByUserId = async function (userId: string) {
   return await this.create({"owner": userId})
 }
 
