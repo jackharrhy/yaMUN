@@ -7,7 +7,7 @@ const bookmarksController = {
     // TODO: Get currently authed user.
     const userId = "603d3e6cd8dc460c06082299";
     const bookmark = await Bookmark.findByUserId(userId);
-    if(bookmark === null) {
+    if (bookmark === null) {
       throw new NotFoundError("bookmark not found");
     } else {
       res.json(bookmark);
@@ -19,7 +19,7 @@ const bookmarksController = {
     const userId = "603d3e6cd8dc460c06082299";
     const crn = Number(req.params.crn);
 
-    if(Number.isNaN(crn)) {
+    if (Number.isNaN(crn)) {
       throw new BadRequest("crn wasn't a valid number");
     }
 
@@ -33,16 +33,16 @@ const bookmarksController = {
     const userId = "603d3e6cd8dc460c06082299";
     const crn = Number(req.params.crn);
 
-    if(Number.isNaN(crn)) {
+    if (Number.isNaN(crn)) {
       throw new BadRequest("crn wasn't a valid number");
     }
 
     const bookmark = await Bookmark.findByUserId(userId);
-    if(bookmark) {
+    if (bookmark) {
       await bookmark.removeCourse(crn);
       res.sendStatus(204);
     } else {
-      throw new NotFoundError("bookmark not found")
+      throw new NotFoundError("bookmark not found");
     }
   },
 };

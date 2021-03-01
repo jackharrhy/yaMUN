@@ -3,7 +3,6 @@ import { expect } from "chai";
 import request from "supertest";
 import { describe } from "mocha";
 
-
 import api from "../../../../src/backend/api";
 import { COURSE_SEARCH_PAGINATION_LIMIT } from "../../../../src/backend/api/controllers/courses";
 
