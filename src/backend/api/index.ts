@@ -33,12 +33,13 @@ const defineRoutes = (app: Express) => {
   app.get("/export/schedules/:scheduleId/ics", exportsController.scheduleToICS);
 };
 
-export default async ({ port = 4000 } = {}) => {
+export default ({ port = 4000 } = {}) => {
   const app = express();
   app.use(express.json());
   defineRoutes(app);
 
   return {
+    app,
     listen: () => {
       app.listen(port, () => {
         console.log(`server started at http://localhost:${port}`);

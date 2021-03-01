@@ -1,31 +1,26 @@
 import { connect } from "./database";
 import { ISemester } from "./models/semester";
-import { coursesFromSemester } from "./scrape/banner";
-import insertData from "./scrape/banner/insert-data";
+import { insertSemester } from "./scrape/banner/insert";
 import api from "./api";
 
-async function test() {
-  const testSemester: ISemester = {
-    year: 2019,
-    term: 2,
-    level: 1,
-  };
-
-  const testCourses = await coursesFromSemester(testSemester);
-
-  await insertData(testCourses);
-}
-
 (async () => {
-  const { listen } = await api();
+  const { listen } = api();
 
-  await connect("development", "development", "localhost");
+  const db = await connect("development", "development", "localhost"); // TODO make configurable
 
   try {
-    await test();
+    // For now, just populate with this test semester
+    const testSemester: ISemester = {
+      year: 2019,
+      term: 2,
+      level: 1,
+    };
+
+    await insertSemester(testSemester);
 
     listen();
   } catch (err) {
     console.error(err);
+    await db.close();
   }
 })();

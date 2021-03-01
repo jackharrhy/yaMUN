@@ -35,6 +35,8 @@ export const connect = (
   database.on("error", (err) => {
     console.log("error connecting to database", err);
   });
+
+  return database;
 };
 
 export const disconnect = () => {
