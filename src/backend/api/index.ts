@@ -5,6 +5,7 @@ import schedulesController from "./controllers/schedules";
 import usersController from "./controllers/users";
 import bookmarksController from "./controllers/bookmarks";
 import exportsController from "./controllers/exports";
+import { errorHandlerMiddleware } from "./errors";
 
 const defineRoutes = (app: Express) => {
   // courses
@@ -37,6 +38,7 @@ export default ({ port = 4000 } = {}) => {
   const app = express();
   app.use(express.json());
   defineRoutes(app);
+  app.use(errorHandlerMiddleware);
 
   return {
     app,

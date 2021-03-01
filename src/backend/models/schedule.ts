@@ -1,4 +1,5 @@
 import mongoose, { Model, Schema, Document } from "mongoose";
+import { NotFoundError } from "../api/errors";
 import Course from "./course";
 import { ISemester, SemesterSchema } from "./semester";
 import { IUser } from "./user";
@@ -36,10 +37,13 @@ ScheduleSchema.methods.addCourse = async function (crn: number) {
     }
     const saved = await this.save();
     if (saved === this) {
-      return true;
+      return;
+    } else {
+      throw new Error("unable to save schedule");
     }
+  } else {
+    throw new NotFoundError("course not found");
   }
-  return false;
 };
 
 ScheduleSchema.methods.removeCourse = async function (crn: number) {
@@ -49,11 +53,14 @@ ScheduleSchema.methods.removeCourse = async function (crn: number) {
       this.courses = this.courses.filter((courseCrn) => courseCrn !== crn);
       const saved = await this.save();
       if (saved === this) {
-        return true;
+        return;
+      } else {
+        throw new Error("unable to save schedule");
       }
     }
+  } else {
+    throw new NotFoundError("course not found");
   }
-  return false;
 };
 
 const Schedule = mongoose.model<ISchedule>("Schedule", ScheduleSchema);

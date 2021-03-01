@@ -2,10 +2,11 @@ import debugFactory from "debug";
 import express from "express";
 
 import Course from "../../models/course";
+import { NotFoundError, BadRequest } from "../errors";
 
 const debug = debugFactory("backend/api/controllers/courses");
 
-const COURSE_SEARCH_PAGINATION_LIMIT = 20;
+export const COURSE_SEARCH_PAGINATION_LIMIT = 20;
 
 const coursesController = {
   async search(req: express.Request, res: express.Response) {
@@ -17,10 +18,7 @@ const coursesController = {
       Number.isNaN(page) ||
       Number.isNaN(limit);
 
-    if (invalidPagination) {
-      res.sendStatus(400);
-      return;
-    }
+    if (invalidPagination) throw new BadRequest("invalid pagination");
 
     const include = req.query.include?.toString().split(",");
 
@@ -67,12 +65,11 @@ const coursesController = {
       res.sendStatus(400);
     }
 
-    debug("crn", crn);
     const course = await Course.findOneByCrn(crn);
     debug("course", course);
 
     if (course === null) {
-      res.sendStatus(404);
+      throw new NotFoundError("course not found");
     } else {
       res.json(course);
     }

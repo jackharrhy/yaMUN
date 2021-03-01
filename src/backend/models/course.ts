@@ -84,6 +84,7 @@ export const CourseSchema = new Schema({
 CourseSchema.statics.findOneByCrn = async function (
   crn: number
 ): Promise<ICourse> {
+  debug("findOneByCrn", crn);
   return await this.findOne({
     sections: { $elemMatch: { crn } },
   }).exec();
@@ -92,7 +93,7 @@ CourseSchema.statics.findOneByCrn = async function (
 CourseSchema.statics.search = async function (
   args: ICourseModelSearch
 ): Promise<ICourse[]> {
-  debug("args", args);
+  debug("search", args);
 
   const { subject, number, name } = args;
 
