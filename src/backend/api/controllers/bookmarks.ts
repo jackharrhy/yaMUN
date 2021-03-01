@@ -1,20 +1,47 @@
-import debugFactory from "debug";
 import express from "express";
-// import Bookmark, { IBookmark } from "../../models/bookmark";
-
-const debug = debugFactory("backend/api/controllers/bookmarks");
+import Bookmark from "../../models/bookmark";
+import { BadRequest, NotFoundError } from "../errors";
 
 const bookmarksController = {
   async getCourseBookmarks(req: express.Request, res: express.Response) {
-    // TODO
+    // TODO: Get currently authed user.
+    const userId = "01";
+    const bookmark = await Bookmark.findByUserId(userId);
+    if(bookmark === null) {
+      throw new NotFoundError("bookmark not found");
+    } else {
+      res.json(bookmark);
+    }
   },
 
   async addCourseBookmark(req: express.Request, res: express.Response) {
-    // TODO
+    // TODO: Get currently authed user.
+    const userId = "01";
+    const crn = Number(req.params.crn);
+
+    if(Number.isNaN(crn)) {
+      throw new BadRequest("crn wasn't a valid number");
+    }
+
+    const bookmark = await Bookmark.findOrCreateByUserId(userId);
+    await bookmark.addCourse(crn);
+    res.sendStatus(204);
   },
 
   async deleteCourseBookmark(req: express.Request, res: express.Response) {
-    // TODO
+    const userId = "01";
+    const crn = Number(req.params.crn);
+
+    if(Number.isNaN(crn)) {
+      throw new BadRequest("crn wasn't a valid number");
+    }
+
+    const bookmark = await Bookmark.findByUserId(userId);
+    if(bookmark) {
+      await bookmark.removeCourse(crn);
+    } else {
+      throw new NotFoundError("bookmark not found")
+    }
   },
 };
 
