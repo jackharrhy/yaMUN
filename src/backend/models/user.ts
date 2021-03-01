@@ -1,25 +1,19 @@
-import mongoose, { Schema, Document } from "mongoose";
-import { ISchedule } from "./schedule";
+import mongoose, { Schema, Document, Model } from "mongoose";
 
-export interface IUser extends Document {
+export interface IUserDocument extends Document {
   username: string;
   password: string;
   email: string;
-  schedules: [ISchedule["_id"]];
 }
+
+export interface IUserModel extends Model<IUserDocument> {}
 
 export const UserSchema: Schema = new Schema({
   username: { type: String, required: true },
   password: { type: String, required: true },
   email: { type: String, required: true },
-  schedules: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Schedule",
-    },
-  ],
 });
 
-const User = mongoose.model<IUser>("User", UserSchema);
+const User = mongoose.model<IUserDocument, IUserModel>("User", UserSchema);
 
 export default User;

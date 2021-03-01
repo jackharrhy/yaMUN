@@ -1,12 +1,17 @@
 import express from "express";
 import Bookmark from "../../models/bookmark";
-import { BadRequest, NotFoundError } from "../errors";
+import User from "../../models/user";
+import { Forbidden, NotFoundError } from "../errors";
+import { stringToNumber } from "../utils";
 
 const bookmarksController = {
   async getCourseBookmarks(req: express.Request, res: express.Response) {
-    // TODO: Get currently authed user.
-    const userId = "603d3e6cd8dc460c06082299";
+    // TODO: Get currently authed user, instead of just the first found one
+    const userId = (await User.findOne({}).exec()).id;
+    if (userId === null) throw new Forbidden("not authorized");
+
     const bookmark = await Bookmark.findByUserId(userId);
+
     if (bookmark === null) {
       throw new NotFoundError("bookmark not found");
     } else {
@@ -15,13 +20,11 @@ const bookmarksController = {
   },
 
   async addCourseBookmark(req: express.Request, res: express.Response) {
-    // TODO: Get currently authed user.
-    const userId = "603d3e6cd8dc460c06082299";
-    const crn = Number(req.params.crn);
+    const crn = stringToNumber(req.params.crn, "crn");
 
-    if (Number.isNaN(crn)) {
-      throw new BadRequest("crn wasn't a valid number");
-    }
+    // TODO: Get currently authed user, instead of just the first found one
+    const userId = (await User.findOne({}).exec()).id;
+    if (userId === null) throw new Forbidden("not authorized");
 
     const bookmark = await Bookmark.findOrCreateByUserId(userId);
     await bookmark.addCourse(crn);
@@ -29,20 +32,19 @@ const bookmarksController = {
   },
 
   async deleteCourseBookmark(req: express.Request, res: express.Response) {
-    // TODO: Get currently authed user.
-    const userId = "603d3e6cd8dc460c06082299";
-    const crn = Number(req.params.crn);
+    const crn = stringToNumber(req.params.crn, "crn");
 
-    if (Number.isNaN(crn)) {
-      throw new BadRequest("crn wasn't a valid number");
-    }
+    // TODO: Get currently authed user, instead of just the first found one
+    const userId = (await User.findOne({}).exec()).id;
+    if (userId === null) throw new Forbidden("not authorized");
 
     const bookmark = await Bookmark.findByUserId(userId);
-    if (bookmark) {
+
+    if (bookmark === null) {
+      throw new NotFoundError("bookmark not found");
+    } else {
       await bookmark.removeCourse(crn);
       res.sendStatus(204);
-    } else {
-      throw new NotFoundError("bookmark not found");
     }
   },
 };

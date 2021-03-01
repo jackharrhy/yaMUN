@@ -64,7 +64,7 @@ export interface ICourseModelSearchQuery {
 }
 
 export interface ICourseModel extends Model<ICourseDocument> {
-  findOneByCrn(crn: number): Promise<ICourse>;
+  findOneByCrn(crn: number): Promise<ICourse | null>;
   search(args: ICourseModelSearch): Promise<ICourse[]>;
 }
 
@@ -91,7 +91,6 @@ CourseSchema.statics.search = async function (
   args: ICourseModelSearch
 ): Promise<ICourse[]> {
   debug("search", args);
-
   const { subject, number, name } = args;
 
   const query: ICourseModelSearchQuery = Object.fromEntries(
@@ -182,7 +181,7 @@ CourseSchema.statics.search = async function (
   }
 
   debug("query", JSON.stringify(query, null, 2));
-  return this.find(query)
+  return await this.find(query)
     .skip(args.page * args.limit)
     .limit(args.limit)
     .exec();

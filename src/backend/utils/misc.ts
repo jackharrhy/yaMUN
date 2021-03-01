@@ -4,7 +4,7 @@ export function stringToBool(str: string): boolean {
   throw new Error(`Got invalid boolean: ${str}`);
 }
 
-export function stringToNumber(str: string): number | null {
+export function stringToNumberOrNull(str: string): number | null {
   const converted = parseInt(str, 10);
   return Number.isInteger(converted) ? converted : null;
 }

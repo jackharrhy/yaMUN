@@ -3,6 +3,7 @@ import express from "express";
 
 import Course from "../../models/course";
 import { NotFoundError, BadRequest } from "../errors";
+import { stringToNumber } from "../utils";
 
 const debug = debugFactory("backend/api/controllers/courses");
 
@@ -59,11 +60,7 @@ const coursesController = {
     res.json(results);
   },
   async courseByCrn(req: express.Request, res: express.Response) {
-    const crn = Number(req.params.crn);
-
-    if (Number.isNaN(crn)) {
-      throw new BadRequest("crn wasn't a valid number");
-    }
+    const crn = stringToNumber(req.params.crn, "crn");
 
     const course = await Course.findOneByCrn(crn);
     debug("course", course);

@@ -2,7 +2,7 @@ import { JSONSchemaType } from "ajv";
 
 import { ISection } from "../../../models/section";
 import { handleMatch } from "../../../utils/ajv";
-import { stringToBool, stringToNumber } from "../../../utils/misc";
+import { stringToBool, stringToNumberOrNull } from "../../../utils/misc";
 
 export const SECTION_REGEX = /^.{37} (?<section>(\d|[A-Z]){3}) (?<crn>\d{5}) .{38}((?<scheduleType>([A-Z]|&){3})|   )   .{11} (?<phoneOne>Y|N|D|A) (?<phoneTwo>Y|N|D|A)  (?<waitList>Y|N)   (?<preCheck>Y|N)    ((?<reserved>Y|N|D)| )   (?<attr>(L|Q|W|G|R| ){5}) (?<creditHours>( |\d){3})  (?<billedHours>(( |\d){3})| NA)  ((Primary - (?<primaryInstructor>[A-Z] (\w| ){11}) ((?<secondaryInstructor>[A-Z] (\w| ){11})|.*))|.*)/;
 
@@ -63,8 +63,8 @@ export function matchToSection(match: RegExpExecArray): ISection {
     crn: parseInt(sectionMatch.crn, 10),
     waitList: stringToBool(sectionMatch.waitList),
     preCheck: stringToBool(sectionMatch.preCheck),
-    creditHours: stringToNumber(sectionMatch.creditHours),
-    billedHours: stringToNumber(sectionMatch.billedHours),
+    creditHours: stringToNumberOrNull(sectionMatch.creditHours),
+    billedHours: stringToNumberOrNull(sectionMatch.billedHours),
     slots: [],
   };
 }

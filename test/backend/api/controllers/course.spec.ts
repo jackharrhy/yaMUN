@@ -14,13 +14,15 @@ describe("backend/api/controllers/courses", function () {
     app = apiImported.app;
   });
 
-  it("has a pagination limit", async function () {
-    const resp = await request(app)
-      .get("/courses/")
-      .set("Accept", "application/json")
-      .expect("Content-Type", /json/)
-      .expect(200);
+  describe("search", function () {
+    it("has a pagination limit", async function () {
+      const resp = await request(app)
+        .get("/courses/")
+        .set("Accept", "application/json")
+        .expect("Content-Type", /json/)
+        .expect(200);
 
-    expect(resp.body).to.have.lengthOf(COURSE_SEARCH_PAGINATION_LIMIT);
+      expect(resp.body).to.have.lengthOf(COURSE_SEARCH_PAGINATION_LIMIT);
+    });
   });
 });
