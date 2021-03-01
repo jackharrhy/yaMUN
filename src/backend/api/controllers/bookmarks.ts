@@ -5,7 +5,7 @@ import { BadRequest, NotFoundError } from "../errors";
 const bookmarksController = {
   async getCourseBookmarks(req: express.Request, res: express.Response) {
     // TODO: Get currently authed user.
-    const userId = "01";
+    const userId = "603d3e6cd8dc460c06082299";
     const bookmark = await Bookmark.findByUserId(userId);
     if(bookmark === null) {
       throw new NotFoundError("bookmark not found");
@@ -16,7 +16,7 @@ const bookmarksController = {
 
   async addCourseBookmark(req: express.Request, res: express.Response) {
     // TODO: Get currently authed user.
-    const userId = "01";
+    const userId = "603d3e6cd8dc460c06082299";
     const crn = Number(req.params.crn);
 
     if(Number.isNaN(crn)) {
@@ -29,7 +29,8 @@ const bookmarksController = {
   },
 
   async deleteCourseBookmark(req: express.Request, res: express.Response) {
-    const userId = "01";
+    // TODO: Get currently authed user.
+    const userId = "603d3e6cd8dc460c06082299";
     const crn = Number(req.params.crn);
 
     if(Number.isNaN(crn)) {
@@ -39,6 +40,7 @@ const bookmarksController = {
     const bookmark = await Bookmark.findByUserId(userId);
     if(bookmark) {
       await bookmark.removeCourse(crn);
+      res.sendStatus(204);
     } else {
       throw new NotFoundError("bookmark not found")
     }

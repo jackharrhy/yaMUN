@@ -29,7 +29,7 @@ export const BookmarkSchema = new Schema<IBookmarkDocument>({
 });
 
 BookmarkSchema.statics.findByUserId = async function (userId: string) {
-  return await this.create({"owner": userId})
+  return await this.findOne({"owner": userId}).exec();
 }
 
 BookmarkSchema.statics.findOrCreateByUserId = async function (userId: string) {
@@ -38,8 +38,7 @@ BookmarkSchema.statics.findOrCreateByUserId = async function (userId: string) {
   if(existing) {
     return existing;
   } else {
-    const created = await this.create({"owner": userId, courses: []});
-    return created;
+    return await this.create({"owner": userId, courses: []});
   }
 }
 
