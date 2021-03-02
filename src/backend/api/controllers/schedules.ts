@@ -1,19 +1,20 @@
 import { JSONSchemaType } from "ajv";
 import debugFactory from "debug";
 import express from "express";
-import Schedule, { ISchedule } from "../../models/schedule";
+import Schedule, { IScheduleDocument } from "../../models/schedule";
 import { ISemester } from "../../models/semester";
 import User from "../../models/user";
 import { handleRequestBody } from "../../utils/ajv";
 import { BadRequest, NotFoundError } from "../errors";
+import { stringToNumber } from "../utils";
 
 const debug = debugFactory("backend/api/controllers/schedules");
 
 interface ICreateScheduleInput {
-  title: ISchedule["title"];
-  description: ISchedule["description"];
+  title: IScheduleDocument["title"];
+  description: IScheduleDocument["description"];
   semester: ISemester;
-  courses: ISchedule["courses"];
+  courses: IScheduleDocument["courses"];
   ownerId: string;
 }
 
@@ -40,9 +41,15 @@ const createScheduleInputSchema: JSONSchemaType<ICreateScheduleInput> = {
 };
 
 const schedulesController = {
-  async get(req: express.Request, res: express.Response) {
+  async getById(req: express.Request, res: express.Response) {
     const scheduleId = req.params.scheduleId;
-    const schedule = await Schedule.findById(scheduleId);
+
+    // TODO ensure auth'd user can get schedule
+
+    const schedule: IScheduleDocument | null = await Schedule.findById(
+      scheduleId
+    ).exec();
+
     if (schedule === null) {
       throw new NotFoundError("schedule not found");
     } else {
@@ -55,48 +62,69 @@ const schedulesController = {
       createScheduleInputSchema,
       req.body
     );
-    const user = await User.findById(createScheduleInput);
 
-    if (user) {
+    // TODO ensure auth'd user is same as ownerId of input
+
+    const user = await User.findById(createScheduleInput.ownerId);
+
+    if (user === null) {
+      throw new BadRequest("can't create schedule, user not found");
+    } else {
       const schedule = await Schedule.create(req.body);
       debug("schedule", schedule);
       res.json(schedule);
-    } else {
-      throw new BadRequest("can't create schedule, user not found");
     }
   },
 
   async delete(req: express.Request, res: express.Response) {
     const scheduleId = req.params.scheduleId;
-    const deleted = await Schedule.findByIdAndDelete(scheduleId);
-    if (deleted) {
-      res.sendStatus(204);
+
+    // TODO ensure auth'd user is same as schedules owner
+
+    const deletedDocument: IScheduleDocument | null = await Schedule.findByIdAndDelete(
+      scheduleId
+    ).exec();
+
+    if (deletedDocument === null) {
+      throw new NotFoundError("schedule not found");
     } else {
-      throw new BadRequest("could not delete schedule");
+      res.sendStatus(204);
     }
   },
 
   async addCourse(req: express.Request, res: express.Response) {
     const scheduleId = req.params.scheduleId;
-    const crn = Number(req.params.crn);
-    const schedule = await Schedule.findById(scheduleId);
-    if (schedule) {
+    const crn = stringToNumber(req.params.crn, "crn");
+
+    // TODO ensure auth'd user is same as schedules owner
+
+    const schedule: IScheduleDocument | null = await Schedule.findById(
+      scheduleId
+    ).exec();
+
+    if (schedule === null) {
+      throw new NotFoundError("schedule not found");
+    } else {
       await schedule.addCourse(crn);
       res.sendStatus(204);
-    } else {
-      throw new NotFoundError("schedule not found");
     }
   },
 
   async removeCourse(req: express.Request, res: express.Response) {
     const scheduleId = req.params.scheduleId;
-    const crn = Number(req.params.crn);
-    const schedule = await Schedule.findById(scheduleId);
-    if (schedule) {
+    const crn = stringToNumber(req.params.crn, "crn");
+
+    // TODO ensure auth'd user is same as schedules owner
+
+    const schedule: IScheduleDocument | null = await Schedule.findById(
+      scheduleId
+    ).exec();
+
+    if (schedule === null) {
+      throw new NotFoundError("schedule not found");
+    } else {
       await schedule.removeCourse(crn);
       res.sendStatus(204);
-    } else {
-      throw new NotFoundError("schedule not found");
     }
   },
 };

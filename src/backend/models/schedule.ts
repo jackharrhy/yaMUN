@@ -2,21 +2,21 @@ import mongoose, { Model, Schema, Document } from "mongoose";
 import { NotFoundError } from "../api/errors";
 import Course from "./course";
 import { ISemester, SemesterSchema } from "./semester";
-import { IUser } from "./user";
+import { IUserDocument } from "./user";
 
-export interface ISchedule extends Document {
+export interface IScheduleDocument extends Document {
   title: string;
   description: string;
   semester: ISemester;
   courses: number[];
-  owner: IUser["_id"];
+  owner: IUserDocument["_id"];
+  addCourse: (crn: Number) => Promise<void>;
+  removeCourse: (crn: Number) => Promise<void>;
 }
 
-export interface IScheduleModel extends Model<ISchedule> {
-  addCourse: (crn: Number) => Promise<boolean>;
-}
+export interface IScheduleModel extends Model<IScheduleDocument> {}
 
-export const ScheduleSchema = new Schema<ISchedule>({
+export const ScheduleSchema = new Schema<IScheduleDocument>({
   title: { type: String, required: false },
   description: { type: String, required: false },
   semester: SemesterSchema,
@@ -29,40 +29,29 @@ export const ScheduleSchema = new Schema<ISchedule>({
 
 ScheduleSchema.methods.addCourse = async function (crn: number) {
   const course = await Course.findOneByCrn(crn);
-  if (course) {
-    if (this.courses) {
-      this.courses.push(crn);
-    } else {
-      this.courses = [crn];
-    }
-    const saved = await this.save();
-    if (saved === this) {
-      return;
-    } else {
-      throw new Error("unable to save schedule");
-    }
-  } else {
+
+  if (course === null) {
     throw new NotFoundError("course not found");
+  } else {
+    this.courses.push(crn);
+    await this.save();
   }
 };
 
 ScheduleSchema.methods.removeCourse = async function (crn: number) {
   const course = await Course.findOneByCrn(crn);
-  if (course) {
-    if (Array.isArray(this.courses)) {
-      this.courses = this.courses.filter((courseCrn) => courseCrn !== crn);
-      const saved = await this.save();
-      if (saved === this) {
-        return;
-      } else {
-        throw new Error("unable to save schedule");
-      }
-    }
-  } else {
+
+  if (course === null) {
     throw new NotFoundError("course not found");
+  } else {
+    this.courses = this.courses.filter((courseCrn) => courseCrn !== crn);
+    await this.save();
   }
 };
 
-const Schedule = mongoose.model<ISchedule>("Schedule", ScheduleSchema);
+const Schedule = mongoose.model<IScheduleDocument, IScheduleModel>(
+  "Schedule",
+  ScheduleSchema
+);
 
 export default Schedule;

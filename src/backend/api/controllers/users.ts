@@ -1,17 +1,15 @@
-import Ajv, { JSONSchemaType } from "ajv";
+import { JSONSchemaType } from "ajv";
 import debugFactory from "debug";
 import express from "express";
-import User, { IUser } from "../../models/user";
+import User, { IUserDocument } from "../../models/user";
 import { handleRequestBody } from "../../utils/ajv";
-import { BadRequest } from "../errors";
 
 const debug = debugFactory("backend/api/controllers/users");
-const ajv = new Ajv();
 
 interface ICreateUserInput {
-  username: IUser["username"];
-  password: IUser["password"];
-  email: IUser["email"];
+  username: IUserDocument["username"];
+  password: IUserDocument["password"];
+  email: IUserDocument["email"];
 }
 
 const createUserInputSchema: JSONSchemaType<ICreateUserInput> = {

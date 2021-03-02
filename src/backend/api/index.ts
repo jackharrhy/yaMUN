@@ -17,48 +17,41 @@ const asyncCatchWrapper = (
   handler(req, res).catch(next);
 };
 
+const acw = asyncCatchWrapper;
+
 const defineRoutes = (app: Express) => {
   // courses
-  app.get("/courses", asyncCatchWrapper(coursesController.search));
-  app.get("/courses/:crn", asyncCatchWrapper(coursesController.courseByCrn));
+  app.get("/courses", acw(coursesController.search));
+  app.get("/courses/:crn", acw(coursesController.courseByCrn));
 
   // users
-  app.post("/users", asyncCatchWrapper(usersController.create));
+  app.post("/users", acw(usersController.create));
 
   // schedules
-  app.post("/schedules", asyncCatchWrapper(schedulesController.create));
-  app.get("/schedules/:scheduleId", asyncCatchWrapper(schedulesController.get));
-  app.put(
-    "/schedules/:scheduleId/:crn",
-    asyncCatchWrapper(schedulesController.addCourse)
-  );
+  app.post("/schedules", acw(schedulesController.create));
+  app.get("/schedules/:scheduleId", acw(schedulesController.getById));
+  app.put("/schedules/:scheduleId/:crn", acw(schedulesController.addCourse));
   app.delete(
     "/schedules/:scheduleId/:crn",
-    asyncCatchWrapper(schedulesController.removeCourse)
+    acw(schedulesController.removeCourse)
   );
-  app.delete(
-    "/schedules/:scheduleId",
-    asyncCatchWrapper(schedulesController.delete)
-  );
+  app.delete("/schedules/:scheduleId", acw(schedulesController.delete));
 
   // bookmarks
-  app.get(
-    "/bookmarks/courses",
-    asyncCatchWrapper(bookmarksController.getCourseBookmarks)
-  );
+  app.get("/bookmarks/courses", acw(bookmarksController.getCourseBookmarks));
   app.put(
     "/bookmarks/courses/:crn",
-    asyncCatchWrapper(bookmarksController.addCourseBookmark)
+    acw(bookmarksController.addCourseBookmark)
   );
   app.delete(
     "/bookmarks/courses/:crn",
-    asyncCatchWrapper(bookmarksController.deleteCourseBookmark)
+    acw(bookmarksController.deleteCourseBookmark)
   );
 
   // exports
   app.get(
     "/export/schedules/:scheduleId/ics",
-    asyncCatchWrapper(exportsController.scheduleToICS)
+    acw(exportsController.scheduleToICS)
   );
 };
 

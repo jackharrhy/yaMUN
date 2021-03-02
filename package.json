@@ -7,7 +7,8 @@
     "lint": "tslint -c tslint.json -p tsconfig.json --fix",
     "dev": "nodemon -e ts --exec \"npm run start\"",
     "start": "tsc && node -r ts-node/register ./src/backend/index.ts",
-    "test": "mocha"
+    "test": "mocha",
+    "coverage": "nyc npm run test"
   },
   "dependencies": {
     "ajv": "^7.0.4",
@@ -31,6 +32,7 @@
     "chai": "^4.3.0",
     "mocha": "^8.3.0",
     "nodemon": "^2.0.7",
+    "nyc": "^15.1.0",
     "supertest": "^6.1.3",
     "ts-node": "^9.1.1",
     "tslint": "^6.1.3",

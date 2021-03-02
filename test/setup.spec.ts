@@ -4,6 +4,8 @@ import { insertSemester } from "../src/backend/scrape/banner/insert";
 import { database, connect } from "../src/backend/database";
 import { ISemester } from "../src/backend/models/semester";
 
+export const testSemesterCrns = [81797, 92771];
+
 let session: ClientSession;
 
 before(async function () {
