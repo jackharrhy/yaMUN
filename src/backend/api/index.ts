@@ -1,10 +1,14 @@
+import MongoStore from "connect-mongo";
+import cookieParser from "cookie-parser";
 import express, { Express } from "express";
+import session from "express-session";
 
+import { getConnectionString } from "../database";
+import bookmarksController from "./controllers/bookmarks";
 import coursesController from "./controllers/courses";
+import exportsController from "./controllers/exports";
 import schedulesController from "./controllers/schedules";
 import usersController from "./controllers/users";
-import bookmarksController from "./controllers/bookmarks";
-import exportsController from "./controllers/exports";
 import { errorHandlerMiddleware } from "./errors";
 
 const asyncCatchWrapper = (
@@ -20,12 +24,24 @@ const asyncCatchWrapper = (
 const acw = asyncCatchWrapper;
 
 const defineRoutes = (app: Express) => {
+  app.use(cookieParser());
+  app.use(
+    session({
+      secret: "development session secret ",
+      store: MongoStore.create({
+        mongoUrl: getConnectionString(),
+      }),
+    })
+  ); // TODO make configurable
+
   // courses
   app.get("/courses", acw(coursesController.search));
   app.get("/courses/:crn", acw(coursesController.courseByCrn));
 
   // users
+  app.get("/users", acw(usersController.getInfoAboutSelf));
   app.post("/users", acw(usersController.create));
+  app.post("/login", acw(usersController.login));
 
   // schedules
   app.post("/schedules", acw(schedulesController.create));

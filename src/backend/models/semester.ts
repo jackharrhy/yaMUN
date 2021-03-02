@@ -1,4 +1,5 @@
 import { Schema } from "mongoose";
+
 export interface ISemester {
   year: number;
   term: number;

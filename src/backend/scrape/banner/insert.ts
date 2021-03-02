@@ -1,6 +1,6 @@
 import debugFactory from "debug";
-import { coursesFromSemester } from ".";
 
+import { coursesFromSemester } from ".";
 import { database } from "../../database";
 import Course, { ICourse } from "../../models/course";
 import { ISemester } from "../../models/semester";

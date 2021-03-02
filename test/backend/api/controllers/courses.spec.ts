@@ -1,7 +1,7 @@
-import { Express } from "express";
 import { expect } from "chai";
-import request from "supertest";
+import { Express } from "express";
 import { describe } from "mocha";
+import request from "supertest";
 
 import api from "../../../../src/backend/api";
 import { COURSE_SEARCH_PAGINATION_LIMIT } from "../../../../src/backend/api/controllers/courses";

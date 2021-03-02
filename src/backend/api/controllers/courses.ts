@@ -61,9 +61,7 @@ const coursesController = {
   },
   async courseByCrn(req: express.Request, res: express.Response) {
     const crn = stringToNumber(req.params.crn, "crn");
-
     const course = await Course.findOneByCrn(crn);
-    debug("course", course);
 
     if (course === null) {
       throw new NotFoundError("course not found");

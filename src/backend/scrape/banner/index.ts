@@ -1,5 +1,5 @@
-import { ISemester } from "../../models/semester";
 import { ICourse } from "../../models/course";
+import { ISemester } from "../../models/semester";
 import fetchData from "./fetch-data";
 import parsePageData from "./parse-page-data";
 

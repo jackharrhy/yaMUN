@@ -1,5 +1,6 @@
-import express from "express";
 import Ajv, { JSONSchemaType } from "ajv";
+import express from "express";
+
 import { BadRequest } from "../api/errors";
 
 const ajv = new Ajv();
