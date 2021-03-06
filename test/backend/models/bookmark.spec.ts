@@ -1,4 +1,4 @@
-import { use, expect } from "chai";
+import { expect } from "chai";
 import { describe } from "mocha";
 
 import Bookmark from "../../../src/backend/models/bookmark";
