@@ -1,10 +1,11 @@
 import { expect } from "chai";
+import { json } from "express";
 import { describe } from "mocha";
 
 import Course from "../../../src/backend/models/course";
 import { testSemesterCrns } from "../../setup.spec";
 
-describe("backend/models/course", function () {
+describe.only("backend/models/course", function () {
   it("find course by crn", async function () {
     const course = await Course.findOneByCrn(testSemesterCrns[0]);
     expect(course).to.have.property("subject");
@@ -23,7 +24,10 @@ describe("backend/models/course", function () {
       page: 0,
       limit: 20,
     });
-    courses.every((c) => expect(c).property("subject").to.equal("ANTH"));
+
+    for (const course of courses) {
+      expect(course.subject).to.equal("ANTH");
+    }
   });
 
   it("find courses with non-existant subject", async function () {
@@ -37,15 +41,13 @@ describe("backend/models/course", function () {
 
   it("find courses that are taught on monday", async function () {
     const courses = await Course.search({ days: ["M"], page: 0, limit: 20 });
-    courses.every((courses) => {
-      expect(
-        courses.sections.some(function (section) {
-          return section.slots.some(function (slot) {
-            return slot.days.includes("M");
-          });
-        })
-      ).to.equal(true);
-    });
+
+    for (const course of courses) {
+      const containsAtLeastOneM = course.sections.some((section) =>
+        section.slots.some((slot) => slot.days.includes("M"))
+      );
+      expect(containsAtLeastOneM).to.be.true;
+    }
   });
 
   it("find courses taught by certain prof", async function () {
@@ -54,11 +56,12 @@ describe("backend/models/course", function () {
       page: 0,
       limit: 20,
     });
-    courses.every((c) => {
-      c.sections.every((s) => {
-        expect(s).to.have.property("primaryInstructor").equal("M Bartha");
-      });
-    });
+
+    for (const course of courses) {
+      for (const section of course.sections) {
+        expect(section.primaryInstructor).to.equal("M Bartha");
+      }
+    }
   });
 
   it("find courses taught by non-existant prof", async function () {
@@ -73,12 +76,13 @@ describe("backend/models/course", function () {
 
   it("test pagination", async function () {
     const coursesPageOne = await Course.search({ page: 0, limit: 10 });
+    const coursesPageOneAgain = await Course.search({ page: 0, limit: 10 });
     const coursesPageTwo = await Course.search({ page: 1, limit: 10 });
-    for (let i = 0; i < coursesPageOne.length; i++) {
-      expect(
-        coursesPageOne[i].subject == coursesPageTwo[i].subject &&
-          coursesPageOne[i].number == coursesPageTwo[i].number
-      ).to.equal(false);
-    }
+
+    expect(
+      JSON.stringify(coursesPageOne) === JSON.stringify(coursesPageOneAgain)
+    ).to.be.true;
+    expect(JSON.stringify(coursesPageOne) === JSON.stringify(coursesPageTwo)).to
+      .be.false;
   });
 });

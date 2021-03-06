@@ -23,7 +23,7 @@ describe("backend/models/bookmark", function () {
     expect(bookmark.courses).to.be.length(0);
   });
 
-  it("create user bookmarks and add two courses to it", async function () {
+  it("create user bookmarks, add two courses to it", async function () {
     const bookmark = await Bookmark.findOrCreateByUserId(userId);
     await bookmark.addCourse(testSemesterCrns[0]);
     await bookmark.addCourse(testSemesterCrns[1]);
