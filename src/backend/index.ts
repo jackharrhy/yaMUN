@@ -4,8 +4,8 @@ import { ISemester } from "./models/semester";
 import { insertSemester } from "./scrape/banner/insert";
 
 (async () => {
-  const { listen } = api();
   const db = await connect();
+  const { listen } = api();
 
   try {
     // For now, just populate with this test semester

@@ -42,14 +42,8 @@ ScheduleSchema.methods.addCourse = async function (crn: number) {
 };
 
 ScheduleSchema.methods.removeCourse = async function (crn: number) {
-  const course = await Course.findOneByCrn(crn);
-
-  if (course === null) {
-    throw new NotFoundError("course not found");
-  } else {
-    this.courses = this.courses.filter((courseCrn) => courseCrn !== crn);
-    await this.save();
-  }
+  this.courses = this.courses.filter((courseCrn) => courseCrn !== crn);
+  await this.save();
 };
 
 const Schedule = mongoose.model<IScheduleDocument, IScheduleModel>(

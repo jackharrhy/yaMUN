@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 
-import { ISemester } from "../../../backend/database/models/semester";
+import { ISemester } from "../../../backend/models/semester";
 import parseData from "../../../backend/scrape/banner/parse-data";
 
 function BannerTest() {
