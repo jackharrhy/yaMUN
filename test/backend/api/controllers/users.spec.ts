@@ -7,7 +7,7 @@ import api from "../../../../src/backend/api";
 import User from "../../../../src/backend/models/user";
 import { dropCollection } from "../../../test-utils";
 
-describe.only("backend/api/controllers/users", function () {
+describe("backend/api/controllers/users", function () {
   let app: Express;
   let agent: SuperAgentTest;
 
