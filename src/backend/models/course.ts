@@ -2,7 +2,7 @@ import debugFactory from "debug";
 import mongoose, { Schema, Document, Model } from "mongoose";
 
 import { ISection, SectionSchema } from "./section";
-import { INullableSemester, ISemester, SemesterSchema } from "./semester";
+import { ISemester, SemesterSchema } from "./semester";
 
 const debug = debugFactory("backend/models/course");
 
@@ -37,7 +37,7 @@ export interface ICourseModelSearch {
 }
 
 export interface ICourseModelSearchQuery {
-  semester?: INullableSemester;
+  semester?: Partial<ISemester>,
   subject?: string;
   number?: string;
   name?: string;

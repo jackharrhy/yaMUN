@@ -28,6 +28,8 @@ const defineRoutes = (app: Express) => {
   app.use(
     session({
       secret: "development session secret ",
+      resave: false,
+      saveUninitialized: false,
       store: MongoStore.create({
         mongoUrl: getConnectionString(),
       }),
