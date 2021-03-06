@@ -37,6 +37,7 @@ const loginUserInputSchema: JSONSchemaType<ILoginUserInput> = createUserInputSch
 const usersController = {
   async create(req: express.Request, res: express.Response) {
     const createUserInput = handleRequestBody(createUserInputSchema, req.body);
+    debug("create", createUserInput.username);
 
     const user = await User.createUser(
       createUserInput.username,
@@ -49,6 +50,7 @@ const usersController = {
 
   async login(req: express.Request, res: express.Response) {
     const loginInput = handleRequestBody(loginUserInputSchema, req.body);
+    debug("login", loginInput.username);
 
     const userId = await User.login(loginInput.username, loginInput.password);
 
@@ -61,6 +63,8 @@ const usersController = {
   },
 
   async logout(req: express.Request, res: express.Response) {
+    const userId = await expectUserId(req);
+    debug("logout", userId);
     req.session.destroy(() => {
       res.sendStatus(204);
     });
@@ -68,7 +72,8 @@ const usersController = {
 
   async getInfoAboutSelf(req: express.Request, res: express.Response) {
     const userId = await expectUserId(req);
-    const user: IUserDocument = User.findById(userId);
+    const user: IUserDocument = await User.findById(userId).exec();
+    debug("getInfoAboutSelf", userId, user.username);
     res.json({
       username: user.username,
     });

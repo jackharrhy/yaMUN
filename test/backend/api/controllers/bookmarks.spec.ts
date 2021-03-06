@@ -9,7 +9,7 @@ import User from "../../../../src/backend/models/user";
 import { testSemesterCrns } from "../../../setup.spec";
 import { dropCollection } from "../../../test-utils";
 
-describe.only("backend/api/controllers/bookmarks", function () {
+describe("backend/api/controllers/bookmarks", function () {
   let app: Express;
   let agent: SuperAgentTest;
 
@@ -23,8 +23,8 @@ describe.only("backend/api/controllers/bookmarks", function () {
     await User.deleteMany({});
     await dropCollection("sessions");
 
-    await User.createUser("test", "test");
     agent = request.agent(app);
+    await agent.post("/users").send({ username: "test", password: "test" });
     await agent.post("/login").send({ username: "test", password: "test" });
   });
 

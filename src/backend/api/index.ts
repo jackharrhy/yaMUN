@@ -3,7 +3,7 @@ import cookieParser from "cookie-parser";
 import express, { Express } from "express";
 import session from "express-session";
 
-import { getConnectionString } from "../database";
+import { database, getConnectionString } from "../database";
 import bookmarksController from "./controllers/bookmarks";
 import coursesController from "./controllers/courses";
 import exportsController from "./controllers/exports";
@@ -31,7 +31,7 @@ const defineRoutes = (app: Express) => {
       resave: false,
       saveUninitialized: false,
       store: MongoStore.create({
-        mongoUrl: getConnectionString(),
+        clientPromise: Promise.resolve(database.getClient()),
       }),
     })
   ); // TODO make configurable
