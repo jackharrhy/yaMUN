@@ -13,7 +13,7 @@ describe("backend/models/bookmark", function () {
     await Bookmark.deleteMany({});
     await User.deleteMany({});
 
-    userId = await User.createUser("test", "test")._id;
+    userId = (await User.createUser("test", "test"))._id;
   });
 
   it("find/create user bookmark", async function () {
