@@ -42,7 +42,7 @@ describe("backend/models/bookmark", function () {
 
   it("create user bookmarks, add a non-existant course crn", async function () {
     const bookmark = await Bookmark.findOrCreateByUserId(userId);
-    await expect(bookmark.addCourse(123456)).to.be.rejectedWith(NotFoundError, "course not found");
+    await expect(bookmark.addCourse(-1)).to.be.rejectedWith(NotFoundError, "course not found");
   });
 
 });
