@@ -1,14 +1,13 @@
 import debugFactory from "debug";
 
+import { ICourse } from "../../models/course";
+import { ISection } from "../../models/section";
+// import { LAB_SECTION_REGEX, matchToLabSection } from "./regular-expressions/lab-section";
+import { ISemester } from "../../models/semester";
+import { ISlot } from "../../models/slot";
 import { COURSE_REGEX, matchToCourse } from "./regular-expressions/course";
 import { SECTION_REGEX, matchToSection } from "./regular-expressions/section";
 import { SLOT_REGEX, matchToSlot } from "./regular-expressions/slot";
-// import { LAB_SECTION_REGEX, matchToLabSection } from "./regular-expressions/lab-section";
-
-import { ISemester } from "../../models/semester";
-import { ICourse } from "../../models/course";
-import { ISection } from "../../models/section";
-import { ISlot } from "../../models/slot";
 
 const debug = debugFactory("backend/scrape/banner/parse-data");
 

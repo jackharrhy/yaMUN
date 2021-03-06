@@ -1,12 +1,11 @@
+import api from "./api";
 import { connect } from "./database";
 import { ISemester } from "./models/semester";
 import { insertSemester } from "./scrape/banner/insert";
-import api from "./api";
 
 (async () => {
   const { listen } = api();
-
-  const db = await connect("development", "development", "localhost"); // TODO make configurable
+  const db = await connect();
 
   try {
     // For now, just populate with this test semester

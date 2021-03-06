@@ -1,8 +1,9 @@
+import debugFactory from "debug";
 import mongoose, { Schema, Document, Model } from "mongoose";
+
 import { NotFoundError } from "../api/errors";
 import Course from "./course";
 import { IUserDocument } from "./user";
-import debugFactory from "debug";
 
 const debug = debugFactory("backend/models/bookmark");
 

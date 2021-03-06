@@ -5,18 +5,26 @@ const debug = debugFactory("backend/database");
 
 export let database: Mongoose.Connection;
 
-export const dropDatabase = () => {
+// TODO make configurable
+const MONGO_USERNAME = "development";
+const MONGO_PASSWORD = "development";
+const MONGO_ENDPOINT = "localhost";
+const MONGO_DATABASE = "development"; // TODO figure out why this throws an auth failure if we set this to something
+
+export const getConnectionString = () => {
+  const uri = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_ENDPOINT}`;
+  debug("getConnectionString", uri);
+  return uri;
+};
+
+export const dropDatabase = async () => {
   debug("dropping database");
-  database.dropDatabase();
+  await database.dropDatabase();
   debug("database dropped");
 };
 
-export const connect = (
-  username: string,
-  password: string,
-  endpoint: string
-) => {
-  const uri = `mongodb://${username}:${password}@${endpoint}`;
+export const connect = async () => {
+  const uri = getConnectionString();
 
   if (database) {
     throw new Error(
@@ -24,26 +32,29 @@ export const connect = (
     );
   }
 
-  Mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  await Mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
   database = Mongoose.connection;
 
-  dropDatabase(); // TODO remove this after we wish to keep the database
+  await dropDatabase(); // TODO remove this after we wish to keep the database
 
   database.once("open", async () => {
-    console.log(`connected to database at ${endpoint}`);
+    console.log(`connected to database via ${uri}`);
   });
   database.on("error", (err) => {
-    console.log("error connecting to database", err);
+    console.log(`error connecting to database via ${uri}`, err);
   });
 
   return database;
 };
 
-export const disconnect = () => {
+export const disconnect = async () => {
   if (!database) {
     throw new Error(
       "attempted to disconnect while there was not an existing databsae connection"
     );
   }
-  Mongoose.disconnect();
+  await Mongoose.disconnect();
 };

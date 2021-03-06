@@ -1,5 +1,5 @@
-import { URLSearchParams } from "url";
 import fetch from "node-fetch";
+import { URLSearchParams } from "url";
 
 import BannerCache, { IBannerCacheDocument } from "../../models/banner-cache";
 import { ISemester } from "../../models/semester";

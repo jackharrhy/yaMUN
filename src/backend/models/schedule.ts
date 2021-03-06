@@ -1,4 +1,5 @@
 import mongoose, { Model, Schema, Document } from "mongoose";
+
 import { NotFoundError } from "../api/errors";
 import Course from "./course";
 import { ISemester, SemesterSchema } from "./semester";
@@ -10,6 +11,7 @@ export interface IScheduleDocument extends Document {
   semester: ISemester;
   courses: number[];
   owner: IUserDocument["_id"];
+  public: boolean;
   addCourse: (crn: Number) => Promise<void>;
   removeCourse: (crn: Number) => Promise<void>;
 }
@@ -25,6 +27,7 @@ export const ScheduleSchema = new Schema<IScheduleDocument>({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+  public: Boolean,
 });
 
 ScheduleSchema.methods.addCourse = async function (crn: number) {

@@ -1,4 +1,5 @@
 import { JSDOM } from "jsdom";
+
 import { ICourse } from "../../models/course";
 import { ISemester } from "../../models/semester";
 import parseData from "./parse-data";
