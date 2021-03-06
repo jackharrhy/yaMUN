@@ -3,6 +3,11 @@ import { ClientSession } from "mongoose";
 import { database, connect, disconnect } from "../src/backend/database";
 import { ISemester } from "../src/backend/models/semester";
 import { insertSemester } from "../src/backend/scrape/banner/insert";
+import { use } from "chai";
+import chaiAsPromised from "chai-as-promised";
+
+use(chaiAsPromised);
+
 
 export const testSemesterCrns = [81797, 92771];
 
