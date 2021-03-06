@@ -2,8 +2,9 @@ import { expect } from "chai";
 import { describe } from "mocha";
 
 import User from "../../../src/backend/models/user";
+import { BadRequest } from "../../../src/backend/api/errors";
 
-describe("backend/models/user", function () {
+describe.only("backend/models/user", function () {
   this.beforeEach(async () => {
     await User.deleteMany({});
   });
@@ -30,5 +31,17 @@ describe("backend/models/user", function () {
   it("login as non-existant user", async function () {
     const login = User.login("test", "test");
     await expect(login).to.eventually.equal(null);
+  });
+
+  it("login as non-existant user", async function () {
+    const login = User.login("test", "test");
+    await expect(login).to.eventually.equal(null);
+  });
+
+  it("create same user twice", async function () {
+    const userOne = User.createUser("test", "test");
+    const userTwo = User.createUser("test", "anotherpass");
+    await expect(userOne).to.eventually.have.property("username").and.to.equal("test");
+    await expect(userTwo).to.be.rejectedWith(BadRequest, "username already exists");
   });
 });
