@@ -1,11 +1,10 @@
 import { expect } from "chai";
-import { json } from "express";
 import { describe } from "mocha";
 
 import Course from "../../../src/backend/models/course";
 import { testSemesterCrns } from "../../setup.spec";
 
-describe.only("backend/models/course", function () {
+describe("backend/models/course", function () {
   it("find course by crn", async function () {
     const course = await Course.findOneByCrn(testSemesterCrns[0]);
     expect(course).to.have.property("subject");
