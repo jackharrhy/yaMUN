@@ -14,6 +14,8 @@ const coursesController = {
     const page = Number(req.query.page ?? 0);
     const limit = Number(req.query.limit ?? COURSE_SEARCH_PAGINATION_LIMIT);
 
+    debug("search", page, limit);
+
     const invalidPagination =
       limit > COURSE_SEARCH_PAGINATION_LIMIT ||
       Number.isNaN(page) ||
@@ -62,6 +64,7 @@ const coursesController = {
   async courseByCrn(req: express.Request, res: express.Response) {
     const crn = stringToNumber(req.params.crn, "crn");
     const course = await Course.findOneByCrn(crn);
+    debug("courseByCrn", crn);
 
     if (course === null) {
       throw new NotFoundError("course not found");

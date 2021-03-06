@@ -1,14 +1,18 @@
+import { use } from "chai";
+import chaiAsPromised from "chai-as-promised";
 import { ClientSession } from "mongoose";
 
 import { database, connect, disconnect } from "../src/backend/database";
 import { ISemester } from "../src/backend/models/semester";
 import { insertSemester } from "../src/backend/scrape/banner/insert";
-import { use } from "chai";
-import chaiAsPromised from "chai-as-promised";
 
 use(chaiAsPromised);
 
-
+export const testSemester: ISemester = {
+  year: 2019,
+  term: 2,
+  level: 1,
+};
 export const testSemesterCrns = [81797, 92771];
 
 let session: ClientSession;
@@ -30,9 +34,11 @@ before(async function () {
   session.startTransaction();
   await insertSemester(testSemester);
   console.log("test semester inserted, running tests!");
+  console.log("\n---\n");
 });
 
 after(async () => {
+  console.log("\n---\n");
   console.log("closing db");
   session.abortTransaction(); // don't persist things done in the transaction
   await disconnect();

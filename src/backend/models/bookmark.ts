@@ -1,5 +1,5 @@
 import debugFactory from "debug";
-import mongoose, { Schema, Document, Model } from "mongoose";
+import mongoose, { Schema, Document, Model, Types } from "mongoose";
 
 import { NotFoundError } from "../api/errors";
 import Course from "./course";
@@ -15,8 +15,8 @@ export interface IBookmarkDocument extends Document {
 }
 
 export interface IBookmarkModel extends Model<IBookmarkDocument> {
-  findByUserId: (userId: String) => Promise<IBookmarkDocument | null>;
-  findOrCreateByUserId: (userId: String) => Promise<IBookmarkDocument>;
+  findByUserId: (userId: Types.ObjectId) => Promise<IBookmarkDocument | null>;
+  findOrCreateByUserId: (userId: Types.ObjectId) => Promise<IBookmarkDocument>;
 }
 
 export const BookmarkSchema = new Schema<IBookmarkDocument>({
@@ -24,12 +24,14 @@ export const BookmarkSchema = new Schema<IBookmarkDocument>({
   courses: [Number],
 });
 
-BookmarkSchema.statics.findByUserId = async function (userId: string) {
+BookmarkSchema.statics.findByUserId = async function (userId: Types.ObjectId) {
   debug("findByUserId", userId);
   return await this.findOne({ owner: userId }).exec();
 };
 
-BookmarkSchema.statics.findOrCreateByUserId = async function (userId: string) {
+BookmarkSchema.statics.findOrCreateByUserId = async function (
+  userId: Types.ObjectId
+) {
   debug("findOrCreateByUserId", userId);
   const existingDocument: IBookmarkDocument | null = await this.findOne({
     owner: userId,

@@ -30,6 +30,7 @@ describe("backend/api/controllers/users", function () {
 
     const resp = await agent.get("/users").expect(200);
     expect(resp.body.username).to.equal(username);
+    expect(resp.body).to.have.property("_id");
   });
 
   it("can't create same user twice", async function () {
