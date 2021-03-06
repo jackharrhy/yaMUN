@@ -4,7 +4,7 @@ import { describe } from "mocha";
 import User from "../../../src/backend/models/user";
 import { BadRequest } from "../../../src/backend/api/errors";
 
-describe.only("backend/models/user", function () {
+describe("backend/models/user", function () {
   this.beforeEach(async () => {
     await User.deleteMany({});
   });
