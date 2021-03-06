@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "lib": ["es2020"],
+    "jsx": "react",
     "module": "commonjs",
     "target": "es2020",
     "strict": true,
@@ -9,5 +10,8 @@
     "forceConsistentCasingInFileNames": true,
     "outDir": "dist"
   },
-  "include": ["src/backend/**/*,test/*"]
+  "include": [
+    "src/**/*",
+    "test/**/*"
+  ]
 }
