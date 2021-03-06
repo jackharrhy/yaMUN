@@ -49,6 +49,7 @@ const defineRoutes = (app: Express) => {
   // schedules
   app.post("/schedules", acw(schedulesController.create));
   app.get("/schedules/:scheduleId", acw(schedulesController.getById));
+  app.put("/schedules/:scheduleId", acw(schedulesController.updateMeta));
   app.put("/schedules/:scheduleId/:crn", acw(schedulesController.addCourse));
   app.delete(
     "/schedules/:scheduleId/:crn",

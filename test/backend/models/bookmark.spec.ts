@@ -1,13 +1,14 @@
 import { expect } from "chai";
 import { describe } from "mocha";
+import { Types } from "mongoose";
 
+import { NotFoundError } from "../../../src/backend/api/errors";
 import Bookmark from "../../../src/backend/models/bookmark";
 import User from "../../../src/backend/models/user";
 import { testSemesterCrns } from "../../setup.spec";
-import { NotFoundError } from "../../../src/backend/api/errors";
 
 describe("backend/models/bookmark", function () {
-  let userId: string;
+  let userId: Types.ObjectId;
 
   this.beforeEach(async () => {
     await Bookmark.deleteMany({});
@@ -42,7 +43,9 @@ describe("backend/models/bookmark", function () {
 
   it("create user bookmarks, add a non-existant course crn", async function () {
     const bookmark = await Bookmark.findOrCreateByUserId(userId);
-    await expect(bookmark.addCourse(-1)).to.be.rejectedWith(NotFoundError, "course not found");
+    await expect(bookmark.addCourse(-1)).to.be.rejectedWith(
+      NotFoundError,
+      "course not found"
+    );
   });
-
 });

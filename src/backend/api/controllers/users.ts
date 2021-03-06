@@ -75,6 +75,7 @@ const usersController = {
     const user: IUserDocument = await User.findById(userId).exec();
     debug("getInfoAboutSelf", userId, user.username);
     res.json({
+      _id: user._id,
       username: user.username,
     });
   },
