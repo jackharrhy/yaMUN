@@ -32,5 +32,4 @@ after(async () => {
   session.abortTransaction(); // don't persist things done in the transaction
   await disconnect();
   console.log("done!");
-  process.exit(0);
 });

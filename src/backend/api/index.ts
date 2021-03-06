@@ -3,7 +3,7 @@ import cookieParser from "cookie-parser";
 import express, { Express } from "express";
 import session from "express-session";
 
-import { getConnectionString } from "../database";
+import { database, getConnectionString } from "../database";
 import bookmarksController from "./controllers/bookmarks";
 import coursesController from "./controllers/courses";
 import exportsController from "./controllers/exports";
@@ -28,8 +28,10 @@ const defineRoutes = (app: Express) => {
   app.use(
     session({
       secret: "development session secret ",
+      resave: false,
+      saveUninitialized: false,
       store: MongoStore.create({
-        mongoUrl: getConnectionString(),
+        clientPromise: Promise.resolve(database.getClient()),
       }),
     })
   ); // TODO make configurable
@@ -42,6 +44,7 @@ const defineRoutes = (app: Express) => {
   app.get("/users", acw(usersController.getInfoAboutSelf));
   app.post("/users", acw(usersController.create));
   app.post("/login", acw(usersController.login));
+  app.get("/logout", acw(usersController.logout));
 
   // schedules
   app.post("/schedules", acw(schedulesController.create));

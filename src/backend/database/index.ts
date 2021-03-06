@@ -33,6 +33,7 @@ export const connect = async () => {
   }
 
   await Mongoose.connect(uri, {
+    useCreateIndex: true,
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });

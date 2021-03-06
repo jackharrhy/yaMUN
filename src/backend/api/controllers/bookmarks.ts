@@ -12,6 +12,7 @@ const bookmarksController = {
   async getCourseBookmarks(req: express.Request, res: express.Response) {
     const userId = await expectUserId(req);
     const bookmark = await Bookmark.findByUserId(userId);
+    debug("getCourseBookmarks", userId);
 
     if (bookmark === null) {
       throw new NotFoundError("bookmarks not found");
@@ -23,6 +24,7 @@ const bookmarksController = {
   async addCourseBookmark(req: express.Request, res: express.Response) {
     const userId = await expectUserId(req);
     const crn = stringToNumber(req.params.crn, "crn");
+    debug("addCourseBookmark", userId, crn);
 
     const bookmark = await Bookmark.findOrCreateByUserId(userId);
 
@@ -33,6 +35,7 @@ const bookmarksController = {
   async deleteCourseBookmark(req: express.Request, res: express.Response) {
     const userId = await expectUserId(req);
     const crn = stringToNumber(req.params.crn, "crn");
+    debug("deleteCourseBookmark", userId, crn);
 
     const bookmark = await Bookmark.findByUserId(userId);
 

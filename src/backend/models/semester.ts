@@ -6,12 +6,6 @@ export interface ISemester {
   level: number;
 }
 
-export interface INullableSemester {
-  year?: number;
-  term?: number;
-  level?: number;
-}
-
 export const SemesterSchema = new Schema({
   year: { type: Number, required: true },
   term: { type: Number, required: true },
