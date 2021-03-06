@@ -9,7 +9,7 @@ import User from "../../../../src/backend/models/user";
 import { testSemesterCrns } from "../../../setup.spec";
 import { dropCollection } from "../../../test-utils";
 
-describe("backend/api/controllers/bookmarks", function () {
+describe.only("backend/api/controllers/bookmarks", function () {
   let app: Express;
   let agent: SuperAgentTest;
 
@@ -34,6 +34,8 @@ describe("backend/api/controllers/bookmarks", function () {
 
     const resp = await agent.get("/bookmarks/courses").expect(200);
     expect(resp.body.courses).to.have.lengthOf(2);
+    expect(resp.body.courses[0]).to.equal(testSemesterCrns[0]);
+    expect(resp.body.courses[1]).to.equal(testSemesterCrns[1]);
   });
 
   it("add the same courses to bookmarks twice", async function () {
@@ -42,6 +44,7 @@ describe("backend/api/controllers/bookmarks", function () {
 
     const resp = await agent.get("/bookmarks/courses").expect(200);
     expect(resp.body.courses).to.have.lengthOf(1);
+    expect(resp.body.courses[0]).to.equal(testSemesterCrns[0]);
   });
 
   it("add course to bookmarks, and then remove it", async function () {
@@ -52,8 +55,35 @@ describe("backend/api/controllers/bookmarks", function () {
     expect(resp.body.courses).to.have.lengthOf(0);
   });
 
+  it("remove a course that already doesn't exist in bookmarks", async function () {
+    await agent.delete(`/bookmarks/courses/${testSemesterCrns[0]}`).expect(204);
+
+    const resp = await agent.get("/bookmarks/courses").expect(200);
+    expect(resp.body.courses).to.have.lengthOf(0);
+  });
+
   it("get bookmarks before creating any", async function () {
     const resp = await agent.get("/bookmarks/courses").expect(200);
     expect(resp.body.courses).to.have.lengthOf(0);
+  });
+
+  it("add course that won't be found to bookmarks", async function () {
+    const resp = await agent.put(`/bookmarks/courses/-1`).expect(404);
+    expect(resp.body.error).to.match(/course not found/);
+  });
+
+  it("add invalid course bookmarks", async function () {
+    const resp = await agent.put(`/bookmarks/courses/abc`).expect(400);
+    expect(resp.body.error).to.match(/crn wasn't a valid number/);
+  });
+
+  it("be unable to request any bookmarks endpoint when logged out", async function () {
+    await agent.get("/bookmarks/courses").expect(200);
+
+    await agent.get(`/logout`).expect(204);
+
+    await agent.get("/bookmarks/courses").expect(403);
+    await agent.put(`/bookmarks/courses/${testSemesterCrns[0]}`).expect(403);
+    await agent.delete(`/bookmarks/courses/${testSemesterCrns[0]}`).expect(403);
   });
 });

@@ -37,7 +37,7 @@ export interface ICourseModelSearch {
 }
 
 export interface ICourseModelSearchQuery {
-  semester?: Partial<ISemester>,
+  semester?: Partial<ISemester>;
   subject?: string;
   number?: string;
   name?: string;

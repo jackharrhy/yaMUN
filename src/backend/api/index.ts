@@ -44,6 +44,7 @@ const defineRoutes = (app: Express) => {
   app.get("/users", acw(usersController.getInfoAboutSelf));
   app.post("/users", acw(usersController.create));
   app.post("/login", acw(usersController.login));
+  app.get("/logout", acw(usersController.logout));
 
   // schedules
   app.post("/schedules", acw(schedulesController.create));
