@@ -1,5 +1,6 @@
 import debugFactory from "debug";
 import Mongoose from "mongoose";
+import User from "../models/user";
 
 const debug = debugFactory("backend/database");
 
@@ -33,6 +34,7 @@ export const connect = async () => {
   }
 
   await Mongoose.connect(uri, {
+    autoIndex: true,
     useCreateIndex: true,
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -47,6 +49,10 @@ export const connect = async () => {
   database.on("error", (err) => {
     console.log(`error connecting to database via ${uri}`, err);
   });
+
+  console.log("building indexes...");
+  await User.init();
+  console.log("indexes built!");
 
   return database;
 };

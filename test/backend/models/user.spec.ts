@@ -23,7 +23,7 @@ describe("backend/models/user", function () {
   });
 
   it("login with wrong password", async function () {
-    const user = await User.createUser("test", "test");
+    await User.createUser("test", "test");
     const login = User.login("test", "wrongpass");
     await expect(login).to.eventually.equal(null);
   });
@@ -38,15 +38,18 @@ describe("backend/models/user", function () {
     await expect(login).to.eventually.equal(null);
   });
 
-  it("create same user twice", async function () {
+  it.only("create same user twice", async function () {
     const userOne = User.createUser("test", "test");
     const userTwo = User.createUser("test", "anotherpass");
-    await expect(userOne)
-      .to.eventually.have.property("username")
-      .and.to.equal("test");
-    await expect(userTwo).to.be.rejectedWith(
-      BadRequest,
-      "username already exists"
-    );
+
+    return Promise.all([
+      expect(userOne)
+        .to.eventually.have.property("username")
+        .and.to.equal("test"),
+      expect(userTwo).to.eventually.be.rejectedWith(
+        BadRequest,
+        "username already exists",
+      ),
+    ]);
   });
 });
