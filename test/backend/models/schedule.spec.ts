@@ -7,7 +7,7 @@ import User from "../../../src/backend/models/user";
 import { NotFoundError } from "../../../src/backend/api/errors";
 import { testSemester, testSemesterCrns } from "../../setup.spec";
 
-describe.only("backend/models/schedule", function () {
+describe("backend/models/schedule", function () {
   let userId: Types.ObjectId;
 
   this.beforeEach(async () => {
