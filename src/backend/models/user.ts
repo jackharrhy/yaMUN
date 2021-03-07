@@ -1,3 +1,4 @@
+import { MongoError } from "mongodb";
 import mongoose, { Schema, Document, Model } from "mongoose";
 
 import { checkPassword, hashPassword } from "../api/auth";
@@ -23,17 +24,23 @@ UserSchema.statics.createUser = async function (
   username: string,
   password: string
 ): Promise<IUserDocument> {
-  const alreadyExists = await User.exists({ username });
+  const passwordHash = await hashPassword(password);
 
-  if (alreadyExists) {
-    throw new BadRequest("username already exists");
-  } else {
-    const passwordHash = await hashPassword(password);
-    const user = await User.create({ username, passwordHash });
-    await Bookmark.findOrCreateByUserId(user.id);
+  let user: IUserDocument;
 
-    return user;
+  try {
+    user = await User.create({ username, passwordHash });
+  } catch (err) {
+    // 11000 is duplicate entry, to avoid multiple users with the same username
+    if (err instanceof MongoError && err.code == 11000) {
+      throw new BadRequest("username already exists");
+    }
+    throw err;
   }
+
+  await Bookmark.findOrCreateByUserId(user.id);
+
+  return user;
 };
 
 UserSchema.statics.login = async function (
