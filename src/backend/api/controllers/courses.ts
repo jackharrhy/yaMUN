@@ -3,7 +3,7 @@ import express from "express";
 
 import Course from "../../models/course";
 import { NotFoundError, BadRequest } from "../errors";
-import { stringToNumber } from "../utils";
+import { maybeStringToNumber, stringToNumber } from "../utils";
 
 const debug = debugFactory("backend/api/controllers/courses");
 
@@ -25,9 +25,18 @@ const coursesController = {
 
     const include = req.query.include?.toString().split(",");
 
-    const semesterYear = Number(req.query.semesterYear);
-    const semesterTerm = Number(req.query.semesterYear);
-    const semesterLevel = Number(req.query.semesterYear);
+    const semesterYear = maybeStringToNumber(
+      req.query.semesterYear?.toString(),
+      "semesterYear"
+    );
+    const semesterTerm = maybeStringToNumber(
+      req.query.semesterYear?.toString(),
+      "semesterTerm"
+    );
+    const semesterLevel = maybeStringToNumber(
+      req.query.semesterYear?.toString(),
+      "semesterLevel"
+    );
 
     const subject = req.query.subject?.toString();
     const number = req.query.number?.toString();
@@ -36,27 +45,39 @@ const coursesController = {
     const prof = req.query.prof?.toString();
     const days = req.query.days?.toString().split(",");
 
-    const beginTimeMax = Number(req.query.beginTimeMax);
-    const beginTimeMin = Number(req.query.beginTimeMin);
-    const endTimeMax = Number(req.query.beginTimeMax);
-    const endTimeMin = Number(req.query.beginTimeMin);
+    const beginTimeMax = maybeStringToNumber(
+      req.query.beginTimeMax?.toString(),
+      "beginTimeMax"
+    );
+    const beginTimeMin = maybeStringToNumber(
+      req.query.beginTimeMin?.toString(),
+      "beginTimeMin"
+    );
+    const endTimeMax = maybeStringToNumber(
+      req.query.beginTimeMax?.toString(),
+      "endTimeMax"
+    );
+    const endTimeMin = maybeStringToNumber(
+      req.query.beginTimeMin?.toString(),
+      "endTimeMin"
+    );
 
     const results = await Course.search({
       page,
       limit,
       include,
-      semesterYear: Number.isNaN(semesterYear) ? undefined : semesterYear,
-      semesterTerm: Number.isNaN(semesterTerm) ? undefined : semesterTerm,
-      semesterLevel: Number.isNaN(semesterLevel) ? undefined : semesterLevel,
+      semesterYear,
+      semesterTerm,
+      semesterLevel,
       subject,
       number,
       name,
       prof,
       days,
-      beginTimeMin: Number.isNaN(beginTimeMin) ? undefined : beginTimeMin,
-      beginTimeMax: Number.isNaN(beginTimeMax) ? undefined : beginTimeMax,
-      endTimeMin: Number.isNaN(beginTimeMin) ? undefined : endTimeMin,
-      endTimeMax: Number.isNaN(beginTimeMax) ? undefined : endTimeMax,
+      beginTimeMin,
+      beginTimeMax,
+      endTimeMin,
+      endTimeMax,
     });
 
     res.json(results);

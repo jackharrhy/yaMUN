@@ -25,18 +25,6 @@ const asyncCatchWrapper = (
 const acw = asyncCatchWrapper;
 
 const defineRoutes = (app: Express) => {
-  app.use(cookieParser());
-  app.use(
-    session({
-      secret: SESSION_SECRET,
-      resave: false,
-      saveUninitialized: false,
-      store: MongoStore.create({
-        clientPromise: Promise.resolve(database.getClient()),
-      }),
-    })
-  );
-
   // courses
   app.get("/courses", acw(coursesController.search));
   app.get("/courses/:crn", acw(coursesController.courseByCrn));
@@ -78,8 +66,24 @@ const defineRoutes = (app: Express) => {
 
 export default () => {
   const app = express();
+
   app.use(express.json());
+
+  app.use(cookieParser());
+
+  app.use(
+    session({
+      secret: SESSION_SECRET,
+      resave: false,
+      saveUninitialized: false,
+      store: MongoStore.create({
+        clientPromise: Promise.resolve(database.getClient()),
+      }),
+    })
+  );
+
   defineRoutes(app);
+
   app.use(errorHandlerMiddleware);
 
   return {
