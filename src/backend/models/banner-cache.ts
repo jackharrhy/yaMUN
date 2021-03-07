@@ -10,7 +10,7 @@ export interface IBannerCache {
 
 export interface IBannerCacheDocument extends Document, IBannerCache {}
 
-export const BannerCacheSchema = new Schema({
+export const BannerCacheSchema = new Schema<IBannerCacheDocument>({
   year: { type: Number, required: true },
   term: { type: Number, required: true },
   level: { type: Number, required: true },

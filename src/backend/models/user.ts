@@ -15,7 +15,7 @@ export interface IUserModel extends Model<IUserDocument> {
   login(username: string, password: string): Promise<string | null>;
 }
 
-export const UserSchema: Schema = new Schema({
+export const UserSchema = new Schema<IUserDocument>({
   username: { type: String, required: true, unique: true },
   passwordHash: { type: String, required: true },
 });

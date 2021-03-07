@@ -41,7 +41,7 @@ describe("backend/models/user", function () {
   it("create same user twice", async function () {
     await User.createUser("test", "test");
 
-    expect(
+    return expect(
       User.createUser("test", "anotherpass")
     ).to.eventually.to.rejectedWith(BadRequest, "username already exists");
   });
