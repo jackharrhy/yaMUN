@@ -7,7 +7,7 @@ import api from "../../../../src/backend/api";
 import { COURSE_SEARCH_PAGINATION_LIMIT } from "../../../../src/backend/api/controllers/courses";
 import { testSemester2Crns } from "../../../test-data";
 
-describe.only("backend/api/controllers/courses", function () {
+describe("backend/api/controllers/courses", function () {
   let app: Express;
 
   this.beforeAll(async () => {
