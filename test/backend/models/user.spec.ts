@@ -38,7 +38,7 @@ describe("backend/models/user", function () {
     await expect(login).to.eventually.equal(null);
   });
 
-  it.only("create same user twice", async function () {
+  it("create same user twice", async function () {
     const userOne = User.createUser("test", "test");
     const userTwo = User.createUser("test", "anotherpass");
 
