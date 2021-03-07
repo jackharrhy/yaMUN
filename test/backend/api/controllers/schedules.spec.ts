@@ -7,7 +7,7 @@ import request, { SuperAgentTest } from "supertest";
 import api from "../../../../src/backend/api";
 import Schedule from "../../../../src/backend/models/schedule";
 import User from "../../../../src/backend/models/user";
-import { testSemester, testSemesterCrns } from "../../../setup.spec";
+import { testSemester1, testSemester1Crns } from "../../../test-data";
 import { dropCollection } from "../../../test-utils";
 
 describe("backend/api/controllers/schedules", function () {
@@ -50,7 +50,7 @@ describe("backend/api/controllers/schedules", function () {
         title: "foo",
         description: "bar",
         public: false,
-        semester: testSemester,
+        semester: testSemester1,
       })
       .expect(200);
 
@@ -65,7 +65,7 @@ describe("backend/api/controllers/schedules", function () {
     const title = "foo";
     const description = "bar";
     const isPublic = false;
-    const semester = testSemester;
+    const semester = testSemester1;
 
     const scheduleCreateResp = await agent
       .post("/schedules")
@@ -101,7 +101,7 @@ describe("backend/api/controllers/schedules", function () {
         title: "one",
         description: "one",
         public: false,
-        semester: testSemester,
+        semester: testSemester1,
       })
       .expect(200);
     expect(firstResp.body.courses).to.be.an("array").that.is.lengthOf(0);
@@ -112,7 +112,7 @@ describe("backend/api/controllers/schedules", function () {
         title: "one",
         description: "one",
         public: false,
-        semester: testSemester,
+        semester: testSemester1,
       })
       .expect(200);
     expect(secondResp.body.courses).to.be.an("array").that.is.lengthOf(0);
@@ -127,7 +127,7 @@ describe("backend/api/controllers/schedules", function () {
         title: "mine",
         description: "and only mine",
         public: false,
-        semester: testSemester,
+        semester: testSemester1,
       })
       .expect(200);
 
@@ -143,7 +143,7 @@ describe("backend/api/controllers/schedules", function () {
         description: "one",
         public: false,
         foo: null,
-        semester: testSemester,
+        semester: testSemester1,
       })
       .expect(400);
 
@@ -159,7 +159,7 @@ describe("backend/api/controllers/schedules", function () {
         title: "title meta",
         description: "description meta",
         public: false,
-        semester: testSemester,
+        semester: testSemester1,
       })
       .expect(200);
 
@@ -190,7 +190,7 @@ describe("backend/api/controllers/schedules", function () {
         title: "title",
         description: "description",
         public: false,
-        semester: testSemester,
+        semester: testSemester1,
       })
       .expect(200);
 
@@ -223,7 +223,7 @@ describe("backend/api/controllers/schedules", function () {
         title: "title",
         description: "description",
         public: true,
-        semester: testSemester,
+        semester: testSemester1,
       })
       .expect(200);
 
@@ -249,15 +249,15 @@ describe("backend/api/controllers/schedules", function () {
         title: "title",
         description: "description",
         public: true,
-        semester: testSemester,
+        semester: testSemester1,
       })
       .expect(200);
 
     await agent
-      .put(`/schedules/${createResp.body._id}/${testSemesterCrns[0]}`)
+      .put(`/schedules/${createResp.body._id}/${testSemester1Crns[0]}`)
       .expect(204);
     await agent
-      .put(`/schedules/${createResp.body._id}/${testSemesterCrns[1]}`)
+      .put(`/schedules/${createResp.body._id}/${testSemester1Crns[1]}`)
       .expect(204);
 
     const resp = await agent
@@ -265,8 +265,8 @@ describe("backend/api/controllers/schedules", function () {
       .expect(200);
 
     expect(resp.body.courses).to.deep.equal([
-      testSemesterCrns[0],
-      testSemesterCrns[1],
+      testSemester1Crns[0],
+      testSemester1Crns[1],
     ]);
   });
 
@@ -277,7 +277,7 @@ describe("backend/api/controllers/schedules", function () {
         title: "title",
         description: "description",
         public: true,
-        semester: testSemester,
+        semester: testSemester1,
       })
       .expect(200);
 
@@ -297,22 +297,22 @@ describe("backend/api/controllers/schedules", function () {
         title: "title",
         description: "description",
         public: true,
-        semester: testSemester,
+        semester: testSemester1,
       })
       .expect(200);
 
     await agent
-      .put(`/schedules/${createResp.body._id}/${testSemesterCrns[0]}`)
+      .put(`/schedules/${createResp.body._id}/${testSemester1Crns[0]}`)
       .expect(204);
 
     const respBeforeDelete = await agent
       .get(`/schedules/${createResp.body._id}`)
       .expect(200);
 
-    expect(respBeforeDelete.body.courses).to.deep.equal([testSemesterCrns[0]]);
+    expect(respBeforeDelete.body.courses).to.deep.equal([testSemester1Crns[0]]);
 
     await agent
-      .delete(`/schedules/${createResp.body._id}/${testSemesterCrns[0]}`)
+      .delete(`/schedules/${createResp.body._id}/${testSemester1Crns[0]}`)
       .expect(204);
 
     const respAfterDelete = await agent
@@ -329,7 +329,7 @@ describe("backend/api/controllers/schedules", function () {
         title: "title",
         description: "description",
         public: true,
-        semester: testSemester,
+        semester: testSemester1,
       })
       .expect(200);
 

@@ -2,11 +2,11 @@ import { expect } from "chai";
 import { describe } from "mocha";
 
 import Course from "../../../src/backend/models/course";
-import { testSemesterCrns } from "../../setup.spec";
+import { testSemester1Crns } from "../../test-data";
 
 describe("backend/models/course", function () {
   it("find course by crn", async function () {
-    const course = await Course.findOneByCrn(testSemesterCrns[0]);
+    const course = await Course.findOneByCrn(testSemester1Crns[0]);
     expect(course).to.have.property("subject");
     expect(course).to.have.property("number");
     expect(course).to.have.property("name");

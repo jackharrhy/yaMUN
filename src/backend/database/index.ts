@@ -1,5 +1,6 @@
 import debugFactory from "debug";
 import Mongoose from "mongoose";
+
 import User from "../models/user";
 
 const debug = debugFactory("backend/database");
@@ -13,7 +14,8 @@ const MONGO_ENDPOINT = "localhost";
 const MONGO_DATABASE = "development"; // TODO figure out why this throws an auth failure if we set this to something
 
 export const getConnectionString = () => {
-  const uri = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_ENDPOINT}`;
+  // const uri = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_ENDPOINT}`;
+  const uri = `mongodb://${MONGO_ENDPOINT}`;
   debug("getConnectionString", uri);
   return uri;
 };
