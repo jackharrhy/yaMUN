@@ -28,7 +28,7 @@ describe("backend/models/schedule", function () {
     schedule.updateMeta("My Public Schedule", "A public schedule.", true);
     expect(schedule).property("title").to.equal("My Public Schedule");
     expect(schedule).property("description").to.equal("A public schedule.");
-    expect(schedule).property("public").to.equal(true);
+    expect(schedule).property("public").to.be.true;
   });
 
   it("create schedule for a user, add a course to it", async function () {
