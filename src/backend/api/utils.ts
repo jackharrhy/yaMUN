@@ -11,6 +11,17 @@ export function stringToNumber(string: string, context: string): number {
   }
 }
 
+export function maybeStringToNumber(
+  string: string | undefined,
+  context: string
+): number | undefined {
+  if (string === undefined) {
+    return undefined;
+  } else {
+    return stringToNumber(string, context);
+  }
+}
+
 export function stringToObjectId(
   string: string,
   context: string

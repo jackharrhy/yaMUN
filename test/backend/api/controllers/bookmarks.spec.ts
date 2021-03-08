@@ -49,14 +49,18 @@ describe("backend/api/controllers/bookmarks", function () {
 
   it("add course to bookmarks, and then remove it", async function () {
     await agent.put(`/bookmarks/courses/${testSemester1Crns[0]}`).expect(204);
-    await agent.delete(`/bookmarks/courses/${testSemester1Crns[0]}`).expect(204);
+    await agent
+      .delete(`/bookmarks/courses/${testSemester1Crns[0]}`)
+      .expect(204);
 
     const resp = await agent.get("/bookmarks/courses").expect(200);
     expect(resp.body.courses).to.have.lengthOf(0);
   });
 
   it("remove a course that already doesn't exist in bookmarks", async function () {
-    await agent.delete(`/bookmarks/courses/${testSemester1Crns[0]}`).expect(204);
+    await agent
+      .delete(`/bookmarks/courses/${testSemester1Crns[0]}`)
+      .expect(204);
 
     const resp = await agent.get("/bookmarks/courses").expect(200);
     expect(resp.body.courses).to.have.lengthOf(0);
@@ -84,6 +88,8 @@ describe("backend/api/controllers/bookmarks", function () {
 
     await agent.get("/bookmarks/courses").expect(403);
     await agent.put(`/bookmarks/courses/${testSemester1Crns[0]}`).expect(403);
-    await agent.delete(`/bookmarks/courses/${testSemester1Crns[0]}`).expect(403);
+    await agent
+      .delete(`/bookmarks/courses/${testSemester1Crns[0]}`)
+      .expect(403);
   });
 });

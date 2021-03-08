@@ -1,4 +1,5 @@
 import debugFactory from "debug";
+import { Condition } from "mongodb";
 import mongoose, { Schema, Document, Model } from "mongoose";
 
 import { ISection, SectionSchema } from "./section";
@@ -37,7 +38,7 @@ export interface ICourseModelSearch {
 }
 
 export interface ICourseModelSearchQuery {
-  semester?: Partial<ISemester>;
+  semester?: Condition<ISemester>;
   subject?: string;
   number?: string;
   name?: string;
@@ -68,7 +69,7 @@ export interface ICourseModel extends Model<ICourseDocument> {
   search(args: ICourseModelSearch): Promise<ICourse[]>;
 }
 
-export const CourseSchema = new Schema({
+export const CourseSchema = new Schema<ICourseDocument>({
   semester: SemesterSchema,
   campus: { type: String, required: true },
   session: { type: String, required: true },
