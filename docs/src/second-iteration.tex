@@ -1,0 +1,128 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage{indentfirst}
+
+\setlength{\parindent}{10ex}
+
+\begin{document}
+\begin{titlepage}
+    \begin{center}
+        \vspace*{1cm}
+            
+        \Huge
+        \textbf{Group 3 - Second Iteration}
+            
+        \vspace{0.5cm}
+        \LARGE
+        yAMUN, a course planning system for MUN students
+            
+        \vspace{1.5cm}
+            
+        \textbf{Jack Harrhy}, \texttt{201732922} \texttt{(jaharrhy@mun.ca)} \\
+        \textbf{Genadi Valyeyev}, \texttt{201921376} \texttt{(gvalyeyev@mun.ca)}\\
+        \textbf{Aidan Langer}, \texttt{201735677} \texttt{(aplanger@mun.ca)}\\
+            
+        \vfill
+    \end{center}
+\end{titlepage}
+\section{Section Header}
+Foo. \par
+Bar.
+
+Functionalities
+
+	In our previous iteration, we stated our functionalities as thus; functions of base level importance are creating and editing a personalized course list. That includes adding and deleting courses from said list, along with the basic information that accompanies said courses. Secondarily, we intend to fetch detailed course descriptions, pre-requisites, and the professor’s contact information from various APIs. Thirdly, we intended to integrate searching functionalities, as well as many optional filters to assist in the searching functionality. When adding a course, if time slots conflict we intend to let the user know, and have them choose how to proceed. Our last few functionalities listed out in the previous iteration involve an ability to add and remove bookmarks for courses to view later, and to be able to export your courses into various calendar applications.
+As of the time of this writing, our base level functionalities are implemented. Courses can be added and deleted, and you can view their sections and slots, but we have yet to include the additional information about the course we set out to include (detailed course descriptions, pre-requisites, professor contact information), since a lot of time was spent building the banner scraping part of our app, which can be found in `src/backend/scrape/banner`. Filters however have been implemented, such as searching by subject, CRN, and course name, etc.. Adding, modifying, and deleting both bookmarks and schedules, has been implemented, along with authorization on these resources, and exporting the schedule to an ICS for calendar applications is also implemented.
+
+Models
+The models we have thus far are as follows; 
+	Banner-Cache: simple model for caching requests to banner, so we don’t have to fetch the same page twice in a short period of time.
+	Course: the model that defines a course that takes place in a given semester in Memorial’s system, including information about itself, its sections, and their courses. Course has two basic functionalities: to find a course by CRN (used when adding course sections to a schedule or bookmarking), and the search functionalities listed earlier that users would use to find courses.
+	Schedule: the model that defines a course schedule owned by a specific user, which can also be either public or not. In this model, you can add a course section (using Course’s findOneByCrn() function to ensure it exists before adding) and remove a course (in which there is no check on removal in case the course was removed).
+	Bookmark: the model that defines the user’s list of bookmarked courses. Much like Schedule, you can add or remove a course with the appropriate similar methods.
+	Semester: exists in the models directory, but is a property of Course.
+	Section: exists in the models directory, but is a child of Course.
+Slot: exists in the models directory, but is a child of Section.
+User: the model that defines a user of our system. It has two properties; username and passwordHash.
+We’re using a mostly embedded system, in which Course is overloaded with all information about itself, but other models like Schedule and Bookmark are separate to course, and reference their owners via ObjectId references, and mention courses by simply CRN, so we have a small amount of normalized data as well.
+	Routes and Controllers
+Our routes include;
+	For Courses;
+app.get("/courses", acw(courseController.search)); 
+Searches for Courses based on arguments passed into the function.
+
+
+
+app.get(
+    "/courses/:crn", 
+    acw(coursesController.courseByCrn)
+);
+
+Finds one Course by a CRN passed into the function.
+
+	For Users;
+	app.post("/users", acw(usersController.create));
+Creates one User and adds it to the system.
+
+	For Schedules;
+	app.post("/schedules", acw(schedulesController.create));
+Creates a new Schedule for the User.
+	
+app.get(
+     "/schedules/:scheduleId", 
+     acw(schedulesController.getById)
+);
+
+Fetches a Schedule from the database by the Schedule’s ID.
+
+app.put(
+     "/schedules/:scheduleId/:crn", 
+     acw(schedulesController.addCourse)
+);
+
+	Adds a Course to the Schedule by the CRN passed.
+
+app.delete(
+     "schedules/:scheduleId/:crn", 
+     acw(schedulesController.removeCourse)
+);
+
+Deletes a Course from the Schedule by the CRN passed.
+
+
+	For Bookmarks;
+app.get(
+     "/bookmarks/courses", 
+     acw(bookmarksController.getCourseBookmarks)
+);
+
+	Fetches course Bookmarks that belong to the user.
+
+app.put(
+     "/bookmarks/courses/:crn",
+	acw(bookmarksController.addCourseBookmark)
+);
+
+	Adds a Bookmark by the CRN passed.
+		
+app.delete(
+	"/bookmarks/courses/:crn",
+     acw(bookmarksController.deleteCourseBookmark)
+);
+
+	Deletes a Bookmark by the CRN passed.
+
+		For Exporting;
+app.get(
+	"/export/schedules/:scheduleId/ics",
+     acw(exportsController.scheduletoICS)
+);
+
+	Exports the schedule to an ICS file for calendar applications.
+
+
+Tests
+	For our testing, we’re using the node package modules Supertest and Mocha.
+\end{document} 
+
