@@ -10,7 +10,7 @@ import User, { IUserDocument } from "../../../../src/backend/models/user";
 import { testSemester, testSemesterCrns } from "../../../setup.spec";
 import { dropCollection } from "../../../test-utils";
 import { ICourse, ICourseDocument } from "../../../../src/backend/models/course";
-import { ISection } from "../../../../src/backend/models/section";
+import Course, { ISection } from "../../../../src/backend/models/section";
 import insertData from "../../../../src/backend/scrape/banner/insert";
 import { ISlot } from "../../../../src/backend/models/slot";
 
@@ -51,7 +51,7 @@ let section1: ISection = {
 
 let section2: ISection = {
     section: "005",
-    crn: 37583,
+    crn: 38450,
     scheduleType: null,
     phoneOne: "phoneThree", 
     phoneTwo: "phoneFour", 
@@ -67,6 +67,7 @@ let section2: ISection = {
 }
 let sections1: ISection[] = [section1];
 let sections2: ISection[] = [section2];
+let crns: number[] = [37583, 38450];
 
 let course1: ICourse = {
     semester: testSemester,
@@ -88,8 +89,6 @@ let course2: ICourse = {
     sections: sections2
 };
 
-insertData([course1, course2]);
-
 describe("backend/api/controllers/exports", function () {
     let app: Express;
     let agent: SuperAgentTest;
@@ -102,7 +101,10 @@ describe("backend/api/controllers/exports", function () {
     this.beforeEach(async () => {
         await Schedule.deleteMany({});
         await User.deleteMany({});
+        await Course.deleteMany({});
         await dropCollection("sessions");
+
+        insertData([course1, course2]);
 
         agent = request.agent(app);
         await agent.post("/users").send({ username: "test", password: "test" });
@@ -112,7 +114,7 @@ describe("backend/api/controllers/exports", function () {
     it("create valid schedule with one course, and export", async function () {
         const title = "foo";
         const description = "bar";
-        const isPublic = false;
+        const isPublic = true;
         const semester = testSemester;  
 
         const scheduleCreateResp = await agent
@@ -125,9 +127,20 @@ describe("backend/api/controllers/exports", function () {
         })
         .expect(200);
 
+        await agent
+        .put(`/schedules/${scheduleCreateResp.body._id}/${crns[0]}`)
+        .expect(204);
+
+        await agent
+        .put(`/schedules/${scheduleCreateResp.body._id}/${crns[1]}`)
+        .expect(204);
+
+        //console.log(scheduleCreateResp.body._id);
+
         const exportResp = await agent
         .get(`/export/schedules/${scheduleCreateResp.body._id}/ics`)
         .expect(200);
+
 
       });
 
