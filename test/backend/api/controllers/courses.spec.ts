@@ -36,16 +36,24 @@ describe("backend/api/controllers/courses", function () {
   });
 
   it("search with invalid pagination fields", async function () {
-    const resp = await request(app).get("/courses/?limit=foo&page=bar").expect(400);
+    const resp = await request(app)
+      .get("/courses/?limit=foo&page=bar")
+      .expect(400);
     expect(resp.body.error).to.match(/invalid pagination/);
   });
 
   it("search with invalid numerical values", async function () {
-    const firstResp = await request(app).get("/courses/?semesterYear=NOT_A_YEAR").expect(400);
+    const firstResp = await request(app)
+      .get("/courses/?semesterYear=NOT_A_YEAR")
+      .expect(400);
     expect(firstResp.body.error).to.match(/semesterYear wasn't a valid number/);
 
-    const secondResp = await request(app).get("/courses/?beginTimeMin=wayTooEarlyForMeOmegaLUL").expect(400);
-    expect(secondResp.body.error).to.match(/beginTimeMin wasn't a valid number/);
+    const secondResp = await request(app)
+      .get("/courses/?beginTimeMin=wayTooEarlyForMeOmegaLUL")
+      .expect(400);
+    expect(secondResp.body.error).to.match(
+      /beginTimeMin wasn't a valid number/
+    );
   });
 
   it("finding course with valid crn", async function () {
