@@ -181,7 +181,7 @@ CourseSchema.statics.search = async function (
     }
   }
 
-  debug("query", JSON.stringify(query, null, 2));
+  debug("query", JSON.stringify(query, null, 2), args.page, args.limit);
   return await this.find(query)
     .skip(args.page * args.limit)
     .limit(args.limit)

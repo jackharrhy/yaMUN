@@ -1,7 +1,6 @@
 import debugFactory from "debug";
 
 import { coursesFromSemester } from ".";
-import { database } from "../../database";
 import Course, { ICourse } from "../../models/course";
 import { ISemester } from "../../models/semester";
 
@@ -13,13 +12,7 @@ export async function insertSemester(semester: ISemester) {
 }
 
 export default async function insertData(courses: ICourse[]) {
-  debug("starting!");
-  const session = await database.startSession();
-  session.startTransaction();
-
+  debug("starting to insert courses!");
   await Course.create(courses);
-
-  await session.commitTransaction();
-  session.endSession();
-  debug("done!");
+  debug("done inserting courses!");
 }

@@ -5,7 +5,7 @@ import BannerCache, { IBannerCacheDocument } from "../../models/banner-cache";
 import { ISemester } from "../../models/semester";
 
 const HEADERS = {
-  "User-Agent": "yamun",
+  "User-Agent": "github.com/jackharrhy/yamun - src/backend/scrape/banner",
   Accept: "text/html",
   "Content-Type": "application/x-www-form-urlencoded",
 };

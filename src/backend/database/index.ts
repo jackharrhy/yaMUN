@@ -6,6 +6,9 @@ import User from "../models/user";
 
 const debug = debugFactory("backend/database");
 
+// Permit empty strings as valid required strings
+(Mongoose.Schema.Types.String as any).checkRequired((v: any) => v != null);
+
 export let database: Mongoose.Connection;
 
 export const dropDatabase = async () => {
@@ -14,7 +17,7 @@ export const dropDatabase = async () => {
   debug("database dropped");
 };
 
-export const connect = async () => {
+export const connect = async (): Promise<Mongoose.Connection> => {
   const uri = MONGO_CONNECTION_STRING;
 
   if (database) {
@@ -29,18 +32,22 @@ export const connect = async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
+
   database = Mongoose.connection;
 
-  if (DROP_DB_ON_START) {
-    await dropDatabase();
-  }
+  database.on("error", (err) => {
+    console.log(`error with the database connected at ${uri}`, err);
+  });
 
   database.once("open", async () => {
     console.log(`connected to database via ${uri}`);
   });
-  database.on("error", (err) => {
-    console.log(`error connecting to database via ${uri}`, err);
-  });
+
+  if (DROP_DB_ON_START) {
+    console.log("dropping");
+    await dropDatabase();
+    console.log("dropped");
+  }
 
   console.log("building indexes...");
   await User.init();

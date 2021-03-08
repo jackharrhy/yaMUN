@@ -1,13 +1,16 @@
+import { Connection } from "mongoose";
+
 import api from "./api";
 import { connect } from "./database";
 import Course from "./models/course";
 import { ISemester } from "./models/semester";
 import { insertSemester } from "./scrape/banner/insert";
+import { populatePeople } from "./scrape/people";
 
-const populateTestSemesterIfNoData = async () => {
-  const existingCourses = await Course.find({}).exec();
+const populateTestSemester = async () => {
+  const existingCourse = await Course.findOne({}).exec();
 
-  if (existingCourses.length === 0) {
+  if (existingCourse === null) {
     console.log("populating test semester...");
     const testSemester: ISemester = {
       year: 2019,
@@ -16,21 +19,21 @@ const populateTestSemesterIfNoData = async () => {
     };
 
     await insertSemester(testSemester);
-    console.log("populated!");
+    console.log("populated test semester!");
   } else {
     console.log("no need to populate test semester, already existing data");
   }
 };
 
 (async () => {
-  const db = await connect();
-  const { listen } = api();
-
   try {
-    await populateTestSemesterIfNoData();
+    await connect();
+    const { listen } = api();
+
+    await populatePeople();
+    await populateTestSemester();
     listen();
   } catch (err) {
     console.error(err);
-    await db.close();
   }
 })();
