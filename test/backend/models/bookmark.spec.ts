@@ -5,7 +5,7 @@ import { Types } from "mongoose";
 import { NotFoundError } from "../../../src/backend/api/errors";
 import Bookmark from "../../../src/backend/models/bookmark";
 import User from "../../../src/backend/models/user";
-import { testSemesterCrns } from "../../setup.spec";
+import { testSemester1Crns } from "../../test-data";
 
 describe("backend/models/bookmark", function () {
   let userId: Types.ObjectId;
@@ -25,19 +25,19 @@ describe("backend/models/bookmark", function () {
 
   it("create user bookmarks, add two courses to it", async function () {
     const bookmark = await Bookmark.findOrCreateByUserId(userId);
-    await bookmark.addCourse(testSemesterCrns[0]);
-    await bookmark.addCourse(testSemesterCrns[1]);
-    expect(bookmark.courses).to.contain(testSemesterCrns[0]);
-    expect(bookmark.courses).to.contain(testSemesterCrns[1]);
+    await bookmark.addCourse(testSemester1Crns[0]);
+    await bookmark.addCourse(testSemester1Crns[1]);
+    expect(bookmark.courses).to.contain(testSemester1Crns[0]);
+    expect(bookmark.courses).to.contain(testSemester1Crns[1]);
   });
 
   it("create user bookmarks, add a course and then delete it", async function () {
     const bookmark = await Bookmark.findOrCreateByUserId(userId);
-    await bookmark.addCourse(testSemesterCrns[0]);
-    expect(bookmark.courses).to.contain(testSemesterCrns[0]);
+    await bookmark.addCourse(testSemester1Crns[0]);
+    expect(bookmark.courses).to.contain(testSemester1Crns[0]);
     expect(bookmark.courses).to.be.length(1);
-    await bookmark.removeCourse(testSemesterCrns[0]);
-    expect(bookmark.courses).not.to.contain(testSemesterCrns[0]);
+    await bookmark.removeCourse(testSemester1Crns[0]);
+    expect(bookmark.courses).not.to.contain(testSemester1Crns[0]);
     expect(bookmark.courses).to.be.length(0);
   });
 

@@ -3,7 +3,8 @@ import cookieParser from "cookie-parser";
 import express, { Express } from "express";
 import session from "express-session";
 
-import { database, getConnectionString } from "../database";
+import { PORT, SESSION_SECRET } from "../config";
+import { database } from "../database";
 import bookmarksController from "./controllers/bookmarks";
 import coursesController from "./controllers/courses";
 import exportsController from "./controllers/exports";
@@ -24,18 +25,6 @@ const asyncCatchWrapper = (
 const acw = asyncCatchWrapper;
 
 const defineRoutes = (app: Express) => {
-  app.use(cookieParser());
-  app.use(
-    session({
-      secret: "development session secret ",
-      resave: false,
-      saveUninitialized: false,
-      store: MongoStore.create({
-        clientPromise: Promise.resolve(database.getClient()),
-      }),
-    })
-  ); // TODO make configurable
-
   // courses
   app.get("/courses", acw(coursesController.search));
   app.get("/courses/:crn", acw(coursesController.courseByCrn));
@@ -75,17 +64,33 @@ const defineRoutes = (app: Express) => {
   );
 };
 
-export default ({ port = 4000 } = {}) => {
+export default () => {
   const app = express();
+
   app.use(express.json());
+
+  app.use(cookieParser());
+
+  app.use(
+    session({
+      secret: SESSION_SECRET,
+      resave: false,
+      saveUninitialized: false,
+      store: MongoStore.create({
+        clientPromise: Promise.resolve(database.getClient()),
+      }),
+    })
+  );
+
   defineRoutes(app);
+
   app.use(errorHandlerMiddleware);
 
   return {
     app,
     listen: () => {
-      app.listen(port, () => {
-        console.log(`server started at http://localhost:${port}`);
+      app.listen(PORT, () => {
+        console.log(`server started at http://localhost:${PORT}`);
       });
     },
   };

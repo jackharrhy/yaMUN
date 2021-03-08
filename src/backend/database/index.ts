@@ -1,22 +1,12 @@
 import debugFactory from "debug";
 import Mongoose from "mongoose";
+
+import { DROP_DB_ON_START, MONGO_CONNECTION_STRING } from "../config";
 import User from "../models/user";
 
 const debug = debugFactory("backend/database");
 
 export let database: Mongoose.Connection;
-
-// TODO make configurable
-const MONGO_USERNAME = "development";
-const MONGO_PASSWORD = "development";
-const MONGO_ENDPOINT = "localhost";
-const MONGO_DATABASE = "development"; // TODO figure out why this throws an auth failure if we set this to something
-
-export const getConnectionString = () => {
-  const uri = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_ENDPOINT}`;
-  debug("getConnectionString", uri);
-  return uri;
-};
 
 export const dropDatabase = async () => {
   debug("dropping database");
@@ -25,7 +15,7 @@ export const dropDatabase = async () => {
 };
 
 export const connect = async () => {
-  const uri = getConnectionString();
+  const uri = MONGO_CONNECTION_STRING;
 
   if (database) {
     throw new Error(
@@ -41,7 +31,9 @@ export const connect = async () => {
   });
   database = Mongoose.connection;
 
-  await dropDatabase(); // TODO remove this after we wish to keep the database
+  if (DROP_DB_ON_START) {
+    await dropDatabase();
+  }
 
   database.once("open", async () => {
     console.log(`connected to database via ${uri}`);

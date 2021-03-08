@@ -39,17 +39,10 @@ describe("backend/models/user", function () {
   });
 
   it("create same user twice", async function () {
-    const userOne = User.createUser("test", "test");
-    const userTwo = User.createUser("test", "anotherpass");
+    await User.createUser("test", "test");
 
-    return Promise.all([
-      expect(userOne)
-        .to.eventually.have.property("username")
-        .and.to.equal("test"),
-      expect(userTwo).to.eventually.be.rejectedWith(
-        BadRequest,
-        "username already exists",
-      ),
-    ]);
+    return expect(
+      User.createUser("test", "anotherpass")
+    ).to.eventually.to.rejectedWith(BadRequest, "username already exists");
   });
 });
