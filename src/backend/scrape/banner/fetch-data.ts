@@ -5,7 +5,7 @@ import BannerCache, { IBannerCacheDocument } from "../../models/banner-cache";
 import { ISemester } from "../../models/semester";
 
 const HEADERS = {
-  "User-Agent": "comp3100-group3",
+  "User-Agent": "yamun",
   Accept: "text/html",
   "Content-Type": "application/x-www-form-urlencoded",
 };

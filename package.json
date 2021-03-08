@@ -1,5 +1,5 @@
 {
-  "name": "comp3100-group3",
+  "name": "yamun",
   "version": "0.1.0",
   "description": "## Members",
   "main": "dist/index.js",
@@ -54,12 +54,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jackharrhy/comp3100.git"
+    "url": "git+https://github.com/jackharrhy/yamun.git"
   },
   "author": "Jack Arthur Harrhy",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/jackharrhy/comp3100/issues"
+    "url": "https://github.com/jackharrhy/yamun/issues"
   },
-  "homepage": "https://github.com/jackharrhy/comp3100#readme"
+  "homepage": "https://github.com/jackharrhy/yamun#readme"
 }
