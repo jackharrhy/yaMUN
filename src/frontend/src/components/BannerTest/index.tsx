@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 
-import { ISemester } from "../../../backend/models/semester";
-import parseCourseData from "../../../backend/scrape/banner/parse-data";
+import { ISemester } from "../../../../backend/models/semester";
+import parseCourseData from "../../../../backend/scrape/banner/parse-data";
 
 function BannerTest() {
   const [year] = useState(2020);
