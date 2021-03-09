@@ -8,10 +8,10 @@ const debug = debugFactory("backend/scrape/banner/insert-data");
 
 export async function insertSemester(semester: ISemester) {
   const testCourses = await coursesFromSemester(semester);
-  await insertData(testCourses);
+  await insertCourses(testCourses);
 }
 
-export default async function insertData(courses: ICourse[]) {
+export default async function insertCourses(courses: ICourse[]) {
   debug("starting to insert courses!");
   await Course.create(courses);
   debug("done inserting courses!");

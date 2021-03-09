@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 
 import { ISemester } from "../../../backend/models/semester";
-import parseData from "../../../backend/scrape/banner/parse-data";
+import parseCourseData from "../../../backend/scrape/banner/parse-data";
 
 function BannerTest() {
   const [year] = useState(2020);
@@ -19,7 +19,7 @@ function BannerTest() {
     };
 
     try {
-      const freshData = parseData(testSemester, data.split("\n"));
+      const freshData = parseCourseData(testSemester, data.split("\n"));
       setError(null);
       return JSON.stringify(freshData, null, 2);
     } catch (err) {

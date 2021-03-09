@@ -10,7 +10,7 @@ import User from "../../../../src/backend/models/user";
 import { testSemester2, testSemester2Crns } from "../../../test-data";
 import { dropCollection } from "../../../test-utils";
 
-describe.only("backend/api/controllers/exports", function () {
+describe("backend/api/controllers/exports", function () {
   let app: Express;
   let agent: SuperAgentTest;
 
@@ -52,17 +52,18 @@ describe.only("backend/api/controllers/exports", function () {
       .put(`/schedules/${scheduleCreateResp.body._id}/${testSemester2Crns[1]}`)
       .expect(204);
 
-    const exportResp = await agent
-      .get(`/export/schedules/${scheduleCreateResp.body._id}/ics`)
+    const exportResp = await agent.get(
+      `/export/schedules/${scheduleCreateResp.body._id}/ics`
+    );
 
-    expect(exportResp.text).to.be.a('string').and.satisfy((str: string) => str.startsWith('BEGIN:VCALENDAR'));
+    expect(exportResp.text)
+      .to.be.a("string")
+      .and.satisfy((str: string) => str.startsWith("BEGIN:VCALENDAR"));
   });
 
   it("exporting schedule that won't be found", async function () {
     const fakeObjectId = Types.ObjectId();
-    await agent
-      .get(`/export/schedules/${fakeObjectId}/ics`)
-      .expect(403);
+    await agent.get(`/export/schedules/${fakeObjectId}/ics`).expect(403);
   });
 
   it("exporting schedule that you are not authorized to view", async function () {

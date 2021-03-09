@@ -65,10 +65,12 @@ const HEADERS = {
   "User-Agent": "github.com/jackharrhy/yamun - src/backend/scrape/people",
 };
 
-export const fetchData = async (): Promise<IPeopleApiResponse> => {
+export const fetchPeopleData = async (): Promise<any> => {
   const response = await fetch(PEOPLE_API, { headers: HEADERS });
-  const data = await response.json();
+  return await response.json();
+};
 
+export const parsePeopleData = (data: any): IPeopleApiResponse => {
   const validate = ajv.compile(peopleApiSchema);
   if (validate(data)) {
     return data;
@@ -78,7 +80,7 @@ export const fetchData = async (): Promise<IPeopleApiResponse> => {
   }
 };
 
-export const convertData = (
+export const convertPeopleData = (
   peopleApiResponse: IPeopleApiResponse
 ): IPeople[] => {
   return peopleApiResponse.results.map((apiResp) => {
@@ -96,7 +98,7 @@ export const convertData = (
   });
 };
 
-export const insertData = async (people: IPeople[]) => {
+export const insertPeople = async (people: IPeople[]) => {
   debug("starting to insert people...");
   await People.create(people);
   debug("done inserting people!");
@@ -107,9 +109,10 @@ export const populatePeople = async () => {
 
   if (existingPeople === null) {
     console.log("populating people...");
-    const peopleApiResponse = await fetchData();
-    const people = await convertData(peopleApiResponse);
-    await insertData(people);
+    const peopleApiResponse = await fetchPeopleData();
+    const parsed = parsePeopleData(peopleApiResponse);
+    const people = await convertPeopleData(parsed);
+    await insertPeople(people);
     console.log("populated people!");
   } else {
     console.log("no need to populate people, already existing data");

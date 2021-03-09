@@ -11,7 +11,7 @@ import { SLOT_REGEX, matchToSlot } from "./regular-expressions/slot";
 
 const debug = debugFactory("backend/scrape/banner/parse-data");
 
-const parseData = (semester: ISemester, data: string[]): ICourse[] => {
+const parseCourseData = (semester: ISemester, data: string[]): ICourse[] => {
   debug("starting!");
   let campus: string | null = null;
   let session: string | null = null;
@@ -117,4 +117,4 @@ const parseData = (semester: ISemester, data: string[]): ICourse[] => {
   return courses;
 };
 
-export default parseData;
+export default parseCourseData;
