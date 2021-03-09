@@ -1,7 +1,11 @@
 import debugFactory from "debug";
 import Mongoose from "mongoose";
 
-import { DROP_DB_ON_START, MONGO_CONNECTION_STRING, MONGO_DATABASE } from "../config";
+import {
+  DROP_DB_ON_START,
+  MONGO_CONNECTION_STRING,
+  MONGO_DATABASE,
+} from "../config";
 import User from "../models/user";
 
 const debug = debugFactory("backend/database");
@@ -17,7 +21,10 @@ export const dropDatabase = async () => {
   debug("database dropped");
 };
 
-export const connect = async (db: string = MONGO_DATABASE, drop: boolean = DROP_DB_ON_START ): Promise<Mongoose.Connection> => {
+export const connect = async (
+  db: string = MONGO_DATABASE,
+  drop: boolean = DROP_DB_ON_START
+): Promise<Mongoose.Connection> => {
   const uri = `${MONGO_CONNECTION_STRING}/${db}`;
 
   console.log(`database uri: ${uri}`);

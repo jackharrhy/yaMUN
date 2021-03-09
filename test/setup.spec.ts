@@ -1,7 +1,7 @@
 import { use } from "chai";
 import chaiAsPromised from "chai-as-promised";
-import { MONGO_TEST_DATABASE } from "../src/backend/config";
 
+import { MONGO_TEST_DATABASE } from "../src/backend/config";
 import {
   connect,
   database,
