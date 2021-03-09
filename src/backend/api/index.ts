@@ -26,20 +26,22 @@ const asyncCatchWrapper = (
 const acw = asyncCatchWrapper;
 
 const defineRoutes = (app: Express) => {
-  // courses
+  // courses - searching for courses by query param filters, and finding specific courses by crn
   app.get("/courses", acw(coursesController.search));
   app.get("/courses/:crn", acw(coursesController.courseByCrn));
 
-  // people
+  // people - getting more information regarding professors who teach courses
   app.get("/people", acw(peopleController.search));
 
-  // users
+  // users - endpoints for creating users, users knowing their username when logged in,
+  // and the ability for users to log in and out
   app.get("/users", acw(usersController.getInfoAboutSelf));
   app.post("/users", acw(usersController.create));
   app.post("/login", acw(usersController.login));
   app.get("/logout", acw(usersController.logout));
 
-  // schedules
+  // schedules - endpoints for users to create, modify, view, and delete their
+  // potentially many schedules, and to access other peoples schedules
   app.post("/schedules", acw(schedulesController.create));
   app.get("/schedules/:scheduleId", acw(schedulesController.getById));
   app.put("/schedules/:scheduleId", acw(schedulesController.updateMeta));
@@ -50,7 +52,7 @@ const defineRoutes = (app: Express) => {
   );
   app.delete("/schedules/:scheduleId", acw(schedulesController.delete));
 
-  // bookmarks
+  // bookmarks - endpoints for viewing, adding, and removing course bookmarks
   app.get("/bookmarks/courses", acw(bookmarksController.getCourseBookmarks));
   app.put(
     "/bookmarks/courses/:crn",
@@ -61,7 +63,7 @@ const defineRoutes = (app: Express) => {
     acw(bookmarksController.deleteCourseBookmark)
   );
 
-  // exports
+  // exports - currently jsut exporting to ics, work in progress
   app.get(
     "/export/schedules/:scheduleId/ics",
     acw(exportsController.scheduleToICS)
