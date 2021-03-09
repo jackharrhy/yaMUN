@@ -30,7 +30,7 @@ before(async function () {
 
   console.log("connecting to db before running tests...");
 
-  await connect(MONGO_TEST_DATABASE);
+  await connect(MONGO_TEST_DATABASE, true);
 
   console.log("connected to db, populating with test semesters and people");
   await insertCourseData(
@@ -39,8 +39,6 @@ before(async function () {
   await insertCourseData(
     parseCourseData(testSemester2, testSemester2Data.split("\n"))
   );
-
-  await dropDatabase();
 
   const parsed = parsePeopleData(fakePeopleApiResp);
   const people = await convertPeopleData(parsed);

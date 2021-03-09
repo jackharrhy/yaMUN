@@ -46,7 +46,7 @@ export const testSemester1: ISemester = {
   level: 1,
 };
 
-export const testSemester1Crns = [92683, 88655];
+export const testSemester1Crns = [60053, 90446];
 
 export const testSemester1Data = `
 Level: Undergraduate
@@ -151,7 +151,7 @@ export const testSemester2: ISemester = {
   level: 1,
 };
 
-export const testSemester2Crns = [94458, 77335];
+export const testSemester2Crns = [94400, 92045];
 
 export const testSemester2Data = `
 Level: Undergraduate

@@ -17,7 +17,7 @@ export const dropDatabase = async () => {
   debug("database dropped");
 };
 
-export const connect = async (db: string = MONGO_DATABASE): Promise<Mongoose.Connection> => {
+export const connect = async (db: string = MONGO_DATABASE, drop: boolean = DROP_DB_ON_START ): Promise<Mongoose.Connection> => {
   const uri = `${MONGO_CONNECTION_STRING}/${db}`;
 
   console.log(`database uri: ${uri}`);
@@ -45,7 +45,7 @@ export const connect = async (db: string = MONGO_DATABASE): Promise<Mongoose.Con
     console.log(`connected to database via ${uri}`);
   });
 
-  if (DROP_DB_ON_START) {
+  if (drop) {
     console.log("dropping");
     await dropDatabase();
     console.log("dropped");

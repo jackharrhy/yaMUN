@@ -5,7 +5,7 @@ import request from "supertest";
 
 import api from "../../../../src/backend/api";
 
-describe.only("backend/api/controllers/people", function () {
+describe("backend/api/controllers/people", function () {
   let app: Express;
 
   this.beforeAll(async () => {
