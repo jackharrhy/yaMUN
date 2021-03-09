@@ -35,12 +35,12 @@ const exportsController = {
       throw new Forbidden("not authorized");
     }
 
-    let events: EventAttributes[] = [];
+    const events: EventAttributes[] = [];
 
-    let semester = schedule.semester;
-    let startYear = semester.year;
-    let startDate: DateArray = [startYear, 9, 2, 11, 0]; // NEEDS TO BE CHANGED TO USER INPUT
-    let endDate: DateArray = [startYear + 1, 4, 15, 16, 0];
+    const semester = schedule.semester;
+    const startYear = semester.year;
+    const startDate: DateArray = [startYear, 9, 2, 11, 0]; // NEEDS TO BE CHANGED TO USER INPUT
+    const endDate: DateArray = [startYear + 1, 4, 15, 16, 0];
 
     await Promise.all(
       schedule.courses.map(async (courseCrn) => {
