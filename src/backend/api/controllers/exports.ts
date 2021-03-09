@@ -6,6 +6,7 @@ import { RRule, ByWeekday } from "rrule";
 
 import Course, { ICourse } from "../../models/course";
 import Schedule, { IScheduleDocument } from "../../models/schedule";
+import { expectUserId } from "../auth";
 import { Forbidden } from "../errors";
 import { stringToObjectId } from "../utils";
 
@@ -23,15 +24,14 @@ const rruleMap: any = {
 
 const exportsController = {
   async scheduleToICS(req: express.Request, res: express.Response) {
+    const userId = await expectUserId(req);
     const scheduleId = stringToObjectId(req.params.scheduleId, "scheduleId");
 
     const schedule: IScheduleDocument | null = await Schedule.findById(
       scheduleId
     ).exec();
 
-    // TODO access control!
-
-    if (schedule === null) {
+    if (schedule === null || !schedule?.owner.equals(userId)) {
       throw new Forbidden("not authorized");
     }
 
