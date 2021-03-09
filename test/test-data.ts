@@ -1,12 +1,52 @@
 import { ISemester } from "../src/backend/models/semester";
 
+export const fakePeopleApiResp = {
+  searchParameters: [],
+  totalResults: 123123,
+  results: [
+    {
+      displayname: "Bartha , Dr. Miklos",
+      campus: "STJ",
+      department: "Computer Science",
+      lname: "Bartha",
+      title: "Dr.",
+      fname: "Miklos",
+      extension: "864-2193",
+      room: "EN2022A",
+      email: "bartha@mun.ca",
+    },
+    {
+      displayname: "Hebert , Dr. Mark",
+      campus: "STJ",
+      department: "Psychology",
+      lname: "Hebert",
+      title: "Dr.",
+      fname: "Mark",
+      extension: "864-3436",
+      room: "SN3098",
+      email: "mhebert@mun.ca",
+    },
+    {
+      displayname: "Rayment , Mr. Michael",
+      campus: "STJ",
+      department: "Computer Science",
+      lname: "Rayment",
+      title: "Mr.",
+      fname: "Michael",
+      extension: "864-8711",
+      room: "EN1060",
+      email: "mtr@mun.ca",
+    },
+  ],
+};
+
 export const testSemester1: ISemester = {
   year: 2019,
   term: 2,
   level: 1,
 };
 
-export const testSemester1Crns = [92683, 88655];
+export const testSemester1Crns = [60053, 90446];
 
 export const testSemester1Data = `
 Level: Undergraduate
@@ -111,7 +151,7 @@ export const testSemester2: ISemester = {
   level: 1,
 };
 
-export const testSemester2Crns = [94458, 77335];
+export const testSemester2Crns = [94400, 92045];
 
 export const testSemester2Data = `
 Level: Undergraduate

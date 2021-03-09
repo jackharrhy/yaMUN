@@ -43,6 +43,6 @@ describe("backend/models/user", function () {
 
     return expect(
       User.createUser("test", "anotherpass")
-    ).to.eventually.to.rejectedWith(BadRequest, "username already exists");
+    ).to.eventually.be.rejectedWith(BadRequest, "username already exists");
   });
 });

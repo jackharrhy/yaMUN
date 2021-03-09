@@ -8,6 +8,7 @@ import { database } from "../database";
 import bookmarksController from "./controllers/bookmarks";
 import coursesController from "./controllers/courses";
 import exportsController from "./controllers/exports";
+import peopleController from "./controllers/people";
 import schedulesController from "./controllers/schedules";
 import usersController from "./controllers/users";
 import { errorHandlerMiddleware } from "./errors";
@@ -28,6 +29,9 @@ const defineRoutes = (app: Express) => {
   // courses
   app.get("/courses", acw(coursesController.search));
   app.get("/courses/:crn", acw(coursesController.courseByCrn));
+
+  // people
+  app.get("/people", acw(peopleController.search));
 
   // users
   app.get("/users", acw(usersController.getInfoAboutSelf));

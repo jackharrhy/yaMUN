@@ -5,14 +5,14 @@ import BannerCache, { IBannerCacheDocument } from "../../models/banner-cache";
 import { ISemester } from "../../models/semester";
 
 const HEADERS = {
-  "User-Agent": "yamun",
+  "User-Agent": "github.com/jackharrhy/yamun - src/backend/scrape/banner",
   Accept: "text/html",
   "Content-Type": "application/x-www-form-urlencoded",
 };
 
 const ENDPOINT = "https://www5.mun.ca/admit/hwswsltb.P_CourseResults";
 
-const fetchData = async ({ year, term, level }: ISemester) => {
+const fetchCourseData = async ({ year, term, level }: ISemester) => {
   const cached: IBannerCacheDocument | null = await BannerCache.findOne({
     year,
     term,
@@ -47,4 +47,4 @@ const fetchData = async ({ year, term, level }: ISemester) => {
   return data;
 };
 
-export default fetchData;
+export default fetchCourseData;
