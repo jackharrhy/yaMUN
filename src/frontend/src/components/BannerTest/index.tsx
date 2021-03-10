@@ -40,7 +40,9 @@ function BannerTest() {
       <br />
       <h1>Output</h1>
       <div className="banner-test-output">
-        <pre>{error ? error.message : output}</pre>
+        <pre>
+          <code>{error ? error.message : output}</code>
+        </pre>
       </div>
     </div>
   );
