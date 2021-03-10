@@ -1,66 +1,58 @@
-const listings = {
-  BIOC: "https://www.mun.ca/regoff/calendar/sectionNo=SCI-2563",
-  BIOL: "https://www.mun.ca/regoff/calendar/sectionNo=SCI-0766",
-  CHEM: "https://www.mun.ca/regoff/calendar/sectionNo=SCI-0905",
-  COMP: "https://www.mun.ca/regoff/calendar/sectionNo=SCI-1023",
-  EASC: "https://www.mun.ca/regoff/calendar/sectionNo=SCI-2273",
-  MATH: "https://www.mun.ca/regoff/calendar/sectionNo=SCI-1331",
-  STAT: "https://www.mun.ca/regoff/calendar/sectionNo=SCI-1331",
-  OCSC: "https://www.mun.ca/regoff/calendar/sectionNo=SCI-3569",
-  PHYS: "https://www.mun.ca/regoff/calendar/sectionNo=SCI-1574",
-  PSYC: "https://www.mun.ca/regoff/calendar/sectionNo=SCI-1702",
-  ANTH: "https://www.mun.ca/regoff/calendar/sectionNo=ARTS-5517",
-  ARCH: "https://www.mun.ca/regoff/calendar/sectionNo=ARTS-5543",
-  CLAS: "https://www.mun.ca/regoff/calendar/sectionNo=ARTS-5649",
-  ECON: "https://www.mun.ca/regoff/calendar/sectionNo=ARTS-5756",
-  FOLK: "https://www.mun.ca/regoff/calendar/sectionNo=ARTS-6008",
-  FREN: "https://www.mun.ca/regoff/calendar/sectionNo=ARTS-6082",
-  GNDR: "https://www.mun.ca/regoff/calendar/sectionNo=ARTS-6938",
-  GEOG: "https://www.mun.ca/regoff/calendar/sectionNo=ARTS-6145",
-  GERM: "https://www.mun.ca/regoff/calendar/sectionNo=ARTS-6208",
-  HIST: "https://www.mun.ca/regoff/calendar/sectionNo=ARTS-10834",
-  INTL: "https://www.mun.ca/regoff/calendar/sectionNo=ARTS-10835",
-  LANG: "https://www.mun.ca/regoff/calendar/sectionNo=ARTS-10269",
-  LING: "https://www.mun.ca/regoff/calendar/sectionNo=ARTS-6432",
-  PHIL: "https://www.mun.ca/regoff/calendar/sectionNo=ARTS-6527",
-  RELS: "https://www.mun.ca/regoff/calendar/sectionNo=ARTS-6712",
-  RUSS: "https://www.mun.ca/regoff/calendar/sectionNo=ARTS-6973",
-  SPAN: "https://www.mun.ca/regoff/calendar/sectionNo=ARTS-10230",
-  UNIV: "https://www.mun.ca/regoff/calendar/sectionNo=ARTS-7313",
-  ENGI: [
-    "https://www.mun.ca/regoff/calendar/sectionNo=ENGI-0037",
-    "https://www.mun.ca/regoff/calendar/sectionNo=ENGI-0504",
-    "https://www.mun.ca/regoff/calendar/sectionNo=ENGI-0517",
-    "https://www.mun.ca/regoff/calendar/sectionNo=ENGI-0534",
-    "https://www.mun.ca/regoff/calendar/sectionNo=ENGI-0554",
-    "https://www.mun.ca/regoff/calendar/sectionNo=ENGI-0578",
-    "https://www.mun.ca/regoff/calendar/sectionNo=ENGI-0605",
-    "https://www.mun.ca/regoff/calendar/sectionNo=ENGI-0643",
-    "https://www.mun.ca/regoff/calendar/sectionNo=ENGI-1727",
-  ],
-  BUSI: [
-    "https://www.mun.ca/regoff/calendar/sectionNo=BUSI-1261",
-    "https://www.mun.ca/regoff/calendar/sectionNo=BUSI-0288",
-    "https://www.mun.ca/regoff/calendar/sectionNo=BUSI-0401",
-    "https://www.mun.ca/regoff/calendar/sectionNo=BUSI-0419",
-  ],
-  ED: "https://www.mun.ca/regoff/calendar/sectionNo=EDUC-0443",
-  HKR: "https://www.mun.ca/regoff/calendar/sectionNo=HKR-0366",
-  MED: [
-    "https://www.mun.ca/regoff/calendar/sectionNo=MED-0376",
-    "https://www.mun.ca/regoff/calendar/sectionNo=MED-0777",
-    "https://www.mun.ca/regoff/calendar/sectionNo=MED-0784",
-    "https://www.mun.ca/regoff/calendar/sectionNo=MED-0791",
-    "https://www.mun.ca/regoff/calendar/sectionNo=MED-0401",
-  ],
-  MUS: [
-    "https://www.mun.ca/regoff/calendar/sectionNo=MUSIC-0231",
-    "https://www.mun.ca/regoff/calendar/sectionNo=MUSIC-0290",
-    "https://www.mun.ca/regoff/calendar/sectionNo=MUSIC-0316",
-    "https://www.mun.ca/regoff/calendar/sectionNo=MUSIC-0361",
-  ],
-  NURS: "https://www.mun.ca/regoff/calendar/sectionNo=NURS-0230",
-  PHAR: "https://www.mun.ca/regoff/calendar/sectionNo=PHAR-0462",
-  SCWK: "https://www.mun.ca/regoff/calendar/sectionNo=SCWK-0130",
-  MSTM: "https://www.mun.ca/regoff/calendar/sectionNo=MARINE-0149",
+import debugFactory from "debug";
+import { JSDOM } from "jsdom";
+import fetch from "node-fetch";
+
+import { LISTINGS, LISTING_BASE } from "./listings";
+
+const debug = debugFactory("backend/scrape/calendar");
+
+const HEADERS = {
+  "User-Agent": "github.com/jackharrhy/yamun - src/backend/scrape/calendar",
+};
+
+export const fetchListingBySectionNo = async (
+  listingSectionNo: string
+): Promise<any> => {
+  const url = `${LISTING_BASE}${listingSectionNo}`;
+  debug("url", url);
+  const response = await fetch(url, { headers: HEADERS });
+  return await response.text();
+};
+
+// TODO eventually parse all listings
+const toParse = {
+  COMP: LISTINGS.COMP,
+};
+
+export const parseListingsPage = (data: string) => {
+  const dom = new JSDOM(data);
+
+  const divs = Array.from(
+    dom.window.document.querySelectorAll(".course")
+  ) as HTMLDivElement[];
+
+  for (const div of divs) {
+    // TODO something fun with these divs
+    console.log(div.textContent);
+  }
+};
+
+export const populateCourseInfo = async () => {
+  // const existingPeople = await People.findOne({}).exec();
+  const existingCourseInfo = null;
+
+  if (existingCourseInfo === null) {
+    console.log("populating course-info...");
+    await Promise.all(
+      Object.entries(toParse).map(async ([dept, sectionNumbers]) => {
+        for (const sectionNumber of sectionNumbers) {
+          const data = await fetchListingBySectionNo(sectionNumber);
+          parseListingsPage(data);
+        }
+      })
+    );
+    console.log("did stuff");
+  } else {
+    console.log("no need to populate course-info, already existing data");
+  }
 };

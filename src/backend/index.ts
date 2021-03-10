@@ -1,10 +1,9 @@
-import { Connection } from "mongoose";
-
 import api from "./api";
 import { connect } from "./database";
 import Course from "./models/course";
 import { ISemester } from "./models/semester";
 import { insertSemester } from "./scrape/banner/insert";
+import { populateCourseInfo } from "./scrape/calendar";
 import { populatePeople } from "./scrape/people";
 
 const populateTestSemester = async () => {
@@ -27,6 +26,9 @@ const populateTestSemester = async () => {
 
 (async () => {
   try {
+    await populateCourseInfo();
+    return;
+
     await connect();
     const { listen } = api();
 
