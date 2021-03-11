@@ -7,15 +7,15 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "classnames": "^2.2.6",
+    "query-string": "^6.14.1",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-hook-form": "^6.15.4",
     "react-router-dom": "^5.2.0",
-    "use-http": "^1.0.18"
+    "use-http": "^1.0.18",
+    "use-query-params": "^1.2.0"
   },
   "devDependencies": {
-    "@types/classnames": "^2.2.11",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/react-router-dom": "^5.1.7",

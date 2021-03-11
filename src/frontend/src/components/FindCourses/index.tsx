@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useQueryParams, StringParam, NumberParam } from "use-query-params";
 
 import { COURSE_SEARCH_PAGINATION_LIMIT } from "../../../../backend/api/controllers/courses";
 import { ICourseDocument } from "../../../../backend/models/course";
@@ -7,13 +8,20 @@ import useCourseSearch, { Filters } from "../../hooks/useCourseSearch";
 import Course from "../Course";
 
 interface SetFiltersProps {
+  filters: Filters;
   setFilters: (data: Filters) => void;
 }
 
-function SetFilters({ setFilters }: SetFiltersProps) {
+function SetFilters({ filters, setFilters }: SetFiltersProps) {
   const { register, handleSubmit } = useForm<Filters>();
 
-  const onSubmit = (data: Filters) => setFilters(data);
+  const onSubmit = (data: Filters) => {
+    setFilters({
+      page: 0,
+      subject: data.subject === "" ? undefined : data.subject,
+      number: data.number === "" ? undefined : data.number,
+    });
+  };
 
   return (
     <form
@@ -24,14 +32,14 @@ function SetFilters({ setFilters }: SetFiltersProps) {
         className="w-full px-3 py-1 border focus:outline-none focus:ring-2 focus:ring-red-200"
         name="subject"
         placeholder="Subject"
-        defaultValue=""
+        defaultValue={filters.subject ?? ""}
         ref={register}
       />
       <input
         className="w-full px-3 py-1 border mt-2 focus:outline-none focus:ring-2 focus:ring-red-200"
         name="number"
         placeholder="Course Number"
-        defaultValue=""
+        defaultValue={filters.number ?? ""}
         ref={register}
       />
       <input
@@ -71,8 +79,12 @@ function Pagination({
 }: PaginationProps) {
   const userPage = page + 1;
 
-  const canGoBack = page <= 0;
-  const canGoNext = results !== COURSE_SEARCH_PAGINATION_LIMIT;
+  const backDisabled = page <= 0;
+  const nextDisabled = results !== COURSE_SEARCH_PAGINATION_LIMIT;
+
+  if ((backDisabled && nextDisabled) || results === 0) {
+    return null;
+  }
 
   return (
     <div className="flex place-content-between my-4">
@@ -80,7 +92,7 @@ function Pagination({
         className={
           "border px-2 py-1 rounded-md w-32 disabled:opacity-50 disabled:cursor-not-allowed"
         }
-        disabled={canGoBack}
+        disabled={backDisabled}
         onClick={() => previousPage()}
       >
         Previous
@@ -90,7 +102,7 @@ function Pagination({
         className={
           "border px-2 py-1 rounded-md w-32 disabled:opacity-50 disabled:cursor-not-allowed"
         }
-        disabled={canGoNext}
+        disabled={nextDisabled}
         onClick={() => nextPage()}
       >
         Next
@@ -100,7 +112,17 @@ function Pagination({
 }
 
 function FindCourses() {
-  const [filters, setFilters] = useState<Filters>({});
+  const [query] = useQueryParams({
+    page: NumberParam,
+    subject: StringParam,
+    number: StringParam,
+  });
+
+  const [filters, setFilters] = useState<Filters>({
+    page: query.page ?? 0,
+    subject: query.subject ?? undefined,
+    number: query.number ?? undefined,
+  });
 
   const { courses, page, nextPage, previousPage } = useCourseSearch(filters);
 
@@ -110,7 +132,7 @@ function FindCourses() {
 
   return (
     <>
-      <SetFilters setFilters={setFilters} />
+      <SetFilters filters={filters} setFilters={setFilters} />
       <Pagination
         page={page}
         results={courses.length}

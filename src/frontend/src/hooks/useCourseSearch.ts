@@ -1,8 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
+import {
+  useQueryParams,
+  StringParam,
+  NumberParam,
+  withDefault,
+} from "use-query-params";
 
 import { ICourseDocument } from "../../../backend/models/course";
 
 export type Filters = {
+  page: number;
   subject?: string;
   number?: string;
 };
@@ -10,23 +17,37 @@ export type Filters = {
 const API_BASE = "/api";
 
 export default function useCourseSearch(filters: Filters) {
-  const [page, setPage] = useState(0);
+  const [query, setQuery] = useQueryParams({
+    page: withDefault(NumberParam, 0),
+    subject: StringParam,
+    number: StringParam,
+  });
+
+  const { page } = query;
+
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    setPage(0);
+    setQuery(
+      {
+        page: filters.page,
+        subject: filters.subject,
+        number: filters.number,
+      },
+      "push"
+    );
   }, [filters]);
 
   const params = useMemo(() => {
     const cleanedFilters = Object.fromEntries(
-      Object.entries(filters).filter(([k, v]) => v !== "")
+      Object.entries(query).filter(([k, v]) => v !== undefined)
     );
 
     return new URLSearchParams({
       ...cleanedFilters,
-      page: page.toString(),
+      page: query.page.toString(),
     });
-  }, [filters, page]);
+  }, [query]);
 
   useEffect(() => {
     fetch(`${API_BASE}/courses/?${params}`).then(async (res) => {
@@ -37,12 +58,14 @@ export default function useCourseSearch(filters: Filters) {
 
   return {
     courses: data as ICourseDocument[],
-    page,
+    page: page ?? 0,
     nextPage: () => {
-      setPage(page + 1);
+      setQuery({ page: query.page + 1 });
     },
     previousPage: () => {
-      if (page > 0) setPage(page - 1);
+      if (page > 0) {
+        setQuery({ page: query.page - 1 });
+      }
     },
   };
 }
