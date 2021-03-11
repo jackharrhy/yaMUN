@@ -1,5 +1,49 @@
 import { ISemester } from "../src/backend/models/semester";
 
+export const fakeUniCalPage1Dept = "COMP";
+
+export const fakeUniCalPage1 = `
+<div class="course">
+   <p class="courseNumber">
+      3100
+   </p>
+   <p class="courseTitle">
+      Web Programming
+   </p>
+   <div class="courseDesc">
+      <p class="inlinePara">
+         studies the Web information system from a programming perspective. It teaches how Web data are transferred across the network, how to design interactive browser contents, and how to provide dynamic pages from the server.
+      </p>
+   </div>
+   <p class="courseAttrs">
+      CR: the former COMP 3715
+   </p>
+   <p class="courseAttrs">
+      PR: COMP <a class="clink" style="color:red;" onclick="showcourse('SCI-3893', event, this);">2006</a>, COMP <a class="clink" style="color:red;" onclick="showcourse('SCI-3894', event, this);">2007</a>
+   </p>
+</div>
+
+<div class="course">
+   <p class="courseNumber">
+      2005
+   </p>
+   <p class="courseTitle">
+      Software Engineering
+   </p>
+   <div class="courseDesc">
+      <p class="inlinePara">
+         introduces students to the different software process models, to project management and the software requirements engineering process, as well as to systems analysis and design as a problem-solving activity.
+      </p>
+   </div>
+   <p class="courseAttrs">
+      CR: the former COMP 3716
+   </p>
+   <p class="courseAttrs">
+      PR: COMP <a class="clink" style="color:red;" onclick="showcourse('SCI-3888', event, this);">2001</a>
+   </p>
+</div>
+`;
+
 export const fakePeopleApiResp = {
   searchParameters: [],
   totalResults: 123123,

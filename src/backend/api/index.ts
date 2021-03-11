@@ -36,7 +36,10 @@ const defineRoutes = (app: Express) => {
 
   // course-info - getting more information regarding courses
   app.get("/course-info/:subject/:number", acw(courseInfoController.course));
-  app.get("/course-info/:subject", acw(courseInfoController.allCoursesOfSubject));
+  app.get(
+    "/course-info/:subject",
+    acw(courseInfoController.allCoursesOfSubject)
+  );
 
   // users - endpoints for creating users, users knowing their username when logged in,
   // and the ability for users to log in and out

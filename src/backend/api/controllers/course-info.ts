@@ -27,7 +27,9 @@ const courseInfoController = {
 
     debug("allCoursesFromSubject", subject);
 
-    const courseInfos: ICourseInfoDocument[] = await CourseInfo.find({ subject });
+    const courseInfos: ICourseInfoDocument[] = await CourseInfo.find({
+      subject,
+    });
 
     if (courseInfos.length === 0) {
       throw new NotFoundError("subject not found");
