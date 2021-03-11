@@ -26,14 +26,13 @@ const populateTestSemester = async () => {
 
 (async () => {
   try {
-    await populateCourseInfo();
-    return;
-
     await connect();
     const { listen } = api();
 
-    await populatePeople();
     await populateTestSemester();
+    await populatePeople();
+    await populateCourseInfo();
+
     listen();
   } catch (err) {
     console.error(err);

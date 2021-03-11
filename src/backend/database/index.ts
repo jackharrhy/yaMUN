@@ -6,6 +6,7 @@ import {
   MONGO_CONNECTION_STRING,
   MONGO_DATABASE,
 } from "../config";
+import CourseInfo from "../models/course-info";
 import User from "../models/user";
 
 const debug = debugFactory("backend/database");
@@ -19,6 +20,13 @@ export const dropDatabase = async () => {
   debug("dropping database");
   await database.dropDatabase();
   debug("database dropped");
+};
+
+export const setupIndexes = async () => {
+  console.log("building indexes...");
+  await User.init();
+  await CourseInfo.init();
+  console.log("indexes built!");
 };
 
 export const connect = async (
@@ -58,9 +66,7 @@ export const connect = async (
     console.log("dropped");
   }
 
-  console.log("building indexes...");
-  await User.init();
-  console.log("indexes built!");
+  await setupIndexes();
 
   return database;
 };
