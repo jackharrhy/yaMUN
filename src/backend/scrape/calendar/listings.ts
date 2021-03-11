@@ -15,6 +15,7 @@ export const LISTINGS = {
   ARCH: ["ARTS-5543"],
   CLAS: ["ARTS-5649"],
   ECON: ["ARTS-5756"],
+  ENGL: ["ARTS-5821"],
   FOLK: ["ARTS-6008"],
   FREN: ["ARTS-6082"],
   GNDR: ["ARTS-6938"],

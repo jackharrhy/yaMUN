@@ -6,6 +6,7 @@ import session from "express-session";
 import { PORT, SESSION_SECRET } from "../config";
 import { database } from "../database";
 import bookmarksController from "./controllers/bookmarks";
+import courseInfoController from "./controllers/course-info";
 import coursesController from "./controllers/courses";
 import exportsController from "./controllers/exports";
 import peopleController from "./controllers/people";
@@ -32,6 +33,10 @@ const defineRoutes = (app: Express) => {
 
   // people - getting more information regarding professors who teach courses
   app.get("/people", acw(peopleController.search));
+
+  // course-info - getting more information regarding courses
+  app.get("/course-info/:subject/:number", acw(courseInfoController.course));
+  app.get("/course-info/:subject", acw(courseInfoController.allCoursesOfSubject));
 
   // users - endpoints for creating users, users knowing their username when logged in,
   // and the ability for users to log in and out
