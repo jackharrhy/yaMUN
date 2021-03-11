@@ -30,7 +30,7 @@ type Day = keyof typeof dayToColor;
 function Slot({ slot }: { slot: ISlot }) {
   const allDays = Object.keys(dayToColor);
   const pill =
-    "rounded-full w-6 text-xs px-0.5 mr-0.5 text-center text-white border inline-block";
+    "rounded-full w-8 text-xs px-2 my-0.5 mr-0.5 text-center text-white border-2 inline-block";
 
   const hasTime = slot.beginTime !== null || slot.endTime !== null;
 
