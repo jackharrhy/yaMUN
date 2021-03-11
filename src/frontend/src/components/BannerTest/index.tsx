@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 
-import { ISemester } from "../../../backend/models/semester";
-import parseCourseData from "../../../backend/scrape/banner/parse-data";
+import { ISemester } from "../../../../backend/models/semester";
+import parseCourseData from "../../../../backend/scrape/banner/parse-data";
 
 function BannerTest() {
   const [year] = useState(2020);
@@ -40,7 +40,9 @@ function BannerTest() {
       <br />
       <h1>Output</h1>
       <div className="banner-test-output">
-        <pre>{error ? error.message : output}</pre>
+        <pre>
+          <code>{error ? error.message : output}</code>
+        </pre>
       </div>
     </div>
   );
