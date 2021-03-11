@@ -15,13 +15,29 @@ function SetFilters({ setFilters }: SetFiltersProps) {
   const onSubmit = (data: Filters) => setFilters(data);
 
   return (
-    <div className="shadow-xl p-5 mb-4 rounded border">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input name="subject" placeholder="Subject" defaultValue="" ref={register} />
-        <input name="number" placeholder="Course Number" defaultValue="" ref={register} />
-        <input type="submit" />
-      </form>
-    </div>
+    <form
+      className="shadow-xl p-5 mb-4 rounded border"
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <input
+        className="w-full px-3 py-1 border focus:outline-none focus:ring-2 focus:ring-red-200"
+        name="subject"
+        placeholder="Subject"
+        defaultValue=""
+        ref={register}
+      />
+      <input
+        className="w-full px-3 py-1 border mt-2 focus:outline-none focus:ring-2 focus:ring-red-200"
+        name="number"
+        placeholder="Course Number"
+        defaultValue=""
+        ref={register}
+      />
+      <input
+        className="w-full py-0.5 mt-4 border bg-red-50 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-200"
+        type="submit"
+      />
+    </form>
   );
 }
 

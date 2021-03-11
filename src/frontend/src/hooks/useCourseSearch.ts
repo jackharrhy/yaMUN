@@ -26,14 +26,14 @@ export default function useCourseSearch(filters: Filters) {
 
     setPage(0);
     setParams(searchParams.toString());
-  }, [filters])
+  }, [filters]);
 
   useEffect(() => {
     fetch(`${API_BASE}/courses/?${params}`).then(async (res) => {
       const json = await res.json();
       setData(json);
     });
-  }, [page, params])
+  }, [page, params]);
 
   return {
     courses: data as ICourse[],

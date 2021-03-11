@@ -7,7 +7,7 @@ function NavBar() {
       <div className="pr-10">
         <Link
           to="/"
-          className="text-3xl leading-6 text-white font-bold hover:text-gray-200"
+          className="text-3xl py-2 leading-6 text-white font-bold hover:text-gray-200 focus:outline-none border-b-2 border-transparent focus:border-red-900"
         >
           yaMUN
         </Link>
@@ -16,7 +16,7 @@ function NavBar() {
         <li>
           <Link
             to="/find-courses"
-            className="mr-6 p-4 py-3 px-0 block font-semibold text-white hover:text-gray-200"
+            className="mr-6 p-4 py-3 px-0 block font-semibold text-white hover:text-gray-200 focus:outline-none border-b-2 border-transparent focus:border-red-900"
           >
             Find Courses
           </Link>
@@ -24,7 +24,7 @@ function NavBar() {
         <li>
           <Link
             to="/schedules"
-            className="mr-6 p-4 py-3 px-0 block font-semibold text-white hover:text-gray-200"
+            className="mr-6 p-4 py-3 px-0 block font-semibold text-white hover:text-gray-200 focus:outline-none border-b-2 border-transparent focus:border-red-900"
           >
             Schedules
           </Link>
@@ -32,7 +32,7 @@ function NavBar() {
         <li>
           <Link
             to="/bookmarks"
-            className="mr-6 p-4 py-3 px-0 block font-semibold text-white hover:text-gray-200"
+            className="mr-6 p-4 py-3 px-0 block font-semibold text-white hover:text-gray-200 focus:outline-none border-b-2 border-transparent focus:border-red-900"
           >
             Bookmarks
           </Link>
