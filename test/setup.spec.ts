@@ -1,7 +1,7 @@
 import { use } from "chai";
 import chaiAsPromised from "chai-as-promised";
-import { MONGO_TEST_DATABASE } from "../src/backend/config";
 
+import { MONGO_TEST_DATABASE } from "../src/backend/config";
 import {
   connect,
   database,
@@ -11,11 +11,17 @@ import {
 import insertCourseData from "../src/backend/scrape/banner/insert";
 import parseCourseData from "../src/backend/scrape/banner/parse-data";
 import {
+  insertCourseInfo,
+  parseListingsPage,
+} from "../src/backend/scrape/calendar";
+import {
   parsePeopleData,
   convertPeopleData,
   insertPeople,
 } from "../src/backend/scrape/people";
 import {
+  fakeUniCalPage1Dept,
+  fakeUniCalPage1,
   fakePeopleApiResp,
   testSemester1,
   testSemester1Data,
@@ -38,6 +44,10 @@ before(async function () {
   );
   await insertCourseData(
     parseCourseData(testSemester2, testSemester2Data.split("\n"))
+  );
+
+  await insertCourseInfo(
+    parseListingsPage(fakeUniCalPage1Dept, fakeUniCalPage1)
   );
 
   const parsed = parsePeopleData(fakePeopleApiResp);

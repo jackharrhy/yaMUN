@@ -1,10 +1,9 @@
-import { Connection } from "mongoose";
-
 import api from "./api";
 import { connect } from "./database";
 import Course from "./models/course";
 import { ISemester } from "./models/semester";
 import { insertSemester } from "./scrape/banner/insert";
+import { populateCourseInfo } from "./scrape/calendar";
 import { populatePeople } from "./scrape/people";
 
 const populateTestSemester = async () => {
@@ -30,8 +29,10 @@ const populateTestSemester = async () => {
     await connect();
     const { listen } = api();
 
-    await populatePeople();
     await populateTestSemester();
+    await populatePeople();
+    await populateCourseInfo();
+
     listen();
   } catch (err) {
     console.error(err);
