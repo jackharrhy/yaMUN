@@ -37,6 +37,12 @@ export default function useCourseSearch(filters: Filters) {
 
   return {
     courses: data as ICourseDocument[],
-    nextPage: () => setPage(page + 1),
+    page,
+    nextPage: () => {
+      setPage(page + 1);
+    },
+    previousPage: () => {
+      if (page > 0) setPage(page - 1);
+    },
   };
 }
