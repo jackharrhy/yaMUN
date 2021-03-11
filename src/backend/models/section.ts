@@ -3,6 +3,7 @@ import { Schema } from "mongoose";
 import { ISlot, SlotSchema } from "./slot";
 
 export interface ISection {
+  _id?: string;
   section: string;
   crn: number;
   scheduleType: string | null; // TODO enum?

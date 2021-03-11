@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { ICourse } from "../../../../backend/models/course";
+import { ICourseDocument } from "../../../../backend/models/course";
 import useCourseSearch, { Filters } from "../../hooks/useCourseSearch";
 import Course from "../Course";
 
@@ -16,7 +16,7 @@ function SetFilters({ setFilters }: SetFiltersProps) {
 
   return (
     <form
-      className="shadow-xl p-5 mb-4 rounded border"
+      className="shadow-md p-5 mb-4 rounded border"
       onSubmit={handleSubmit(onSubmit)}
     >
       <input
@@ -42,14 +42,14 @@ function SetFilters({ setFilters }: SetFiltersProps) {
 }
 
 interface DisplayCoursesProps {
-  courses: ICourse[];
+  courses: ICourseDocument[];
 }
 
 function DisplayCourses({ courses }: DisplayCoursesProps) {
   return (
     <>
       {courses.map((course) => (
-        <Course course={course} />
+        <Course key={course._id} course={course} />
       ))}
     </>
   );

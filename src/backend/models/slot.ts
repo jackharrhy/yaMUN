@@ -11,6 +11,7 @@ export enum DayOfWeek {
 }
 
 export interface ISlot {
+  _id?: string;
   slot: string;
   days: string[]; // DayOfWeek[];
   beginTime: number | null;

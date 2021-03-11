@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import { ICourse } from "../../../backend/models/course";
+import { ICourseDocument } from "../../../backend/models/course";
 
 export type Filters = {
   subject?: string;
@@ -11,32 +11,32 @@ const API_BASE = "/api";
 
 export default function useCourseSearch(filters: Filters) {
   const [page, setPage] = useState(0);
-  const [params, setParams] = useState("");
   const [data, setData] = useState([]);
 
   useEffect(() => {
+    setPage(0);
+  }, [filters]);
+
+  const params = useMemo(() => {
     const cleanedFilters = Object.fromEntries(
       Object.entries(filters).filter(([k, v]) => v !== "")
     );
 
-    const searchParams = new URLSearchParams({
+    return new URLSearchParams({
       ...cleanedFilters,
       page: page.toString(),
     });
-
-    setPage(0);
-    setParams(searchParams.toString());
-  }, [filters]);
+  }, [filters, page]);
 
   useEffect(() => {
     fetch(`${API_BASE}/courses/?${params}`).then(async (res) => {
       const json = await res.json();
       setData(json);
     });
-  }, [page, params]);
+  }, [params]);
 
   return {
-    courses: data as ICourse[],
+    courses: data as ICourseDocument[],
     nextPage: () => setPage(page + 1),
   };
 }
