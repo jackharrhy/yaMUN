@@ -13,6 +13,12 @@ function Pill({ text }: { text: string }) {
 }
 
 function Slot({ slot }: { slot: ISlot }) {
+  const hasTime = slot.beginTime !== null || slot.endTime !== null;
+
+  if (!hasTime) {
+    return null;
+  }
+
   return (
     <p key={slot._id}>
       {slot.days} - {slot.beginTime} to {slot.endTime}
@@ -24,7 +30,7 @@ function Section({ section }: { section: ISection }) {
   return (
     <div className="mt-4 py-1 px-2 border-2 rounded shadow-sm">
       <p>
-        {section.crn} - {section.primaryInstructor}
+        <code>{section.crn}</code> - {section.primaryInstructor}
       </p>
       {section.slots.map((slot) => (
         <Slot key={slot._id} slot={slot} />
@@ -34,10 +40,12 @@ function Section({ section }: { section: ISection }) {
 }
 
 function Course({ course }: { course: ICourseDocument }) {
+  const name = course.info?.title ?? course.name;
+
   return (
     <div className="shadow-md p-5 mb-4 rounded border">
       <p className="text-xl font-medium mb-2">
-        {course.subject} {course.number} - {course.name}
+        {course.subject} {course.number}
       </p>
       <Pill text={course.campus} />
       {course.sections.map((section) => (

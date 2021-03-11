@@ -1,6 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+function Option({ link, text }: { link: string, text: string; }) {
+  return (
+    <li>
+      <Link
+        to={link}
+        className="mr-6 p-4 py-3 px-0 block font-semibold text-white hover:text-gray-200 focus:outline-none border-b-2 border-transparent focus:border-red-900"
+      >
+        {text}
+      </Link>
+    </li>
+  );
+}
+
 function NavBar() {
   return (
     <nav className="flex items-center pl-3.5 shadow-md bg-red-500">
@@ -13,30 +26,9 @@ function NavBar() {
         </Link>
       </div>
       <ul className="flex items-center justify-between text-base">
-        <li>
-          <Link
-            to="/find-courses"
-            className="mr-6 p-4 py-3 px-0 block font-semibold text-white hover:text-gray-200 focus:outline-none border-b-2 border-transparent focus:border-red-900"
-          >
-            Find Courses
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/schedules"
-            className="mr-6 p-4 py-3 px-0 block font-semibold text-white hover:text-gray-200 focus:outline-none border-b-2 border-transparent focus:border-red-900"
-          >
-            Schedules
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/bookmarks"
-            className="mr-6 p-4 py-3 px-0 block font-semibold text-white hover:text-gray-200 focus:outline-none border-b-2 border-transparent focus:border-red-900"
-          >
-            Bookmarks
-          </Link>
-        </li>
+        <Option link="/find-courses" text="Find Courses" />
+        <Option link="/schedules" text="Schedules" />
+        <Option link="/bookmarks" text="Bookmarks" />
       </ul>
     </nav>
   );

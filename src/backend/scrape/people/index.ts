@@ -84,7 +84,10 @@ export const convertPeopleData = (
   peopleApiResponse: IPeopleApiResponse
 ): IPeople[] => {
   return peopleApiResponse.results.map((apiResp) => {
+    const bannerName = `${apiResp.fname?.[0]} ${apiResp.fname}`;
+
     return {
+      bannerName,
       displayName: apiResp.displayname,
       campus: apiResp.campus,
       department: apiResp.department,
