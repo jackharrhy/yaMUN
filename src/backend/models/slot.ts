@@ -1,13 +1,13 @@
 import { Schema } from "mongoose";
 
 export enum DayOfWeek {
-  Monday = "Monday",
-  Tuesday = "Tuesday",
-  Wednesday = "Wednesday",
-  Thursday = "Thursday",
-  Friday = "Friday",
-  Saturday = "Saturday",
-  Sunday = "Sunday",
+  Monday = "M",
+  Tuesday = "T",
+  Wednesday = "W",
+  Thursday = "R",
+  Friday = "F",
+  Saturday = "S",
+  Sunday = "U",
 }
 
 export interface ISlot {

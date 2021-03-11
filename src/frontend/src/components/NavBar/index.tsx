@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function Option({ link, text }: { link: string, text: string; }) {
+function Option({ link, text }: { link: string; text: string }) {
   return (
     <li>
       <Link

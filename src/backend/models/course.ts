@@ -1,8 +1,8 @@
 import debugFactory from "debug";
 import { Condition } from "mongodb";
 import mongoose, { Schema, Document, Model } from "mongoose";
-import { ICourseInfo } from "./course-info";
 
+import { ICourseInfo } from "./course-info";
 import { ISection, SectionSchema } from "./section";
 import { ISemester, SemesterSchema } from "./semester";
 
@@ -72,23 +72,26 @@ export interface ICourseModel extends Model<ICourseDocument> {
   search(args: ICourseModelSearch): Promise<ICourse[]>;
 }
 
-export const CourseSchema = new Schema<ICourseDocument>({
-  semester: SemesterSchema,
-  campus: { type: String, required: true },
-  session: { type: String, required: true },
-  subject: { type: String, required: true },
-  number: { type: String, required: true },
-  name: { type: String, required: true },
-  sections: [SectionSchema],
-}, {
-  toJSON: { virtuals: true },
-  toObject: { virtuals: true },
-});
+export const CourseSchema = new Schema<ICourseDocument>(
+  {
+    semester: SemesterSchema,
+    campus: { type: String, required: true },
+    session: { type: String, required: true },
+    subject: { type: String, required: true },
+    number: { type: String, required: true },
+    name: { type: String, required: true },
+    sections: [SectionSchema],
+  },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
 
-CourseSchema.virtual('info', {
-  ref: 'CourseInfo',
-  localField: ['subject', 'number'],
-  foreignField: ['subject', 'number'],
+CourseSchema.virtual("info", {
+  ref: "CourseInfo",
+  localField: ["subject", "number"],
+  foreignField: ["subject", "number"],
   justOne: true,
 });
 
@@ -198,7 +201,7 @@ CourseSchema.statics.search = async function (
   return await this.find(query)
     .skip(args.page * args.limit)
     .limit(args.limit)
-    .populate('info')
+    .populate("info")
     .exec();
 };
 
