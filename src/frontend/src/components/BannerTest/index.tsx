@@ -13,9 +13,9 @@ function BannerTest() {
 
   const output = useMemo(() => {
     const testSemester: ISemester = {
-      year: year,
-      term: term,
-      level: level,
+      year,
+      term,
+      level,
     };
 
     try {
