@@ -32,7 +32,6 @@ export default function useCourseSearch(filters: Filters) {
   const page = pageFromQuery ?? 0;
 
   useEffect(() => {
-    console.log("filters", filters);
     setQuery(
       {
         page: filters.page,
@@ -80,7 +79,7 @@ export default function useCourseSearch(filters: Filters) {
     },
     previousPage: () => {
       if (page > 0) {
-        const newPage = page === 1 ? undefined : page;
+        const newPage = page === 1 ? undefined : page - 1;
         setQuery({ page: newPage });
       }
     },

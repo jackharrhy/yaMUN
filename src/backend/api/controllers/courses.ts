@@ -9,6 +9,14 @@ const debug = debugFactory("backend/api/controllers/courses");
 
 export const COURSE_SEARCH_PAGINATION_LIMIT = 20;
 
+export interface IPossibleFilters {
+  subjects: string[];
+  campuses: string[];
+  years: number[];
+  terms: number[];
+  levels: number[];
+}
+
 const coursesController = {
   async search(req: express.Request, res: express.Response) {
     const page = Number(req.query.page ?? 0);
@@ -94,19 +102,22 @@ const coursesController = {
     }
   },
   async filters(req: express.Request, res: express.Response) {
+    debug("filters");
     const subjects = await Course.distinct("subject").exec();
     const campuses = await Course.distinct("campus").exec();
     const years = await Course.distinct("semester.year").exec();
     const terms = await Course.distinct("semester.term").exec();
     const levels = await Course.distinct("semester.level").exec();
 
-    res.json({
+    const possibleFilters: IPossibleFilters = {
       subjects,
       campuses,
       years,
       terms,
       levels,
-    });
+    };
+
+    res.json(possibleFilters);
   },
   async subjects(req: express.Request, res: express.Response) {
     debug("subjects");

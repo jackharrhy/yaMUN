@@ -1,6 +1,8 @@
-import React from "react";
-import { useForm } from "react-hook-form";
+import React, { useMemo } from "react";
+import { useForm, Controller } from "react-hook-form";
+import Select from "react-select";
 
+import useCoursePossibleFilters from "../../hooks/useCoursePossibleFilters";
 import { Filters } from "../../hooks/useCourseSearch";
 
 interface SetFiltersProps {
@@ -9,10 +11,40 @@ interface SetFiltersProps {
 }
 
 function SetFilters({ filters, setFilters }: SetFiltersProps) {
-  const { register, handleSubmit } = useForm<Filters>();
+  const { control, register, handleSubmit } = useForm<Filters>();
+
+  const { possibleFilters, error } = useCoursePossibleFilters();
+
+  const options = useMemo(() => {
+    if (possibleFilters === null) {
+      return { years: [], terms: [], levels: [], subjects: [] };
+    }
+
+    return {
+      years: possibleFilters.years
+        .map((year) => ({ value: year, label: year }))
+        .reverse(),
+      terms: possibleFilters.terms.map((term) => ({
+        value: term,
+        label: term,
+      })),
+      levels: possibleFilters.levels.map((level) => ({
+        value: level,
+        label: level,
+      })),
+      subjects: possibleFilters.subjects.map((subject) => ({
+        value: subject,
+        label: subject,
+      })),
+    };
+  }, [possibleFilters]);
+
+  if (error) {
+    // TODO display nice error instead of just hiding the search view
+    return null;
+  }
 
   const onSubmit = (data: Filters) => {
-    console.log("data", data);
     setFilters({
       page: undefined,
       subject: data.subject === "" ? undefined : data.subject,
@@ -35,37 +67,90 @@ function SetFilters({ filters, setFilters }: SetFiltersProps) {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="mb-2">
-        <input
-          className="pl-3 py-1 w-1/3 border-box border focus:outline-none focus:ring-2 focus:ring-red-200"
-          type="number"
+        <Controller
           name="semesterYear"
-          placeholder="Semester Year"
-          defaultValue={filters.semesterYear} // get current year
-          ref={register({ valueAsNumber: true })}
+          control={control}
+          defaultValue={filters.semesterYear}
+          render={(props) => (
+            <Select
+              className="inline-block w-1/3"
+              placeholder="Semester Year"
+              isClearable
+              defaultValue={
+                filters.semesterYear
+                  ? {
+                      value: filters.semesterYear,
+                      label: filters.semesterYear,
+                    }
+                  : undefined
+              }
+              onChange={(e) => props.onChange(e?.value)}
+              options={options.years}
+            />
+          )}
         />
-        <input
-          className="pl-3 py-1 w-1/3 border-box border focus:outline-none focus:ring-2 focus:ring-red-200"
-          type="number"
+        <Controller
           name="semesterTerm"
-          placeholder="Semester Term"
-          defaultValue={filters.semesterTerm} // get current year
-          ref={register({ valueAsNumber: true })}
+          control={control}
+          render={(props) => (
+            <Select
+              className="inline-block w-1/3"
+              placeholder="Semester Term"
+              isClearable
+              defaultValue={
+                filters.semesterTerm
+                  ? {
+                      value: filters.semesterTerm,
+                      label: filters.semesterTerm,
+                    }
+                  : undefined
+              }
+              onChange={(e) => props.onChange(e?.value)}
+              options={options.terms}
+            />
+          )}
         />
-        <input
-          className="pl-3 py-1 w-1/3 border-box border focus:outline-none focus:ring-2 focus:ring-red-200"
-          type="number"
+        <Controller
           name="semesterLevel"
-          placeholder="Semester Level"
-          defaultValue={filters.semesterLevel} // get current year
-          ref={register({ valueAsNumber: true })}
+          control={control}
+          render={(props) => (
+            <Select
+              className="inline-block w-1/3"
+              placeholder="Semester Level"
+              isClearable
+              defaultValue={
+                filters.semesterLevel
+                  ? {
+                      value: filters.semesterLevel,
+                      label: filters.semesterLevel,
+                    }
+                  : undefined
+              }
+              onChange={(e) => props.onChange(e?.value)}
+              options={options.levels}
+            />
+          )}
         />
       </div>
-      <input
-        className="w-full px-3 py-1 border focus:outline-none focus:ring-2 focus:ring-red-200"
+      <Controller
         name="subject"
-        placeholder="Subject"
+        control={control}
         defaultValue={filters.subject ?? ""}
-        ref={register}
+        render={(props) => (
+          <Select
+            placeholder="Course Subject"
+            defaultValue={
+              filters.subject
+                ? {
+                    value: filters.subject,
+                    label: filters.subject,
+                  }
+                : undefined
+            }
+            onChange={(e) => props.onChange(e?.value)}
+            options={options.subjects}
+          />
+        )}
       />
       <input
         className="w-full px-3 py-1 border mt-2 focus:outline-none focus:ring-2 focus:ring-red-200"

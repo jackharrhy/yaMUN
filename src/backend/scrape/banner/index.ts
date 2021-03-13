@@ -43,7 +43,9 @@ export async function populateCourses() {
 
           if (courses === null) {
             if (year < curYear) {
-              console.log("semester produced no courses, but was before current year");
+              console.log(
+                "semester produced no courses, but was before current year"
+              );
             } else {
               console.log(
                 "stopped parsing at ",

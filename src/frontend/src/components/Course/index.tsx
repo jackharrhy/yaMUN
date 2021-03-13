@@ -6,9 +6,12 @@ import { ISectionDocument } from "../../../../backend/models/section";
 import { ISemesterDocument } from "../../../../backend/models/semester";
 import { ISlotDocument } from "../../../../backend/models/slot";
 
-function Pill({ text, style }: { text: string, style?: React.CSSProperties }) {
+function Pill({ text, style }: { text: string; style?: React.CSSProperties }) {
   return (
-    <div style={style} className="rounded-full text-sm font-medium bg-red-500 px-2 text-white border-2 border-red-200 inline-block">
+    <div
+      style={style}
+      className="rounded-full text-sm font-medium bg-red-500 px-2 text-white border-2 border-red-200 inline-block"
+    >
       {text}
     </div>
   );
@@ -88,11 +91,13 @@ function Section({ section }: { section: ISectionDocument }) {
   );
 }
 
-const termToChar = ["Fall", "Winter", "Spring"];
+const termToName = ["Fall", "Winter", "Spring"];
 const levelToName = ["Undergrad", "Graduate"];
 
 function formatSemester(semester: ISemesterDocument): string {
-  return `${termToChar[semester.term - 1]} ${semester.year} - ${levelToName[semester.level - 1]}`;
+  return `${termToName[semester.term - 1]} ${semester.year} - ${
+    levelToName[semester.level - 1]
+  }`;
 }
 
 function Course({ course }: { course: ICourseDocument }) {
@@ -104,7 +109,7 @@ function Course({ course }: { course: ICourseDocument }) {
       <p className="text-xl font-medium mb-2">
         {course.subject} {course.number} - {name}
       </p>
-      <Pill text={semester} />
+      <Pill style={{ marginRight: "0.5rem" }} text={semester} />
       <Pill text={course.campus} />
       <div className="sections mt-4 mb-2">
         {course.sections.map((section) => (
