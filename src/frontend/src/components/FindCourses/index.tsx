@@ -16,10 +16,20 @@ function SetFilters({ filters, setFilters }: SetFiltersProps) {
   const { register, handleSubmit } = useForm<Filters>();
 
   const onSubmit = (data: Filters) => {
+    console.log("data", data);
     setFilters({
-      page: 0,
+      page: undefined,
       subject: data.subject === "" ? undefined : data.subject,
       number: data.number === "" ? undefined : data.number,
+      semesterYear: Number.isNaN(data.semesterYear)
+        ? undefined
+        : data.semesterYear,
+      semesterTerm: Number.isNaN(data.semesterTerm)
+        ? undefined
+        : data.semesterTerm,
+      semesterLevel: Number.isNaN(data.semesterLevel)
+        ? undefined
+        : data.semesterLevel,
     });
   };
 
@@ -28,6 +38,32 @@ function SetFilters({ filters, setFilters }: SetFiltersProps) {
       className="shadow-md p-5 mb-4 rounded border"
       onSubmit={handleSubmit(onSubmit)}
     >
+      <div className="mb-2">
+        <input
+          className="pl-3 py-1 w-1/3 border-box border focus:outline-none focus:ring-2 focus:ring-red-200"
+          type="number"
+          name="semesterYear"
+          placeholder="Semester Year"
+          defaultValue={filters.semesterYear} // get current year
+          ref={register({ valueAsNumber: true })}
+        />
+        <input
+          className="pl-3 py-1 w-1/3 border-box border focus:outline-none focus:ring-2 focus:ring-red-200"
+          type="number"
+          name="semesterTerm"
+          placeholder="Semester Term"
+          defaultValue={filters.semesterTerm} // get current year
+          ref={register({ valueAsNumber: true })}
+        />
+        <input
+          className="pl-3 py-1 w-1/3 border-box border focus:outline-none focus:ring-2 focus:ring-red-200"
+          type="number"
+          name="semesterLevel"
+          placeholder="Semester Level"
+          defaultValue={filters.semesterLevel} // get current year
+          ref={register({ valueAsNumber: true })}
+        />
+      </div>
       <input
         className="w-full px-3 py-1 border focus:outline-none focus:ring-2 focus:ring-red-200"
         name="subject"
@@ -66,17 +102,25 @@ function DisplayCourses({ courses }: DisplayCoursesProps) {
 function FindCourses() {
   const [query] = useQueryParams({
     page: NumberParam,
+    semesterYear: NumberParam,
+    semesterTerm: NumberParam,
+    semesterLevel: NumberParam,
     subject: StringParam,
     number: StringParam,
   });
 
   const [filters, setFilters] = useState<Filters>({
-    page: query.page ?? 0,
+    page: query.page ?? undefined,
+    semesterYear: query.semesterYear ?? undefined,
+    semesterTerm: query.semesterTerm ?? undefined,
+    semesterLevel: query.semesterLevel ?? undefined,
     subject: query.subject ?? undefined,
     number: query.number ?? undefined,
   });
 
-  const { courses, page, nextPage, previousPage } = useCourseSearch(filters);
+  const { courses, error, page, nextPage, previousPage } = useCourseSearch(
+    filters
+  );
 
   if (courses === null) {
     return <p>Loading...</p>;
@@ -85,6 +129,7 @@ function FindCourses() {
   return (
     <>
       <SetFilters filters={filters} setFilters={setFilters} />
+      {error && <p className="text-md text-red-900 font-bold">{error}</p>}
       <Pagination
         page={page}
         results={courses.length}

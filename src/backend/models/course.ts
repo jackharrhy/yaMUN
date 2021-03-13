@@ -1,10 +1,9 @@
 import debugFactory from "debug";
-import { Condition } from "mongodb";
 import mongoose, { Schema, Document, Model } from "mongoose";
 
 import { ICourseInfo } from "./course-info";
-import { ISection, SectionSchema } from "./section";
-import { ISemester, SemesterSchema } from "./semester";
+import { ISection, ISectionDocument, SectionSchema } from "./section";
+import { ISemester, ISemesterDocument, SemesterSchema } from "./semester";
 
 const debug = debugFactory("backend/models/course");
 
@@ -19,6 +18,8 @@ export interface ICourse {
 }
 
 export interface ICourseDocument extends Document, ICourse {
+  semester: ISemesterDocument;
+  sections: ISectionDocument[];
   info?: ICourseInfo;
 }
 
@@ -41,7 +42,9 @@ export interface ICourseModelSearch {
 }
 
 export interface ICourseModelSearchQuery {
-  semester?: Condition<ISemester>;
+  "semester.year"?: number;
+  "semester.term"?: number;
+  "semester.level"?: number;
   subject?: string;
   number?: string;
   name?: string;
@@ -74,7 +77,7 @@ export interface ICourseModel extends Model<ICourseDocument> {
 
 export const CourseSchema = new Schema<ICourseDocument>(
   {
-    semester: SemesterSchema,
+    semester: { type: SemesterSchema, required: true },
     campus: { type: String, required: true },
     session: { type: String, required: true },
     subject: { type: String, required: true },
@@ -118,14 +121,16 @@ CourseSchema.statics.search = async function (
     }).filter(([k, v]) => v !== undefined)
   );
 
-  if (args.semesterLevel || args.semesterTerm || args.semesterYear) {
-    query.semester = Object.fromEntries(
-      Object.entries({
-        year: args.semesterYear,
-        term: args.semesterTerm,
-        level: args.semesterLevel,
-      }).filter(([k, v]) => v !== undefined)
-    );
+  if (args.semesterYear) {
+    query["semester.year"] = args.semesterYear;
+  }
+
+  if (args.semesterTerm) {
+    query["semester.term"] = args.semesterTerm;
+  }
+
+  if (args.semesterLevel) {
+    query["semester.level"] = args.semesterLevel;
   }
 
   const hasBeginEndFields =

@@ -1,15 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  useQueryParams,
-  StringParam,
-  NumberParam,
-  withDefault,
-} from "use-query-params";
+import { useQueryParams, StringParam, NumberParam } from "use-query-params";
 
 import { ICourseDocument } from "../../../backend/models/course";
 
 export type Filters = {
-  page: number;
+  page?: number;
+  semesterYear?: number;
+  semesterTerm?: number;
+  semesterLevel?: number;
   subject?: string;
   number?: string;
 };
@@ -17,20 +15,30 @@ export type Filters = {
 const API_BASE = "/api";
 
 export default function useCourseSearch(filters: Filters) {
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+
   const [query, setQuery] = useQueryParams({
-    page: withDefault(NumberParam, 0),
+    page: NumberParam,
+    semesterYear: NumberParam,
+    semesterTerm: NumberParam,
+    semesterLevel: NumberParam,
     subject: StringParam,
     number: StringParam,
   });
 
-  const { page } = query;
+  const { page: pageFromQuery } = query;
 
-  const [data, setData] = useState([]);
+  const page = pageFromQuery ?? 0;
 
   useEffect(() => {
+    console.log("filters", filters);
     setQuery(
       {
         page: filters.page,
+        semesterYear: filters.semesterYear,
+        semesterTerm: filters.semesterTerm,
+        semesterLevel: filters.semesterLevel,
         subject: filters.subject,
         number: filters.number,
       },
@@ -45,26 +53,35 @@ export default function useCourseSearch(filters: Filters) {
 
     return new URLSearchParams({
       ...cleanedFilters,
-      page: query.page.toString(),
+      page: page.toString(),
     });
   }, [query]);
 
   useEffect(() => {
     fetch(`${API_BASE}/courses/?${params}`).then(async (res) => {
       const json = await res.json();
-      setData(json);
+
+      if (res.ok) {
+        setError(null);
+        setData(json);
+      } else {
+        setData([]);
+        setError(json.error);
+      }
     });
   }, [params]);
 
   return {
     courses: data as ICourseDocument[],
+    error,
     page: page ?? 0,
     nextPage: () => {
-      setQuery({ page: query.page + 1 });
+      setQuery({ page: page + 1 });
     },
     previousPage: () => {
       if (page > 0) {
-        setQuery({ page: query.page - 1 });
+        const newPage = page === 1 ? undefined : page;
+        setQuery({ page: newPage });
       }
     },
   };

@@ -30,11 +30,11 @@ const coursesController = {
       "semesterYear"
     );
     const semesterTerm = maybeStringToNumber(
-      req.query.semesterYear?.toString(),
+      req.query.semesterTerm?.toString(),
       "semesterTerm"
     );
     const semesterLevel = maybeStringToNumber(
-      req.query.semesterYear?.toString(),
+      req.query.semesterLevel?.toString(),
       "semesterLevel"
     );
 
@@ -92,6 +92,16 @@ const coursesController = {
     } else {
       res.json(course);
     }
+  },
+  async subjects(req: express.Request, res: express.Response) {
+    debug("subjects");
+    const subjects = await Course.distinct("subject").exec();
+    res.json(subjects);
+  },
+  async campuses(req: express.Request, res: express.Response) {
+    debug("campuses");
+    const campuses = await Course.distinct("campus").exec();
+    res.json(campuses);
   },
 };
 

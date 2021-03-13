@@ -1,9 +1,8 @@
-import { Schema } from "mongoose";
+import { Schema, Document } from "mongoose";
 
-import { ISlot, SlotSchema } from "./slot";
+import { ISlot, ISlotDocument, SlotSchema } from "./slot";
 
 export interface ISection {
-  _id?: string;
   section: string;
   crn: number;
   scheduleType: string | null; // TODO enum?
@@ -20,7 +19,11 @@ export interface ISection {
   slots: ISlot[];
 }
 
-export const SectionSchema = new Schema({
+export interface ISectionDocument extends Document, ISection {
+  slots: ISlotDocument[];
+}
+
+export const SectionSchema = new Schema<ISectionDocument>({
   section: { type: String, required: true },
   crn: { type: Number, required: true },
   scheduleType: { type: String },
