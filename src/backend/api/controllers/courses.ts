@@ -103,6 +103,21 @@ const coursesController = {
     const campuses = await Course.distinct("campus").exec();
     res.json(campuses);
   },
+  async years(req: express.Request, res: express.Response) {
+    debug("years");
+    const years = await Course.distinct("semester.year").exec();
+    res.json(years);
+  },
+  async terms(req: express.Request, res: express.Response) {
+    debug("terms");
+    const terms = await Course.distinct("semester.term").exec();
+    res.json(terms);
+  },
+  async levels(req: express.Request, res: express.Response) {
+    debug("levels");
+    const levels = await Course.distinct("semester.level").exec();
+    res.json(levels);
+  },
 };
 
 export default coursesController;
