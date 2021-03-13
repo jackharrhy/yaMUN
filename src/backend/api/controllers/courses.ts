@@ -93,6 +93,21 @@ const coursesController = {
       res.json(course);
     }
   },
+  async filters(req: express.Request, res: express.Response) {
+    const subjects = await Course.distinct("subject").exec();
+    const campuses = await Course.distinct("campus").exec();
+    const years = await Course.distinct("semester.year").exec();
+    const terms = await Course.distinct("semester.term").exec();
+    const levels = await Course.distinct("semester.level").exec();
+
+    res.json({
+      subjects,
+      campuses,
+      years,
+      terms,
+      levels,
+    });
+  },
   async subjects(req: express.Request, res: express.Response) {
     debug("subjects");
     const subjects = await Course.distinct("subject").exec();

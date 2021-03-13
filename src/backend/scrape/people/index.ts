@@ -115,6 +115,7 @@ export const populatePeople = async () => {
     const peopleApiResponse = await fetchPeopleData();
     const parsed = parsePeopleData(peopleApiResponse);
     const people = await convertPeopleData(parsed);
+    console.log(`inserting ${people.length} people`);
     await insertPeople(people);
     console.log("populated people!");
   } else {

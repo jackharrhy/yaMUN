@@ -97,6 +97,9 @@ export const populateCourseInfo = async () => {
             sectionNumbers.map(async (sectionNumber) => {
               const data = await fetchListingBySectionNo(sectionNumber);
               const courseInfos = parseListingsPage(subject, data);
+              console.log(
+                `found ${courseInfos.length} course-infos from ${subject}`
+              );
               return courseInfos;
             })
           );

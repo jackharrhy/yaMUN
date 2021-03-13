@@ -7,8 +7,11 @@ import { ISemester } from "../../models/semester";
 const debug = debugFactory("backend/scrape/banner/insert-data");
 
 export async function insertSemester(semester: ISemester) {
-  const testCourses = await coursesFromSemester(semester);
-  await insertCourses(testCourses);
+  const courses = await coursesFromSemester(semester);
+  if (courses === null) {
+    throw new Error("attempted to insert a semester without any valid courses");
+  }
+  await insertCourses(courses);
 }
 
 export default async function insertCourses(courses: ICourse[]) {
