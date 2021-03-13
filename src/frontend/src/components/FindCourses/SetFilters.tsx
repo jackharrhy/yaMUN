@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useForm, Controller } from "react-hook-form";
-import Select from "react-select";
+import Select, { OptionTypeBase, StylesConfig } from "react-select";
 
 import useCoursePossibleFilters from "../../hooks/useCoursePossibleFilters";
 import { Filters } from "../../hooks/useCourseSearch";
@@ -30,6 +30,21 @@ const subjectToOption = (subject: string) => ({
   value: subject,
   label: subject,
 });
+
+const customSelectStyles: StylesConfig<OptionTypeBase, false> = {
+  control: (provided) => ({
+    ...provided,
+    borderColor: "#e5e7eb",
+    borderRadius: 0,
+    ":hover": {
+      borderColor: "inherit",
+    },
+  }),
+  placeholder: (provided) => ({
+    ...provided,
+    color: "#9ca3af",
+  }),
+};
 
 function SetFilters({ filters, setFilters }: SetFiltersProps) {
   const { control, register, handleSubmit } = useForm<Filters>();
@@ -86,6 +101,7 @@ function SetFilters({ filters, setFilters }: SetFiltersProps) {
           render={(props) => (
             <Select
               className="inline-block w-1/3 pr-2"
+              styles={customSelectStyles}
               placeholder="Semester Year"
               isClearable
               defaultValue={
@@ -104,6 +120,7 @@ function SetFilters({ filters, setFilters }: SetFiltersProps) {
           render={(props) => (
             <Select
               className="inline-block w-1/3"
+              styles={customSelectStyles}
               placeholder="Semester Term"
               isClearable
               defaultValue={
@@ -122,6 +139,7 @@ function SetFilters({ filters, setFilters }: SetFiltersProps) {
           render={(props) => (
             <Select
               className="inline-block w-1/3 pl-2"
+              styles={customSelectStyles}
               placeholder="Semester Level"
               isClearable
               defaultValue={
@@ -141,6 +159,7 @@ function SetFilters({ filters, setFilters }: SetFiltersProps) {
         defaultValue={filters.subject ?? ""}
         render={(props) => (
           <Select
+            styles={customSelectStyles}
             isClearable
             placeholder="Course Subject"
             defaultValue={
