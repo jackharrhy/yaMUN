@@ -64,6 +64,6 @@ export async function populateCourses() {
     await Promise.all(insertionPromises);
     console.log("populated courses!");
   } else {
-    console.log("no need to populate test semester, already existing data");
+    console.log("no need to populate courses, already existing data");
   }
 }

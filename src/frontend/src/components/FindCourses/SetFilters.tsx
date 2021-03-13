@@ -73,7 +73,7 @@ function SetFilters({ filters, setFilters }: SetFiltersProps) {
           defaultValue={filters.semesterYear}
           render={(props) => (
             <Select
-              className="inline-block w-1/3"
+              className="inline-block w-1/3 pr-2"
               placeholder="Semester Year"
               isClearable
               defaultValue={
@@ -115,7 +115,7 @@ function SetFilters({ filters, setFilters }: SetFiltersProps) {
           control={control}
           render={(props) => (
             <Select
-              className="inline-block w-1/3"
+              className="inline-block w-1/3 pl-2"
               placeholder="Semester Level"
               isClearable
               defaultValue={
@@ -138,6 +138,7 @@ function SetFilters({ filters, setFilters }: SetFiltersProps) {
         defaultValue={filters.subject ?? ""}
         render={(props) => (
           <Select
+            isClearable
             placeholder="Course Subject"
             defaultValue={
               filters.subject

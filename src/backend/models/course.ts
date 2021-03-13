@@ -206,6 +206,7 @@ CourseSchema.statics.search = async function (
   return await this.find(query)
     .skip(args.page * args.limit)
     .limit(args.limit)
+    .sort({ "semester.year": -1 })
     .populate("info")
     .exec();
 };
