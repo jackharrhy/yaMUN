@@ -91,8 +91,8 @@ function Section({ section }: { section: ISectionDocument }) {
   );
 }
 
-const termToName = ["Fall", "Winter", "Spring"];
-const levelToName = ["Undergrad", "Graduate"];
+export const termToName = ["Fall", "Winter", "Spring"];
+export const levelToName = ["Undergrad", "Graduate"];
 
 function formatSemester(semester: ISemesterDocument): string {
   return `${termToName[semester.term - 1]} ${semester.year} - ${

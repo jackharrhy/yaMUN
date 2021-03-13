@@ -4,11 +4,32 @@ import Select from "react-select";
 
 import useCoursePossibleFilters from "../../hooks/useCoursePossibleFilters";
 import { Filters } from "../../hooks/useCourseSearch";
+import { levelToName, termToName } from "../Course";
 
 interface SetFiltersProps {
   filters: Filters;
   setFilters: (data: Filters) => void;
 }
+
+const yearToOption = (semesterYear: number) => ({
+  value: semesterYear,
+  label: semesterYear,
+});
+
+const termToOption = (semesterTerm: number) => ({
+  value: semesterTerm,
+  label: termToName[semesterTerm - 1],
+});
+
+const levelToOption = (semesterLevel: number) => ({
+  value: semesterLevel,
+  label: levelToName[semesterLevel - 1],
+});
+
+const subjectToOption = (subject: string) => ({
+  value: subject,
+  label: subject,
+});
 
 function SetFilters({ filters, setFilters }: SetFiltersProps) {
   const { control, register, handleSubmit } = useForm<Filters>();
@@ -21,21 +42,12 @@ function SetFilters({ filters, setFilters }: SetFiltersProps) {
     }
 
     return {
-      years: possibleFilters.years
-        .map((year) => ({ value: year, label: year }))
-        .reverse(),
-      terms: possibleFilters.terms.map((term) => ({
-        value: term,
-        label: term,
-      })),
-      levels: possibleFilters.levels.map((level) => ({
-        value: level,
-        label: level,
-      })),
-      subjects: possibleFilters.subjects.map((subject) => ({
-        value: subject,
-        label: subject,
-      })),
+      years: possibleFilters.years.map((year) => yearToOption(year)).reverse(),
+      terms: possibleFilters.terms.map((term) => termToOption(term)),
+      levels: possibleFilters.levels.map((level) => levelToOption(level)),
+      subjects: possibleFilters.subjects.map((subject) =>
+        subjectToOption(subject)
+      ),
     };
   }, [possibleFilters]);
 
@@ -78,10 +90,7 @@ function SetFilters({ filters, setFilters }: SetFiltersProps) {
               isClearable
               defaultValue={
                 filters.semesterYear
-                  ? {
-                      value: filters.semesterYear,
-                      label: filters.semesterYear,
-                    }
+                  ? yearToOption(filters.semesterYear)
                   : undefined
               }
               onChange={(e) => props.onChange(e?.value)}
@@ -99,10 +108,7 @@ function SetFilters({ filters, setFilters }: SetFiltersProps) {
               isClearable
               defaultValue={
                 filters.semesterTerm
-                  ? {
-                      value: filters.semesterTerm,
-                      label: filters.semesterTerm,
-                    }
+                  ? termToOption(filters.semesterTerm)
                   : undefined
               }
               onChange={(e) => props.onChange(e?.value)}
@@ -120,10 +126,7 @@ function SetFilters({ filters, setFilters }: SetFiltersProps) {
               isClearable
               defaultValue={
                 filters.semesterLevel
-                  ? {
-                      value: filters.semesterLevel,
-                      label: filters.semesterLevel,
-                    }
+                  ? levelToOption(filters.semesterLevel)
                   : undefined
               }
               onChange={(e) => props.onChange(e?.value)}
@@ -141,12 +144,7 @@ function SetFilters({ filters, setFilters }: SetFiltersProps) {
             isClearable
             placeholder="Course Subject"
             defaultValue={
-              filters.subject
-                ? {
-                    value: filters.subject,
-                    label: filters.subject,
-                  }
-                : undefined
+              filters.subject ? subjectToOption(filters.subject) : undefined
             }
             onChange={(e) => props.onChange(e?.value)}
             options={options.subjects}
