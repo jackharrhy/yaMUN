@@ -1,8 +1,11 @@
+import debugFactory from "debug";
 import fetch from "node-fetch";
 import { URLSearchParams } from "url";
 
 import BannerCache, { IBannerCacheDocument } from "../../models/banner-cache";
 import { ISemester } from "../../models/semester";
+
+const debug = debugFactory("backend/scrape/banner/fetch-data");
 
 const HEADERS = {
   "User-Agent": "github.com/jackharrhy/yamun - src/backend/scrape/banner",
@@ -18,7 +21,13 @@ const fetchCourseData = async ({ year, term, level }: ISemester) => {
     term,
     level,
   }).exec();
-  if (cached !== null) return cached.data;
+
+  if (cached !== null) {
+    debug("cached", year, term, level);
+    return cached.data;
+  }
+
+  debug("fresh", year, term, level);
 
   const formData = {
     p_term: `${year}0${term}`,

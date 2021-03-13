@@ -1,9 +1,9 @@
 import debugFactory from "debug";
-import { Condition } from "mongodb";
 import mongoose, { Schema, Document, Model } from "mongoose";
 
-import { ISection, SectionSchema } from "./section";
-import { ISemester, SemesterSchema } from "./semester";
+import { ICourseInfo } from "./course-info";
+import { ISection, ISectionDocument, SectionSchema } from "./section";
+import { ISemester, ISemesterDocument, SemesterSchema } from "./semester";
 
 const debug = debugFactory("backend/models/course");
 
@@ -17,7 +17,11 @@ export interface ICourse {
   sections: ISection[];
 }
 
-export interface ICourseDocument extends Document, ICourse {}
+export interface ICourseDocument extends Document, ICourse {
+  semester: ISemesterDocument;
+  sections: ISectionDocument[];
+  info?: ICourseInfo;
+}
 
 export interface ICourseModelSearch {
   page: number;
@@ -38,7 +42,9 @@ export interface ICourseModelSearch {
 }
 
 export interface ICourseModelSearchQuery {
-  semester?: Condition<ISemester>;
+  "semester.year"?: number;
+  "semester.term"?: number;
+  "semester.level"?: number;
   subject?: string;
   number?: string;
   name?: string;
@@ -69,14 +75,27 @@ export interface ICourseModel extends Model<ICourseDocument> {
   search(args: ICourseModelSearch): Promise<ICourse[]>;
 }
 
-export const CourseSchema = new Schema<ICourseDocument>({
-  semester: SemesterSchema,
-  campus: { type: String, required: true },
-  session: { type: String, required: true },
-  subject: { type: String, required: true },
-  number: { type: String, required: true },
-  name: { type: String, required: true },
-  sections: [SectionSchema],
+export const CourseSchema = new Schema<ICourseDocument>(
+  {
+    semester: { type: SemesterSchema, required: true },
+    campus: { type: String, required: true },
+    session: { type: String, required: true },
+    subject: { type: String, required: true },
+    number: { type: String, required: true },
+    name: { type: String, required: true },
+    sections: [SectionSchema],
+  },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
+
+CourseSchema.virtual("info", {
+  ref: "CourseInfo",
+  localField: ["subject", "number"],
+  foreignField: ["subject", "number"],
+  justOne: true,
 });
 
 CourseSchema.statics.findOneByCrn = async function (
@@ -102,14 +121,16 @@ CourseSchema.statics.search = async function (
     }).filter(([k, v]) => v !== undefined)
   );
 
-  if (args.semesterLevel || args.semesterTerm || args.semesterYear) {
-    query.semester = Object.fromEntries(
-      Object.entries({
-        year: args.semesterYear,
-        term: args.semesterTerm,
-        level: args.semesterLevel,
-      }).filter(([k, v]) => v !== undefined)
-    );
+  if (args.semesterYear) {
+    query["semester.year"] = args.semesterYear;
+  }
+
+  if (args.semesterTerm) {
+    query["semester.term"] = args.semesterTerm;
+  }
+
+  if (args.semesterLevel) {
+    query["semester.level"] = args.semesterLevel;
   }
 
   const hasBeginEndFields =
@@ -185,6 +206,8 @@ CourseSchema.statics.search = async function (
   return await this.find(query)
     .skip(args.page * args.limit)
     .limit(args.limit)
+    .sort({ "semester.year": -1 })
+    .populate("info")
     .exec();
 };
 

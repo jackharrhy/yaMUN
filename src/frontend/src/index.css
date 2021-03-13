@@ -24,7 +24,7 @@ code {
 #root {
   height: 100%;
   display: grid;
-  grid-template-columns: 1fr 50% 1fr;
+  grid-template-columns: 1fr 60% 1fr;
   grid-template-rows: 3rem 1fr;
   grid-column-gap: 0px;
   grid-row-gap: 0px;
@@ -36,4 +36,11 @@ nav {
 
 #content {
   grid-area: 2 / 2 / 3 / 3;
+}
+
+.sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 25rem);
+  grid-gap: 0.5rem;
+  justify-content: center;
 }

@@ -3,7 +3,12 @@ import mongoose, { Model, Schema, Document } from "mongoose";
 
 import { BadRequest, NotFoundError } from "../api/errors";
 import Course from "./course";
-import { ISemester, SemesterSchema, semestersEqual } from "./semester";
+import {
+  ISemester,
+  ISemesterDocument,
+  SemesterSchema,
+  semestersEqual,
+} from "./semester";
 import { IUserDocument } from "./user";
 
 const debug = debugFactory("backend/models/schedule");
@@ -24,12 +29,14 @@ export interface IScheduleDocument extends Document {
   removeCourse: (crn: Number) => Promise<void>;
 }
 
-export interface IScheduleModel extends Model<IScheduleDocument> {}
+export interface IScheduleModel extends Model<IScheduleDocument> {
+  semester: ISemesterDocument;
+}
 
 export const ScheduleSchema = new Schema<IScheduleDocument>({
   title: { type: String, required: false },
   description: { type: String, required: false },
-  semester: SemesterSchema,
+  semester: { type: SemesterSchema, required: true },
   courses: [Number],
   owner: {
     type: Schema.Types.ObjectId,

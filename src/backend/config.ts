@@ -4,6 +4,9 @@ dotenv.config();
 
 export const PORT = process.env.YAMUN_PORT || 4000;
 
+export const YEAR_TO_START_FETCHING_COURSES_FROM =
+  Number(process.env.YAMUN_YEAR_TO_START_FETCHING_COURSES_FROM) || 2000;
+
 export const DROP_DB_ON_START = process.env.YAMUN_DROP_DB_ON_START === "true";
 
 export const MONGO_CONNECTION_STRING =

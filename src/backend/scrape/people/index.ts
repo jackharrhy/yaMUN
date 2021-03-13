@@ -84,7 +84,10 @@ export const convertPeopleData = (
   peopleApiResponse: IPeopleApiResponse
 ): IPeople[] => {
   return peopleApiResponse.results.map((apiResp) => {
+    const bannerName = `${apiResp.fname?.[0]} ${apiResp.fname}`;
+
     return {
+      bannerName,
       displayName: apiResp.displayname,
       campus: apiResp.campus,
       department: apiResp.department,
@@ -112,6 +115,7 @@ export const populatePeople = async () => {
     const peopleApiResponse = await fetchPeopleData();
     const parsed = parsePeopleData(peopleApiResponse);
     const people = await convertPeopleData(parsed);
+    console.log(`inserting ${people.length} people`);
     await insertPeople(people);
     console.log("populated people!");
   } else {

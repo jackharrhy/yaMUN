@@ -30,6 +30,12 @@ const defineRoutes = (app: Express) => {
   // courses - searching for courses by query param filters, and finding specific courses by crn
   app.get("/courses", acw(coursesController.search));
   app.get("/courses/:crn", acw(coursesController.courseByCrn));
+  app.get("/course-filters", acw(coursesController.filters));
+  app.get("/subjects", acw(coursesController.subjects));
+  app.get("/campuses", acw(coursesController.campuses));
+  app.get("/semester/years", acw(coursesController.years));
+  app.get("/semester/terms", acw(coursesController.terms));
+  app.get("/semester/levels", acw(coursesController.levels));
 
   // people - getting more information regarding professors who teach courses
   app.get("/people", acw(peopleController.search));

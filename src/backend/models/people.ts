@@ -6,6 +6,7 @@ import { BadRequest } from "../api/errors";
 const debug = debugFactory("backend/models/people");
 
 export interface IPeople {
+  bannerName: string;
   displayName: string;
   campus: string;
   department: string;
@@ -24,6 +25,7 @@ export interface IPeopleModel extends Model<IPeopleDocument> {
 }
 
 export const PeopleSchema = new Schema<IPeopleDocument>({
+  bannerName: { type: String, required: true },
   displayName: { type: String, required: true },
   campus: { type: String, required: true },
   department: { type: String, required: true },

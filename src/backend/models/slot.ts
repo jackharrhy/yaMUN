@@ -1,13 +1,13 @@
-import { Schema } from "mongoose";
+import { Schema, Document } from "mongoose";
 
 export enum DayOfWeek {
-  Monday = "Monday",
-  Tuesday = "Tuesday",
-  Wednesday = "Wednesday",
-  Thursday = "Thursday",
-  Friday = "Friday",
-  Saturday = "Saturday",
-  Sunday = "Sunday",
+  Monday = "M",
+  Tuesday = "T",
+  Wednesday = "W",
+  Thursday = "R",
+  Friday = "F",
+  Saturday = "S",
+  Sunday = "U",
 }
 
 export interface ISlot {
@@ -18,7 +18,9 @@ export interface ISlot {
   room: string | null;
 }
 
-export const SlotSchema = new Schema({
+export interface ISlotDocument extends Document, ISlot {}
+
+export const SlotSchema = new Schema<ISlotDocument>({
   slot: { type: String, required: true },
   days: [{ type: String }],
   beginTime: { type: Number },
