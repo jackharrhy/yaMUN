@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useQueryParams, StringParam, NumberParam } from "use-query-params";
 
 import { ICourseDocument } from "../../../backend/models/course";
+import { API_BASE } from "../api";
 
 export type Filters = {
   page?: number;
@@ -11,8 +12,6 @@ export type Filters = {
   subject?: string;
   number?: string;
 };
-
-const API_BASE = "/api";
 
 export default function useCourseSearch(filters: Filters) {
   const [data, setData] = useState([]);

@@ -1,7 +1,7 @@
 import debugFactory from "debug";
 import mongoose, { Schema, Document, Model, Types } from "mongoose";
 
-import { NotFoundError } from "../api/errors";
+import { BadRequest, NotFoundError } from "../api/errors";
 import Course from "./course";
 import { IUserDocument } from "./user";
 
@@ -50,10 +50,12 @@ BookmarkSchema.methods.addCourse = async function (crn: number) {
     throw new NotFoundError("course not found");
   } else {
     const alreadyAdded = this.courses.find((courseCrn) => courseCrn === crn);
-    if (!alreadyAdded) {
+    if (alreadyAdded) {
+      throw new BadRequest("course already added to bookmarks");
+    } else {
       this.courses.push(crn);
+      await this.save();
     }
-    await this.save();
   }
 };
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useQueryParams, StringParam, NumberParam } from "use-query-params";
 
 import { ICourseDocument } from "../../../../backend/models/course";
+import useAddBookmarks from "../../hooks/useAddBookmark";
 import useCourseSearch, { Filters } from "../../hooks/useCourseSearch";
 import Course from "../Course";
 import DisplayError from "../DisplayError";
@@ -10,17 +11,19 @@ import SetFilters from "./SetFilters";
 
 interface DisplayCoursesProps {
   courses: ICourseDocument[];
+  addBookmark: (crn: number) => void;
 }
 
-function DisplayCourses({ courses }: DisplayCoursesProps) {
+function DisplayCourses({ courses, addBookmark }: DisplayCoursesProps) {
   return (
     <>
       {courses.map((course) => (
-        <Course key={course._id} course={course} />
+        <Course key={course._id} course={course} addBookmark={addBookmark} />
       ))}
     </>
   );
 }
+
 function FindCourses() {
   const [query] = useQueryParams({
     page: NumberParam,
@@ -44,6 +47,8 @@ function FindCourses() {
     filters
   );
 
+  const { addBookmark } = useAddBookmarks();
+
   if (courses === null) {
     return <p>Loading...</p>;
   }
@@ -58,7 +63,7 @@ function FindCourses() {
         nextPage={nextPage}
         previousPage={previousPage}
       />
-      <DisplayCourses courses={courses} />
+      <DisplayCourses courses={courses} addBookmark={addBookmark} />
       <Pagination
         page={page}
         results={courses.length}

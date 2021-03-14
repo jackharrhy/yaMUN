@@ -1,4 +1,5 @@
 import React from "react";
+
 import useBookmarks from "../hooks/useBookmarks";
 
 function ViewBookmarks() {
@@ -10,7 +11,9 @@ function ViewBookmarks() {
 
   return (
     <>
-      <pre><code>{JSON.stringify(bookmarks)}</code></pre>
+      <pre>
+        <code>{JSON.stringify(bookmarks)}</code>
+      </pre>
     </>
   );
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { IBookmarkDocument } from "../../../backend/models/bookmark";
+import { API_BASE } from "../api";
 
 export type Filters = {
   page?: number;
@@ -10,8 +11,6 @@ export type Filters = {
   subject?: string;
   number?: string;
 };
-
-const API_BASE = "/api";
 
 export default function useBookmarks() {
   const [bookmarks, setBookmarks] = useState<IBookmarkDocument | null>(null);
