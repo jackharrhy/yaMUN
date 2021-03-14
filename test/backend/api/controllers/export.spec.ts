@@ -25,8 +25,12 @@ describe("backend/api/controllers/exports", function () {
     await dropCollection("sessions");
 
     agent = request.agent(app);
-    await agent.post("/users").send({ username: "test", password: "test" });
-    await agent.post("/login").send({ username: "test", password: "test" });
+    await agent
+      .post("/users")
+      .send({ username: "test", password: "long valid password" });
+    await agent
+      .post("/login")
+      .send({ username: "test", password: "long valid password" });
   });
 
   it("create valid schedule with two courses, and exports", async function () {

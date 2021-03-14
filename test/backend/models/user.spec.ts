@@ -49,16 +49,19 @@ describe("backend/models/user", function () {
 
   it("create user with too short/long passwords", async function () {
     await expect(
-      User.createUser("s", "short username")
+      User.createUser("s", "short username but valid password")
     ).to.eventually.be.rejectedWith(BadRequest);
     await expect(
-      User.createUser("fine username", "pas")
+      User.createUser("fine username, invalid password", "pas")
     ).to.eventually.be.rejectedWith(BadRequest);
     await expect(
-      User.createUser("toolong".repeat(32), "valid password")
+      User.createUser(
+        "toolong".repeat(32),
+        "valid password, super long username"
+      )
     ).to.eventually.be.rejectedWith(BadRequest);
     return expect(
-      User.createUser("valid username", "toolong".repeat(64))
+      User.createUser("valid username, too long password", "toolong".repeat(64))
     ).to.eventually.be.rejectedWith(BadRequest);
   });
 });

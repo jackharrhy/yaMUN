@@ -25,8 +25,12 @@ describe("backend/api/controllers/schedules", function () {
     await dropCollection("sessions");
 
     agent = request.agent(app);
-    await agent.post("/users").send({ username: "test", password: "test" });
-    await agent.post("/login").send({ username: "test", password: "test" });
+    await agent
+      .post("/users")
+      .send({ username: "test", password: "long valid password" });
+    await agent
+      .post("/login")
+      .send({ username: "test", password: "long valid password" });
   });
 
   it("fail to find schedule that doesn't exist", async function () {
