@@ -57,7 +57,9 @@ export default function useCourseSearch(filters: Filters) {
   }, [query]);
 
   useEffect(() => {
+    let isMounted = true;
     fetch(`${API_BASE}/courses/?${params}`).then(async (res) => {
+      if (!isMounted) return;
       const json = await res.json();
 
       if (res.ok) {
@@ -68,6 +70,7 @@ export default function useCourseSearch(filters: Filters) {
         setError(json.error);
       }
     });
+    return () => { isMounted = false };
   }, [params]);
 
   return {

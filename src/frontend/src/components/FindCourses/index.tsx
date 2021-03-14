@@ -4,6 +4,7 @@ import { useQueryParams, StringParam, NumberParam } from "use-query-params";
 import { ICourseDocument } from "../../../../backend/models/course";
 import useCourseSearch, { Filters } from "../../hooks/useCourseSearch";
 import Course from "../Course";
+import DisplayError from "../DisplayError";
 import Pagination from "../Pagination";
 import SetFilters from "./SetFilters";
 
@@ -50,7 +51,7 @@ function FindCourses() {
   return (
     <>
       <SetFilters filters={filters} setFilters={setFilters} />
-      {error && <p className="text-md text-red-900 font-bold">{error}</p>}
+      <DisplayError error={error} />
       <Pagination
         page={page}
         results={courses.length}
