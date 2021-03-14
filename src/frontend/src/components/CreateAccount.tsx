@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { API_BASE, postData } from '../api';
+import { API_BASE, postData } from "../api";
 import DisplayError from "./DisplayError";
 
 function CreateAccount() {
@@ -29,7 +29,7 @@ function CreateAccount() {
         const json = await resp.json();
         setError(json.error);
       }
-      
+
       setLoading(false);
     });
   };

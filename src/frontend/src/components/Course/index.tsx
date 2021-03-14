@@ -2,6 +2,7 @@ import React from "react";
 
 import { ICourseDocument } from "../../../../backend/models/course";
 import { ISemesterDocument } from "../../../../backend/models/semester";
+import Box from "../Box";
 import Section from "./Section";
 
 function Pill({ text, style }: { text: string; style?: React.CSSProperties }) {
@@ -29,7 +30,7 @@ function Course({ course }: { course: ICourseDocument }) {
   const semester = formatSemester(course.semester);
 
   return (
-    <div className="shadow-md p-5 mb-4 rounded border">
+    <Box className="p-5 mb-4">
       <p className="text-xl font-medium mb-2">
         {course.subject} {course.number} - {name}
       </p>
@@ -40,7 +41,7 @@ function Course({ course }: { course: ICourseDocument }) {
           <Section key={section._id} section={section} />
         ))}
       </div>
-    </div>
+    </Box>
   );
 }
 

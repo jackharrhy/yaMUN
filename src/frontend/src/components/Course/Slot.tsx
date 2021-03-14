@@ -1,5 +1,5 @@
-import React from "react";
 import classNames from "classnames";
+import React from "react";
 
 import { ISlotDocument } from "../../../../backend/models/slot";
 
@@ -60,4 +60,3 @@ function Slot({ slot }: { slot: ISlotDocument }) {
 }
 
 export default Slot;
-

@@ -18,7 +18,9 @@ export default function useLoginStatus() {
         setError(json.error);
       }
     });
-    return () => { isMounted = false };
+    return () => {
+      isMounted = false;
+    };
   };
 
   useEffect(() => {

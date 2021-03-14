@@ -26,7 +26,9 @@ export default function useCoursePossibleFilters() {
       }
     });
 
-    return () => { isMounted = false };
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return { possibleFilters, error };

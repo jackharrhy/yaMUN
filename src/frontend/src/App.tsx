@@ -2,12 +2,12 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { QueryParamProvider } from "use-query-params";
 
-import useLoginStatus from "./hooks/useLoginStatus";
 import BannerTest from "./components/BannerTest";
 import CreateAccount from "./components/CreateAccount";
 import FindCourses from "./components/FindCourses";
 import Login from "./components/Login";
 import NavBar from "./components/NavBar";
+import useLoginStatus from "./hooks/useLoginStatus";
 
 export default function App() {
   const { refetch: refetchLoginStatus, error } = useLoginStatus();

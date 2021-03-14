@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
-import { API_BASE, postData } from '../api';
+import { API_BASE, postData } from "../api";
+import Box from "./Box";
 import DisplayError from "./DisplayError";
 
 function Login() {
@@ -21,6 +22,8 @@ function Login() {
   };
 
   const attemptLogin = () => {
+    if (username === "" || password === "") return;
+
     setLoading(true);
     postData(`${API_BASE}/login`, { username, password }).then(async (resp) => {
       if (resp.ok) {
@@ -29,35 +32,37 @@ function Login() {
         const json = await resp.json();
         setError(json.error);
       }
-      
+
       setLoading(false);
     });
   };
 
   return (
-    <div className="m-auto w-64">
-      <input
-        className="w-full px-3 py-1 border mt-2 focus:outline-none focus:ring-2 focus:ring-red-200"
-        placeholder="Username"
-        disabled={disabled}
-        value={username}
-        onChange={onUsernameChange}
-      />
-      <input
-        className="w-full px-3 py-1 border mt-2 focus:outline-none focus:ring-2 focus:ring-red-200"
-        type="password"
-        placeholder="Password"
-        disabled={disabled}
-        value={password}
-        onChange={onPasswordChange}
-      />
-      <input
-        className="w-full py-0.5 mt-4 border bg-red-50 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-200"
-        type="submit"
-        value="Login"
-        disabled={disabled}
-        onClick={attemptLogin}
-      />
+    <div className="m-auto w-64 pt-2">
+      <Box className="pt-4 pb-5 px-5">
+        <input
+          className="w-full px-3 py-1 border mt-2 focus:outline-none focus:ring-2 focus:ring-red-200"
+          placeholder="Username"
+          disabled={disabled}
+          value={username}
+          onChange={onUsernameChange}
+        />
+        <input
+          className="w-full px-3 py-1 border mt-2 focus:outline-none focus:ring-2 focus:ring-red-200"
+          type="password"
+          placeholder="Password"
+          disabled={disabled}
+          value={password}
+          onChange={onPasswordChange}
+        />
+        <input
+          className="w-full py-0.5 mt-4 border bg-red-50 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-200"
+          type="submit"
+          value="Login"
+          disabled={disabled}
+          onClick={attemptLogin}
+        />
+      </Box>
       <DisplayError error={error} />
     </div>
   );

@@ -70,7 +70,9 @@ export default function useCourseSearch(filters: Filters) {
         setError(json.error);
       }
     });
-    return () => { isMounted = false };
+    return () => {
+      isMounted = false;
+    };
   }, [params]);
 
   return {

@@ -1,4 +1,5 @@
 import React from "react";
+
 import { ISectionDocument } from "../../../../backend/models/section";
 import Slot from "./Slot";
 
