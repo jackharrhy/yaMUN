@@ -4,7 +4,11 @@ import { API_BASE, postData } from "../api";
 import Box from "./Box";
 import DisplayError from "./DisplayError";
 
-function CreateAccount() {
+function CreateAccount({
+  refetchLoginStatus,
+}: {
+  refetchLoginStatus: () => void;
+}) {
   const [error, setError] = useState(null);
 
   const [username, setUsername] = useState<string>("");
@@ -25,7 +29,7 @@ function CreateAccount() {
     setLoading(true);
     postData(`${API_BASE}/users`, { username, password }).then(async (resp) => {
       if (resp.ok) {
-        // TODO do something once user created
+        refetchLoginStatus();
       } else {
         const json = await resp.json();
         setError(json.error);

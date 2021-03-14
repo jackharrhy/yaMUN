@@ -16,7 +16,6 @@ export default function useLoginStatus() {
     fetch(`${API_BASE}/users`).then(async (res) => {
       if (!isMounted) return;
       const json = await res.json();
-      console.log(json);
 
       if (res.ok) {
         setError(null);

@@ -9,7 +9,7 @@ function DisplayError({ error }: DisplayErrorProps) {
     return null;
   }
 
-  return <p className="text-md text-red-900 font-bold">{error}</p>;
+  return <p className="m-4 text-md text-center text-red-900 font-bold">{error}</p>;
 }
 
 export default DisplayError;

@@ -5,9 +5,9 @@ import { QueryParamProvider } from "use-query-params";
 import BannerTest from "./components/BannerTest";
 import CreateAccount from "./components/CreateAccount";
 import FindCourses from "./components/FindCourses";
+import LoggedIn from "./components/LoggedIn";
 import Login from "./components/Login";
 import NavBar from "./components/NavBar";
-import UserStatus from "./components/UserStatus";
 import useLoginStatus from "./hooks/useLoginStatus";
 
 export default function App() {
@@ -28,13 +28,21 @@ export default function App() {
             <Route path="/schedules">Schedule</Route>
             <Route path="/bookmarks">Bookmarks</Route>
             <Route path="/(login|create-account)">
-              <UserStatus username={username} />
-              <Route path="/login">
-                <Login />
-              </Route>
-              <Route path="/create-account">
-                <CreateAccount />
-              </Route>
+              {username ? (
+                <LoggedIn
+                  username={username}
+                  refetchLoginStatus={refetchLoginStatus}
+                />
+              ) : (
+                <>
+                  <Route path="/login">
+                    <Login refetchLoginStatus={refetchLoginStatus} />
+                  </Route>
+                  <Route path="/create-account">
+                    <CreateAccount refetchLoginStatus={refetchLoginStatus} />
+                  </Route>
+                </>
+              )}
             </Route>
             <Route path="/">Home Page</Route>
           </Switch>
