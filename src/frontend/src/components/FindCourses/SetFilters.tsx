@@ -4,6 +4,7 @@ import Select, { OptionTypeBase, StylesConfig } from "react-select";
 
 import useCoursePossibleFilters from "../../hooks/useCoursePossibleFilters";
 import { Filters } from "../../hooks/useCourseSearch";
+import Box from "../Box";
 import { levelToName, termToName } from "../Course";
 
 interface SetFiltersProps {
@@ -89,99 +90,98 @@ function SetFilters({ filters, setFilters }: SetFiltersProps) {
   };
 
   return (
-    <form
-      className="shadow-md p-5 mb-4 rounded border"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <div className="mb-2">
-        <Controller
-          name="semesterYear"
-          control={control}
-          defaultValue={filters.semesterYear}
-          render={(props) => (
-            <Select
-              className="inline-block w-1/3 pr-2"
-              styles={customSelectStyles}
-              placeholder="Semester Year"
-              isClearable
-              defaultValue={
-                filters.semesterYear
-                  ? yearToOption(filters.semesterYear)
-                  : undefined
-              }
-              onChange={(e) => props.onChange(e?.value)}
-              options={options.years}
-            />
-          )}
-        />
-        <Controller
-          name="semesterTerm"
-          control={control}
-          render={(props) => (
-            <Select
-              className="inline-block w-1/3"
-              styles={customSelectStyles}
-              placeholder="Semester Term"
-              isClearable
-              defaultValue={
-                filters.semesterTerm
-                  ? termToOption(filters.semesterTerm)
-                  : undefined
-              }
-              onChange={(e) => props.onChange(e?.value)}
-              options={options.terms}
-            />
-          )}
-        />
-        <Controller
-          name="semesterLevel"
-          control={control}
-          render={(props) => (
-            <Select
-              className="inline-block w-1/3 pl-2"
-              styles={customSelectStyles}
-              placeholder="Semester Level"
-              isClearable
-              defaultValue={
-                filters.semesterLevel
-                  ? levelToOption(filters.semesterLevel)
-                  : undefined
-              }
-              onChange={(e) => props.onChange(e?.value)}
-              options={options.levels}
-            />
-          )}
-        />
-      </div>
-      <Controller
-        name="subject"
-        control={control}
-        defaultValue={filters.subject ?? ""}
-        render={(props) => (
-          <Select
-            styles={customSelectStyles}
-            isClearable
-            placeholder="Course Subject"
-            defaultValue={
-              filters.subject ? subjectToOption(filters.subject) : undefined
-            }
-            onChange={(e) => props.onChange(e?.value)}
-            options={options.subjects}
+    <Box>
+      <form className="p-5 mb-4" onSubmit={handleSubmit(onSubmit)}>
+        <div className="mb-2">
+          <Controller
+            name="semesterYear"
+            control={control}
+            defaultValue={filters.semesterYear}
+            render={(props) => (
+              <Select
+                className="inline-block w-1/3 pr-2"
+                styles={customSelectStyles}
+                placeholder="Semester Year"
+                isClearable
+                defaultValue={
+                  filters.semesterYear
+                    ? yearToOption(filters.semesterYear)
+                    : undefined
+                }
+                onChange={(e) => props.onChange(e?.value)}
+                options={options.years}
+              />
+            )}
           />
-        )}
-      />
-      <input
-        className="w-full px-3 py-1 border mt-2 focus:outline-none focus:ring-2 focus:ring-red-200"
-        name="number"
-        placeholder="Course Number"
-        defaultValue={filters.number ?? ""}
-        ref={register}
-      />
-      <input
-        className="w-full py-0.5 mt-4 border bg-red-50 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-200"
-        type="submit"
-      />
-    </form>
+          <Controller
+            name="semesterTerm"
+            control={control}
+            render={(props) => (
+              <Select
+                className="inline-block w-1/3"
+                styles={customSelectStyles}
+                placeholder="Semester Term"
+                isClearable
+                defaultValue={
+                  filters.semesterTerm
+                    ? termToOption(filters.semesterTerm)
+                    : undefined
+                }
+                onChange={(e) => props.onChange(e?.value)}
+                options={options.terms}
+              />
+            )}
+          />
+          <Controller
+            name="semesterLevel"
+            control={control}
+            render={(props) => (
+              <Select
+                className="inline-block w-1/3 pl-2"
+                styles={customSelectStyles}
+                placeholder="Semester Level"
+                isClearable
+                defaultValue={
+                  filters.semesterLevel
+                    ? levelToOption(filters.semesterLevel)
+                    : undefined
+                }
+                onChange={(e) => props.onChange(e?.value)}
+                options={options.levels}
+              />
+            )}
+          />
+        </div>
+        <Controller
+          name="subject"
+          control={control}
+          defaultValue={filters.subject ?? ""}
+          render={(props) => (
+            <Select
+              styles={customSelectStyles}
+              isClearable
+              placeholder="Course Subject"
+              defaultValue={
+                filters.subject ? subjectToOption(filters.subject) : undefined
+              }
+              onChange={(e) => props.onChange(e?.value)}
+              options={options.subjects}
+            />
+          )}
+        />
+        <input
+          className="w-full px-3 py-1 border mt-2 focus:outline-none focus:ring-2 focus:ring-red-200"
+          name="number"
+          placeholder="Course Number"
+          defaultValue={filters.number ?? ""}
+          ref={register}
+        />
+        <input
+          className="w-full py-0.5 mt-4 border bg-red-50 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-200"
+          type="submit"
+        />
+      </form>
+    </Box>
   );
 }
 

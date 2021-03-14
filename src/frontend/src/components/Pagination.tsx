@@ -1,6 +1,6 @@
 import React from "react";
 
-import { COURSE_SEARCH_PAGINATION_LIMIT } from "../../../../backend/api/controllers/courses";
+import { COURSE_SEARCH_PAGINATION_LIMIT } from "../../../backend/api/controllers/courses";
 
 type PaginationProps = {
   page: number;

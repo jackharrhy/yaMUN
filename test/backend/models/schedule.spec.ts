@@ -14,7 +14,7 @@ describe("backend/models/schedule", function () {
     await Schedule.deleteMany({});
     await User.deleteMany({});
 
-    userId = (await User.createUser("test", "test"))._id;
+    userId = (await User.createUser("test", "long valid password"))._id;
   });
 
   it("create schedule for a user", async function () {

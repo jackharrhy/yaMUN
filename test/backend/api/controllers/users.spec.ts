@@ -25,8 +25,14 @@ describe("backend/api/controllers/users", function () {
   it("creates user, logs in, and returns data about self", async function () {
     const username = "johndoe";
 
-    await agent.post("/users").send({ username, password: "test" }).expect(204);
-    await agent.post("/login").send({ username, password: "test" }).expect(204);
+    await agent
+      .post("/users")
+      .send({ username, password: "long valid password" })
+      .expect(204);
+    await agent
+      .post("/login")
+      .send({ username, password: "long valid password" })
+      .expect(204);
 
     const resp = await agent.get("/users").expect(200);
     expect(resp.body.username).to.equal(username);
@@ -35,7 +41,10 @@ describe("backend/api/controllers/users", function () {
 
   it("can't create same user twice", async function () {
     const username = "johndoe";
-    await agent.post("/users").send({ username, password: "test" }).expect(204);
+    await agent
+      .post("/users")
+      .send({ username, password: "long valid password" })
+      .expect(204);
 
     const resp = await agent
       .post("/users")
@@ -56,7 +65,10 @@ describe("backend/api/controllers/users", function () {
 
   it("can't login to user with wrong password", async function () {
     const username = "johndoe";
-    await agent.post("/users").send({ username, password: "test" }).expect(204);
+    await agent
+      .post("/users")
+      .send({ username, password: "long valid password" })
+      .expect(204);
 
     const resp = await agent
       .post("/login")
@@ -67,8 +79,12 @@ describe("backend/api/controllers/users", function () {
   });
 
   it("forbidden on logout if logged out, and getting info about self", async function () {
-    await agent.post("/users").send({ username: "test", password: "test" });
-    await agent.post("/login").send({ username: "test", password: "test" });
+    await agent
+      .post("/users")
+      .send({ username: "test", password: "long valid password" });
+    await agent
+      .post("/login")
+      .send({ username: "test", password: "long valid password" });
     await agent.get("/users").expect(200);
 
     await agent.get(`/logout`).expect(204);

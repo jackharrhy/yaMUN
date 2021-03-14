@@ -11,7 +11,10 @@ export default function useCoursePossibleFilters() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    let isMounted = true;
     fetch(`${API_BASE}/course-filters`).then(async (res) => {
+      if (!isMounted) return;
+
       const json = await res.json();
 
       if (res.ok) {
@@ -22,6 +25,10 @@ export default function useCoursePossibleFilters() {
         setError(json.error);
       }
     });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return { possibleFilters, error };

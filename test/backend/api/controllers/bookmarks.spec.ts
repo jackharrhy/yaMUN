@@ -24,8 +24,12 @@ describe("backend/api/controllers/bookmarks", function () {
     await dropCollection("sessions");
 
     agent = request.agent(app);
-    await agent.post("/users").send({ username: "test", password: "test" });
-    await agent.post("/login").send({ username: "test", password: "test" });
+    await agent
+      .post("/users")
+      .send({ username: "test", password: "long valid password" });
+    await agent
+      .post("/login")
+      .send({ username: "test", password: "long valid password" });
   });
 
   it("add two different courses to bookmarks", async function () {
