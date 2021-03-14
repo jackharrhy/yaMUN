@@ -27,7 +27,7 @@ function LoggedIn({
   };
 
   return (
-    <div className="m-auto w-64 pt-2">
+    <div className="m-auto w-auto pt-2">
       <Box className="pt-4 pb-5 px-5">
         <p className="text-xl text-center">{status}</p>
         <input
