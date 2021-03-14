@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 import { API_BASE, postData } from "../api";
 import Box from "./Box";
@@ -45,7 +46,7 @@ function Login({ refetchLoginStatus }: { refetchLoginStatus: () => void }) {
 
   return (
     <div className="m-auto w-64 pt-2">
-      <Box className="pt-4 pb-5 px-5">
+      <Box className="py-4 px-5">
         <input
           className="w-full px-3 py-1 border mt-2 focus:outline-none focus:ring-2 focus:ring-red-200"
           placeholder="Username"
@@ -70,6 +71,9 @@ function Login({ refetchLoginStatus }: { refetchLoginStatus: () => void }) {
           disabled={disabled}
           onClick={attemptLogin}
         />
+        <Link to="/create-account">
+          <p className="text-sm text-center mt-3">Create an account</p>
+        </Link>
       </Box>
       <DisplayError error={error} />
     </div>

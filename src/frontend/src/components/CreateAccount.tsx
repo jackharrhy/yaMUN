@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 import { API_BASE, postData } from "../api";
 import Box from "./Box";
@@ -41,7 +42,7 @@ function CreateAccount({
 
   return (
     <div className="m-auto w-64 pt-2">
-      <Box className="pt-4 pb-5 px-5">
+      <Box className="py-4 px-5">
         <input
           className="w-full px-3 py-1 border mt-2 focus:outline-none focus:ring-2 focus:ring-red-200"
           placeholder="Username"
@@ -64,6 +65,9 @@ function CreateAccount({
           disabled={disabled}
           onClick={attemptCreateAccount}
         />
+        <Link to="/login">
+          <p className="text-sm text-center mt-3">Login</p>
+        </Link>
       </Box>
       <DisplayError error={error} />
     </div>
