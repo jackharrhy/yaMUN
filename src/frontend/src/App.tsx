@@ -4,10 +4,12 @@ import { QueryParamProvider } from "use-query-params";
 
 import BannerTest from "./components/BannerTest";
 import CreateAccount from "./components/CreateAccount";
+import DisplayError from "./components/DisplayError";
 import FindCourses from "./components/FindCourses";
 import LoggedIn from "./components/LoggedIn";
 import Login from "./components/Login";
 import NavBar from "./components/NavBar";
+import ViewBookmarks from "./components/ViewBookmarks";
 import useLoginStatus from "./hooks/useLoginStatus";
 
 export default function App() {
@@ -25,8 +27,26 @@ export default function App() {
             <Route path="/find-courses">
               <FindCourses />
             </Route>
-            <Route path="/schedules">Schedule</Route>
-            <Route path="/bookmarks">Bookmarks</Route>
+            <Route path="/schedules">
+              {username ? (
+                <p>Schedules</p>
+              ) : (
+                <>
+                  <DisplayError error="Login required!" />
+                  <Login refetchLoginStatus={refetchLoginStatus} />
+                </>
+              )}
+            </Route>
+            <Route path="/bookmarks">
+              {username ? (
+                <ViewBookmarks />
+              ) : (
+                <>
+                  <DisplayError error="Login required!" />
+                  <Login refetchLoginStatus={refetchLoginStatus} />
+                </>
+              )}
+            </Route>
             <Route path="/(login|create-account)">
               {username ? (
                 <LoggedIn
