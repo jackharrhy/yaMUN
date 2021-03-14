@@ -5,7 +5,9 @@ import { checkPassword, hashPassword } from "../api/auth";
 import { BadRequest } from "../api/errors";
 import Bookmark from "./bookmark";
 
+const MIN_USERNAME_LENGTH = 3;
 const MAX_USERNAME_LENGTH = 20;
+const MIN_PASSWORD_LENGTH = 8;
 const MAX_PASSWORD_LENGTH = 64;
 
 export interface IUserDocument extends Document {
@@ -27,12 +29,22 @@ UserSchema.statics.createUser = async function (
   username: string,
   password: string
 ): Promise<IUserDocument> {
-  if (username.length > MAX_USERNAME_LENGTH) {
-    throw new BadRequest(`username can't be greater than ${MAX_USERNAME_LENGTH}`);
+  if (
+    username.length > MAX_USERNAME_LENGTH ||
+    username.length < MIN_USERNAME_LENGTH
+  ) {
+    throw new BadRequest(
+      `username length must be between ${MIN_USERNAME_LENGTH} and ${MAX_USERNAME_LENGTH}`
+    );
   }
 
-  if (password.length > MAX_PASSWORD_LENGTH) {
-    throw new BadRequest(`password can't be greater than ${MAX_PASSWORD_LENGTH}`);
+  if (
+    password.length > MAX_PASSWORD_LENGTH ||
+    password.length < MIN_PASSWORD_LENGTH
+  ) {
+    throw new BadRequest(
+      `password length must be between ${MIN_PASSWORD_LENGTH} and ${MAX_PASSWORD_LENGTH}`
+    );
   }
 
   const passwordHash = await hashPassword(password);
