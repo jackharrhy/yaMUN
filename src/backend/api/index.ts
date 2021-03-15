@@ -67,7 +67,7 @@ const defineRoutes = (app: Express) => {
   app.delete("/schedules/:scheduleId", acw(schedulesController.delete));
 
   // bookmarks - endpoints for viewing, adding, and removing course bookmarks
-  app.get("/bookmarks/courses", acw(bookmarksController.getCourseBookmarks));
+  app.get("/bookmarks", acw(bookmarksController.getBookmarks));
   app.put(
     "/bookmarks/courses/:crn",
     acw(bookmarksController.addCourseBookmark)

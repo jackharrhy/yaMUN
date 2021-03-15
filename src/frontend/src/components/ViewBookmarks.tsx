@@ -1,20 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-import useBookmarks from "../hooks/useBookmarks";
+import { useStoreActions, useStoreState } from "../store";
 
 function ViewBookmarks() {
-  const { bookmarks, error } = useBookmarks();
+  const bookmarks = useStoreState((state) => state.bookmarks);
+  const fetchBookmarks = useStoreActions((actions) => actions.fetchBookmarks);
 
-  if (bookmarks === null) {
-    return <p>Loading...</p>;
+  useEffect(() => {
+    fetchBookmarks();
+  }, []);
+
+  if (bookmarks === undefined) {
+    // TODO loading state?
+    return null;
   }
 
   return (
-    <>
-      <pre>
-        <code>{JSON.stringify(bookmarks)}</code>
-      </pre>
-    </>
+    <pre>
+      <code>{JSON.stringify(bookmarks, null, 2)}</code>
+    </pre>
   );
 }
 

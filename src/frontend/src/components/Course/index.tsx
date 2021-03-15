@@ -25,13 +25,7 @@ function formatSemester(semester: ISemesterDocument): string {
   }`;
 }
 
-function Course({
-  course,
-  addBookmark,
-}: {
-  course: ICourseDocument;
-  addBookmark: (crn: number) => void;
-}) {
+function Course({ course }: { course: ICourseDocument }) {
   const name = course.info?.title ?? course.name;
   const semester = formatSemester(course.semester);
 
@@ -44,11 +38,7 @@ function Course({
       <Pill text={course.campus} />
       <div className="sections mt-4 mb-2">
         {course.sections.map((section) => (
-          <Section
-            key={section._id}
-            section={section}
-            addBookmark={addBookmark}
-          />
+          <Section key={section._id} section={section} />
         ))}
       </div>
     </Box>

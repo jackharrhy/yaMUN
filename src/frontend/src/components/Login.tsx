@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-import { API_BASE, postData } from "../api";
+import { useStoreActions } from "../store";
 import Box from "./Box";
-import DisplayError from "./DisplayError";
 
-function Login({ refetchLoginStatus }: { refetchLoginStatus: () => void }) {
-  const [error, setError] = useState(null);
+function Login() {
+  // TODO use react-hook-form
+  const login = useStoreActions((actions) => actions.login);
+
+  const disabled = false; // TODO have a state in the store for when this request is being made, to disable buttons
 
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [loading, setLoading] = useState(false);
-
-  const disabled = loading;
 
   const onUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -24,18 +23,7 @@ function Login({ refetchLoginStatus }: { refetchLoginStatus: () => void }) {
 
   const attemptLogin = () => {
     if (username === "" || password === "") return;
-
-    setLoading(true);
-    postData(`${API_BASE}/login`, { username, password }).then(async (resp) => {
-      if (resp.ok) {
-        refetchLoginStatus();
-      } else {
-        const json = await resp.json();
-        setError(json.error);
-      }
-
-      setLoading(false);
-    });
+    login({ username, password });
   };
 
   const handleKeyPress = (event: React.KeyboardEvent) => {
@@ -75,7 +63,6 @@ function Login({ refetchLoginStatus }: { refetchLoginStatus: () => void }) {
           <p className="text-sm text-center mt-3">Create an account</p>
         </Link>
       </Box>
-      <DisplayError error={error} />
     </div>
   );
 }

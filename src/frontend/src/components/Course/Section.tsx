@@ -2,15 +2,12 @@ import React from "react";
 import { MdStarBorder } from "react-icons/md";
 
 import { ISectionDocument } from "../../../../backend/models/section";
+import { useStoreActions } from "../../store";
 import Slot from "./Slot";
 
-function Section({
-  section,
-  addBookmark,
-}: {
-  section: ISectionDocument;
-  addBookmark: (crn: number) => void;
-}) {
+function Section({ section }: { section: ISectionDocument }) {
+  const addBookmark = useStoreActions((actions) => actions.addBookmark);
+
   const instructor = section.primaryInstructor
     ? ` - ${section.primaryInstructor}`
     : "";

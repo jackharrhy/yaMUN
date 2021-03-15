@@ -1,22 +1,17 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-import { API_BASE, postData } from "../api";
+import { useStoreActions } from "../store";
 import Box from "./Box";
-import DisplayError from "./DisplayError";
 
-function CreateAccount({
-  refetchLoginStatus,
-}: {
-  refetchLoginStatus: () => void;
-}) {
-  const [error, setError] = useState(null);
+function CreateAccount() {
+  // TODO use react-hook-form
+  const createAccount = useStoreActions((actions) => actions.createAccount);
 
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [loading, setLoading] = useState(false);
 
-  const disabled = loading;
+  const disabled = false; // TODO have a state in the store for when this request is being made, to disable buttons
 
   const onUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -27,17 +22,7 @@ function CreateAccount({
   };
 
   const attemptCreateAccount = () => {
-    setLoading(true);
-    postData(`${API_BASE}/users`, { username, password }).then(async (resp) => {
-      if (resp.ok) {
-        refetchLoginStatus();
-      } else {
-        const json = await resp.json();
-        setError(json.error);
-      }
-
-      setLoading(false);
-    });
+    createAccount({ username, password });
   };
 
   return (
@@ -69,7 +54,6 @@ function CreateAccount({
           <p className="text-sm text-center mt-3">Login</p>
         </Link>
       </Box>
-      <DisplayError error={error} />
     </div>
   );
 }

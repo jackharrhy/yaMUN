@@ -1,9 +1,10 @@
 import reactRefresh from "@vitejs/plugin-react-refresh";
-import { defineConfig, ProxyOptions } from "vite";
+import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [reactRefresh()],
   server: {
+    hmr: false,
     proxy: {
       "/api": {
         target: "http://localhost:4000/",
