@@ -1,0 +1,994 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "yaMUN API",
+    "description": "https://github.com/jackharrhy/yaMUN/",
+    "version": "0.1"
+  },
+  "servers": [
+    {
+      "url": "http://66.70.201.154:3000"
+    }
+  ],
+  "paths": {
+    "/api/users": {
+      "post": {
+        "description": "Create a user.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body"
+              },
+              "example": {
+                "username": "test",
+                "password": "totallySecurePassword!"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User created successfully."
+          },
+          "400": {
+            "description": "Invalid input or user already exists.",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": {
+                  "error": "Error: username already exists"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://66.70.201.154:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://66.70.201.154:3000"
+        }
+      ]
+    },
+    "/api/login": {
+      "post": {
+        "description": "User authentication using username and password.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_1"
+              },
+              "example": {
+                "username": "testUser",
+                "password": "totalySecurePassword!"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Login successful"
+          },
+          "400": {
+            "description": "Login failed"
+          }
+        },
+        "servers": [
+          {
+            "url": "http://66.70.201.154:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://66.70.201.154:3000"
+        }
+      ]
+    },
+    "/api/courses": {
+      "get": {
+        "description": "List courses with the possibility to filter by many fields.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            },
+            "example": 5
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            },
+            "example": 0
+          },
+          {
+            "name": "semesterYear",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            },
+            "example": 2020
+          },
+          {
+            "name": "semesterTerm",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            },
+            "example": 2
+          },
+          {
+            "name": "semesterLevel",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            },
+            "example": 1
+          },
+          {
+            "name": "subject",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "COMP"
+          },
+          {
+            "name": "number",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            },
+            "example": 2002
+          },
+          {
+            "name": "prof",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "X%20Jiang"
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "M"
+          },
+          {
+            "name": "beginTimeMin",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            },
+            "example": 1000
+          },
+          {
+            "name": "beginTimeMax",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            },
+            "example": 2000
+          },
+          {
+            "name": "endTimeMin",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            },
+            "example": 1050
+          },
+          {
+            "name": "endTimeMax",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            },
+            "example": 1650
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": [
+                  {
+                    "_id": "604fa10a1bd8185a90d8775b",
+                    "semester": {
+                      "_id": "604fa10a1bd8185a90d8775c",
+                      "year": 2020,
+                      "term": 2,
+                      "level": 1
+                    },
+                    "campus": "St. John's",
+                    "session": "Full Term",
+                    "subject": "COMP",
+                    "number": "2002",
+                    "name": "Data Strctrs & Algorithms  ",
+                    "sections": [
+                      {
+                        "_id": "604fa10a1bd8185a90d8775d",
+                        "section": "001",
+                        "crn": 88655,
+                        "scheduleType": "L&L",
+                        "phoneOne": "Y",
+                        "phoneTwo": "Y",
+                        "waitList": true,
+                        "preCheck": true,
+                        "reserved": "Y",
+                        "attr": "Q    ",
+                        "creditHours": 3,
+                        "billedHours": 3,
+                        "primaryInstructor": "X Jiang",
+                        "slots": [
+                          {
+                            "days": [
+                              "M",
+                              "W",
+                              "F"
+                            ],
+                            "_id": "604fa10a1bd8185a90d8775e",
+                            "slot": "03  ",
+                            "beginTime": 1000,
+                            "endTime": 1050
+                          },
+                          {
+                            "days": [
+                              "W"
+                            ],
+                            "_id": "604fa10a1bd8185a90d8775f",
+                            "slot": "63  ",
+                            "beginTime": 1400,
+                            "endTime": 1650
+                          }
+                        ]
+                      }
+                    ],
+                    "__v": 0,
+                    "info": {
+                      "attributes": [
+                        "CR: the former COMP 2711",
+                        "LH: 3",
+                        "PR: COMP 1001, COMP 1002 or Mathematics 2320, and COMP 1003"
+                      ],
+                      "_id": "604fa11f1bd8185a90d8a016",
+                      "subject": "COMP",
+                      "number": "2002",
+                      "title": "Data Structures and Algorithms",
+                      "description": "covers fundamental data structures, algorithms and algorithm design techniques. A problem-driven course, it focuses on computational problem solving from designing an efficient algorithm to implementing it using appropriate data structures.",
+                      "__v": 0
+                    },
+                    "id": "604fa10a1bd8185a90d8775b"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://66.70.201.154:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://66.70.201.154:3000"
+        }
+      ]
+    },
+    "/api/course-info/{subject}": {
+      "get": {
+        "description": "Get information about courses by subject.",
+        "parameters": [
+          {
+            "name": "subject",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "COMP"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array with information about courses.",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": [
+                  {
+                    "attributes": [
+                      "CR: the former COMP 1700. Students cannot receive credit for COMP 1000 if they have previously successfullly completed, or are currently registered for, COMP 1003.",
+                      "LH: 3"
+                    ],
+                    "_id": "604fa11f1bd8185a90d8a00c",
+                    "subject": "COMP",
+                    "number": "1000",
+                    "title": "Computer Science – An Introduction",
+                    "description": "takes a breadth-first overview approach to the discussion of important aspects of computer science including fundamentals in algorithms, binary data representation, Boolean logic, systems software, networking concepts, introductory programming, databases, and selected Computer Science subfields.",
+                    "__v": 0
+                  },
+                  {
+                    "attributes": [
+                      "CR: the former COMP 1710",
+                      "LH: 3"
+                    ],
+                    "_id": "604fa11f1bd8185a90d8a00d",
+                    "subject": "COMP",
+                    "number": "1001",
+                    "title": "Introduction to Programming",
+                    "description": "is an introduction to fundamental programming techniques, primitive data types, and to simple algorithms and their design concepts.",
+                    "__v": 0
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "Course not found. Invalid subject or course number."
+          }
+        },
+        "servers": [
+          {
+            "url": "http://66.70.201.154:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://66.70.201.154:3000"
+        }
+      ]
+    },
+    "/api/course-info/{subject}/{number}": {
+      "get": {
+        "description": "Get information about a specific course by its subject and number.",
+        "parameters": [
+          {
+            "name": "subject",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "COMP"
+          },
+          {
+            "name": "number",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "number"
+            },
+            "example": 3100
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array with information about courses in provided subject.",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": {
+                  "attributes": [
+                    "CR: the former COMP 3715",
+                    "PR: COMP 2006, COMP 2007"
+                  ],
+                  "_id": "604fa11f1bd8185a90d8a022",
+                  "subject": "COMP",
+                  "number": "3100",
+                  "title": "Web Programming",
+                  "description": "studies the Web information system from a programming perspective. It teaches how Web data are transferred across the network, how to design interactive browser contents, and how to provide dynamic pages from the server.",
+                  "__v": 0
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Course not found. Invalid subject or course number."
+          }
+        },
+        "servers": [
+          {
+            "url": "http://66.70.201.154:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://66.70.201.154:3000"
+        }
+      ]
+    },
+    "/api/bookmarks/courses": {
+      "get": {
+        "description": "Gets the list of bookmarked courses.",
+        "responses": {
+          "200": {
+            "description": "Successfully added course to bookmarks. Returns bookmarks object.",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": {
+                  "courses": [
+                    87091
+                  ],
+                  "_id": "604fa34e8526175b24c04f40",
+                  "owner": "604fa34d8526175b24c04f3f",
+                  "__v": 3
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Course not found."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "http://66.70.201.154:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://66.70.201.154:3000"
+        }
+      ]
+    },
+    "/api/bookmarks/courses/{courseCrn}": {
+      "put": {
+        "description": "Add course to bookmarks.",
+        "parameters": [
+          {
+            "name": "courseCrn",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "number"
+            },
+            "example": 59355
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Course successfully added."
+          },
+          "400": {
+            "description": "Course not found."
+          },
+          "403": {
+            "description": "Not authorized."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "http://66.70.201.154:3000"
+          }
+        ]
+      },
+      "delete": {
+        "description": "Remove course from bookmarks",
+        "parameters": [
+          {
+            "name": "courseCrn",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "number"
+            },
+            "example": 59355
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Course successfully deleted."
+          },
+          "403": {
+            "description": "Not authorized."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "http://66.70.201.154:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://66.70.201.154:3000"
+        }
+      ]
+    },
+    "/api/schedules": {
+      "post": {
+        "description": "Create a schedule",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_2"
+              },
+              "example": {
+                "title": "My Schedule",
+                "description": "This is my first public schedule!",
+                "public": true,
+                "semester": {
+                  "year": 2020,
+                  "term": 2,
+                  "level": 1
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Schedule created successfully.",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": {
+                  "title": "My Schedule",
+                  "description": "This is my first public schedule!",
+                  "public": true,
+                  "semester": {
+                    "year": 2020,
+                    "term": 2,
+                    "level": 1
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or missing data."
+          },
+          "403": {
+            "description": "Not authorized."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "http://66.70.201.154:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://66.70.201.154:3000"
+        }
+      ]
+    },
+    "/api/schedules/{scheduleId}": {
+      "put": {
+        "description": "Modify schedule meta data, such as title, description, or visibility.",
+        "parameters": [
+          {
+            "name": "scheduleId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "604fa84b8526175b24c04fd1"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_3"
+              },
+              "example": {
+                "title": "Private Semester",
+                "description": "This is now a private semester.",
+                "public": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successfully modified schedule data."
+          },
+          "400": {
+            "description": "Missing or invalid data."
+          },
+          "403": {
+            "description": "Not authorized to modify schedule."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "http://66.70.201.154:3000"
+          }
+        ]
+      },
+      "delete": {
+        "description": "Delete schedule.",
+        "parameters": [
+          {
+            "name": "scheduleId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "604fa84b8526175b24c04fd1"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Schedule removed."
+          },
+          "403": {
+            "description": "Not authorized to modify schedule."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "http://66.70.201.154:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://66.70.201.154:3000"
+        }
+      ]
+    },
+    "/api/schedules/{scheduleId}/{courseCrn}": {
+      "put": {
+        "description": "Add course to schedule.",
+        "parameters": [
+          {
+            "name": "scheduleId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "604fa84b8526175b24c04fd1"
+          },
+          {
+            "name": "courseCrn",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "number"
+            },
+            "example": 94071
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Course successfully added to schedule."
+          },
+          "400": {
+            "description": "Course is not in the same semester as the schedule."
+          },
+          "403": {
+            "description": "Not authorized to modify schedule."
+          },
+          "404": {
+            "description": "Course not found."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "http://66.70.201.154:3000"
+          }
+        ]
+      },
+      "delete": {
+        "description": "Remove course from schedule.",
+        "parameters": [
+          {
+            "name": "scheduleId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "604fa84b8526175b24c04fd1"
+          },
+          {
+            "name": "courseCrn",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "number"
+            },
+            "example": 94071
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Course successfully removed from schedule."
+          },
+          "403": {
+            "description": "Not authorized to modify schedule."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "http://66.70.201.154:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://66.70.201.154:3000"
+        }
+      ]
+    },
+    "/api/people/": {
+      "get": {
+        "description": "Search people at MUN by name their name in banner.",
+        "parameters": [
+          {
+            "name": "nameInBanner",
+            "in": "query",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "M Bartha"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Information about person",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": [
+                  {
+                    "_id": "604fa1211bd8185a90d8aa4b",
+                    "bannerName": "M Miklos",
+                    "displayName": "Bartha , Dr. Miklos",
+                    "campus": "STJ",
+                    "department": "Computer Science",
+                    "title": "Dr.",
+                    "firstName": "Miklos",
+                    "lastName": "Bartha",
+                    "extension": "864-2193",
+                    "room": "EN2022A",
+                    "email": "bartha@mun.ca",
+                    "__v": 0
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "Param nameInBanner: missing or invalid name"
+          }
+        },
+        "servers": [
+          {
+            "url": "http://66.70.201.154:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://66.70.201.154:3000"
+        }
+      ]
+    }
+  },
+  "components": {
+    "schemas": {
+      "body": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          }
+        }
+      },
+      "body_1": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          }
+        }
+      },
+      "apischedules_semester": {
+        "type": "object",
+        "properties": {
+          "year": {
+            "type": "integer"
+          },
+          "level": {
+            "type": "integer"
+          },
+          "term": {
+            "type": "integer"
+          }
+        }
+      },
+      "body_2": {
+        "type": "object",
+        "properties": {
+          "public": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string"
+          },
+          "semester": {
+            "$ref": "#/components/schemas/apischedules_semester"
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      },
+      "body_3": {
+        "type": "object",
+        "properties": {
+          "public": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "session": {
+        "type": "apiKey",
+        "name": "connect.sid",
+        "in": "cookie"
+      }
+    }
+  }
+}
