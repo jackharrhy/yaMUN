@@ -35,7 +35,7 @@ export const api = {
     return await post(`${API_BASE}/users`, { username, password });
   },
   bookmarks: async (): Promise<Response> => {
-    return await fetch(`${API_BASE}/bookmarks/courses`);
+    return await fetch(`${API_BASE}/bookmarks`);
   },
   addBookmark: async (crn: number): Promise<Response> => {
     return await put(`${API_BASE}/bookmarks/courses/${crn}`);
