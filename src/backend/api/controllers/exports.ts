@@ -47,17 +47,21 @@ const exportsController = {
         const course: ICourse | null = await Course.findOneByCrn(courseCrn);
 
         if (course === null) {
-          // TODO maybe handle this by throwing?
-          return;
+          throw new Error();
         }
 
         course.sections.forEach((curSection) => {
           curSection.slots.forEach((curSlot) => {
             if (curSlot.endTime === null || curSlot.beginTime === null) {
-              return;
+              curSlot.beginTime = 1200;
+              curSlot.endTime = 1201;
             }
 
             const duration = curSlot.endTime - curSlot.beginTime;
+
+            var hours = Math.round(duration / 100);
+            var minutes = Math.round(duration % 100);
+            if (minutes >= 60) { hours++; minutes -= 60; }
 
             const mappedDays: ByWeekday[] = curSlot.days.map(
               (day) => rruleMap[day]
@@ -66,13 +70,6 @@ const exportsController = {
             const rule = new RRule({
               freq: RRule.WEEKLY,
               byweekday: mappedDays,
-              dtstart: new Date(
-                startDate[0],
-                startDate[1],
-                startDate[2],
-                startDate[3],
-                startDate[4]
-              ),
               until: new Date(
                 endDate[0],
                 endDate[1],
@@ -81,15 +78,14 @@ const exportsController = {
                 endDate[4]
               ),
             });
-
             events.push({
               start: startDate,
               title: course.name.concat("-", curSection.section), // CHECK CONCATENATE
               location: curSlot.room ?? undefined,
-              recurrenceRule: rule.toString(),
+              recurrenceRule: rule.toString().replace("RRULE:", ''),
               duration: {
-                hours: Math.round(duration / 100),
-                minutes: Math.round(duration % 100),
+                hours: hours,
+                minutes: minutes,
               },
             });
           });
