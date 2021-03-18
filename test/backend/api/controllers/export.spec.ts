@@ -59,7 +59,7 @@ describe("backend/api/controllers/exports", function () {
     const exportResp = await agent.get(
       `/export/schedules/${scheduleCreateResp.body._id}/ics`
     );
-    
+
     expect(exportResp.text)
       .to.be.a("string")
       .and.satisfy((str: string) => str.startsWith("BEGIN:VCALENDAR"));
