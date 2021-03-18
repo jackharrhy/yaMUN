@@ -60,7 +60,6 @@ describe("backend/api/controllers/exports", function () {
       `/export/schedules/${scheduleCreateResp.body._id}/ics`
     );
 
-    console.log(exportResp.text);
     expect(exportResp.text)
       .to.be.a("string")
       .and.satisfy((str: string) => str.startsWith("BEGIN:VCALENDAR"));

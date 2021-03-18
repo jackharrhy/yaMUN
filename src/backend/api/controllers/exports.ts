@@ -52,9 +52,11 @@ const exportsController = {
         }
 
         course.sections.forEach((curSection) => {
+          console.log("section");
           curSection.slots.forEach((curSlot) => {
             if (curSlot.endTime === null || curSlot.beginTime === null) {
-              return;
+              curSlot.beginTime = 1200;
+              curSlot.endTime = 1201;
             }
 
             const duration = curSlot.endTime - curSlot.beginTime;
@@ -78,7 +80,7 @@ const exportsController = {
                 endDate[4]
               ),
             });
-
+            console.log("push");
             events.push({
               start: startDate,
               title: course.name.concat("-", curSection.section), // CHECK CONCATENATE
