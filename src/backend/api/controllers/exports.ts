@@ -47,7 +47,7 @@ const exportsController = {
         const course: ICourse | null = await Course.findOneByCrn(courseCrn);
 
         if (course === null) {
-          throw new Error();
+          throw new Error("Aborted. Course with CRN: " + courseCrn + " could not be found in database.");
         }
 
         course.sections.forEach((curSection) => {
@@ -59,9 +59,12 @@ const exportsController = {
 
             const duration = curSlot.endTime - curSlot.beginTime;
 
-            var hours = Math.round(duration / 100);
-            var minutes = Math.round(duration % 100);
-            if (minutes >= 60) { hours++; minutes -= 60; }
+            let hours = Math.round(duration / 100);
+            let minutes = Math.round(duration % 100);
+            if (minutes >= 60) {
+              hours++;
+              minutes -= 60;
+            }
 
             const mappedDays: ByWeekday[] = curSlot.days.map(
               (day) => rruleMap[day]
@@ -82,7 +85,7 @@ const exportsController = {
               start: startDate,
               title: course.name.concat("-", curSection.section), // CHECK CONCATENATE
               location: curSlot.room ?? undefined,
-              recurrenceRule: rule.toString().replace("RRULE:", ''),
+              recurrenceRule: rule.toString().replace("RRULE:", ""),
               duration: {
                 hours: hours,
                 minutes: minutes,
