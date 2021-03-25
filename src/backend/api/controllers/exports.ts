@@ -7,7 +7,7 @@ import { RRule, ByWeekday } from "rrule";
 import Course, { ICourse } from "../../models/course";
 import Schedule, { IScheduleDocument } from "../../models/schedule";
 import { expectUserId } from "../auth";
-import { Forbidden } from "../errors";
+import { BadRequest, Forbidden } from "../errors";
 import { stringToObjectId } from "../utils";
 
 const debug = debugFactory("backend/api/controllers/exports");
@@ -47,7 +47,7 @@ const exportsController = {
         const course: ICourse | null = await Course.findOneByCrn(courseCrn);
 
         if (course === null) {
-          throw new Error("Aborted. Course with CRN: " + courseCrn + " could not be found in database.");
+          throw new BadRequest(`can't export schedule with missing course, found invalid crn '${courseCrn}'`);
         }
 
         course.sections.forEach((curSection) => {
@@ -61,6 +61,7 @@ const exportsController = {
 
             let hours = Math.round(duration / 100);
             let minutes = Math.round(duration % 100);
+
             if (minutes >= 60) {
               hours++;
               minutes -= 60;
