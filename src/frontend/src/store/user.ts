@@ -7,6 +7,7 @@ import { api } from "../api";
 export interface IStoreUserFields {
   id?: string;
   username?: string;
+  loggedIn: Computed<IStore, boolean>;
   setUser: Action<IStore, { id?: string; username?: string }>;
   fetchLoginStatus: Thunk<IStore>;
   login: Thunk<IStore, { username: string; password: string }>;
@@ -17,6 +18,7 @@ export interface IStoreUserFields {
 export const userFields: IStoreUserFields = {
   id: undefined,
   username: undefined,
+  loggedIn: computed((state) => state.username !== undefined),
   setUser: action((state, { id, username }) => {
     state.id = id;
     state.username = username;
@@ -36,7 +38,7 @@ export const userFields: IStoreUserFields = {
       await actions.fetchLoginStatus();
     } else {
       const json = await resp.json();
-      toast(json.error);
+      toast.error(json.error);
     }
   }),
   logout: thunk(async (actions) => {
@@ -49,7 +51,7 @@ export const userFields: IStoreUserFields = {
       await actions.fetchLoginStatus();
     } else {
       const json = await resp.json();
-      toast(json.error);
+      toast.error(json.error);
     }
   }),
 };

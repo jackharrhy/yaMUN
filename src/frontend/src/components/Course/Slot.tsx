@@ -3,16 +3,14 @@ import React from "react";
 
 import { ISlotDocument } from "../../../../backend/models/slot";
 
-const colorNumber = 500;
-
 const dayToColor = {
-  M: `blue-${colorNumber}`,
-  T: `yellow-${colorNumber}`,
-  W: `pink-${colorNumber}`,
-  R: `green-${colorNumber}`,
-  F: `indigo-${colorNumber}`,
-  S: `gray-${colorNumber}`,
-  U: `gray-${colorNumber}`,
+  M: `#3B82F6`, // blue-500
+  T: `#F59E0B`, // yellow-500
+  W: `#EC4899`, // pink-500
+  R: `#10B981`, // green-500
+  F: `#6366F1`, // indigo-500
+  S: `#6B7280`, // gray-500
+  U: `#6B7280`, // gray-500
 };
 
 type Day = keyof typeof dayToColor;
@@ -27,8 +25,6 @@ function formatTime(time: number): string {
 
 function Slot({ slot }: { slot: ISlotDocument }) {
   const allDays = Object.keys(dayToColor);
-  const dayPill =
-    "rounded-full w-8 text-xs px-2 my-0.5 mr-0.5 text-center text-white border-2 inline-block";
 
   const time = "rounded-full text-xs px-2 inline-block";
 
@@ -41,9 +37,9 @@ function Slot({ slot }: { slot: ISlotDocument }) {
       {allDays.map((day) => (
         <div
           key={day}
+          style={{ backgroundColor: dayToColor[day as Day] ?? "black" }}
           className={classNames(
-            dayPill,
-            `bg-${dayToColor[day as Day] ?? "black"}`,
+            "rounded-full w-8 text-xs px-2 my-0.5 mr-0.5 text-center text-white border-2 inline-block",
             {
               "opacity-10 select-none": !slot.days.includes(day),
             }
@@ -52,7 +48,7 @@ function Slot({ slot }: { slot: ISlotDocument }) {
           {day}
         </div>
       ))}
-      <div className={time}>
+      <div className="rounded-full text-xs px-2 inline-block">
         {`${formatTime(slot.beginTime)} → ${formatTime(slot.endTime)}`}
       </div>
     </div>

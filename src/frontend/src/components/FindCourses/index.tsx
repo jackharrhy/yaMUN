@@ -1,8 +1,7 @@
 import React from "react";
-import { useQueryParams, StringParam, NumberParam } from "use-query-params";
 
 import { ICourseDocument } from "../../../../backend/models/course";
-import useCourseQueryParams from "../../hooks/useUpdateCourseQueryParams";
+import useCourseQueryParams from "../../hooks/usePersistCourseFilters";
 import { useStoreActions, useStoreState } from "../../store";
 import Course from "../Course";
 import Pagination from "../Pagination";
@@ -24,30 +23,6 @@ function DisplayCourses({ courses }: { courses?: ICourseDocument[] }) {
 }
 
 function FindCourses() {
-  /*
-  const [query] = useQueryParams({
-    page: NumberParam,
-    semesterYear: NumberParam,
-    semesterTerm: NumberParam,
-    semesterLevel: NumberParam,
-    subject: StringParam,
-    number: StringParam,
-  });
-
-  const [filters, setFilters] = useState<Filters>({
-    page: query.page ?? undefined,
-    semesterYear: query.semesterYear ?? undefined,
-    semesterTerm: query.semesterTerm ?? undefined,
-    semesterLevel: query.semesterLevel ?? undefined,
-    subject: query.subject ?? undefined,
-    number: query.number ?? undefined,
-  });
-
-  const { courses, error, page, nextPage, previousPage } = useCourseSearch(
-    filters
-  );
-  */
-
   const courses = useStoreState((state) => state.courses);
   const filters = useStoreState((state) => state.courseFilters);
   const setCourseFilters = useStoreActions(

@@ -31,6 +31,7 @@ export const courseFields: IStoreCourseFields = {
     state.courses = courses;
   }),
   courseFilters: {
+    // TODO pull from usePersistCourseFilters
     page: 0,
   },
   setCourseFilters: action((state, filters) => {

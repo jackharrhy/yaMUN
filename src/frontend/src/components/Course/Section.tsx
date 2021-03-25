@@ -1,12 +1,19 @@
 import React from "react";
-import { MdStarBorder } from "react-icons/md";
+import { MdStar, MdStarBorder } from "react-icons/md";
 
 import { ISectionDocument } from "../../../../backend/models/section";
-import { useStoreActions } from "../../store";
+import { useStoreActions, useStoreState } from "../../store";
 import Slot from "./Slot";
+
+const bookmarkAdded = `#FBBF24`; // yellow-400
 
 function Section({ section }: { section: ISectionDocument }) {
   const addBookmark = useStoreActions((actions) => actions.addBookmark);
+  const removeBookmark = useStoreActions((actions) => actions.removeBookmark);
+  const bookmarks = useStoreState((state) => state.bookmarks);
+  const loggedIn = useStoreState((state) => state.loggedIn);
+
+  const isBookmarked = bookmarks?.includes(section.crn);
 
   const instructor = section.primaryInstructor
     ? ` - ${section.primaryInstructor}`
@@ -19,14 +26,35 @@ function Section({ section }: { section: ISectionDocument }) {
           <code>{section.crn}</code>
           {instructor}
         </p>
-        <button
-          style={{ marginRight: "-0.25rem" }}
-          type="submit"
-          onClick={() => addBookmark(section.crn)}
-        >
-          <MdStarBorder aria-hidden="true" title="Add to Bookmarks" />
-          <span className="visually-hidden">Add to Bookmarks</span>
-        </button>
+        {loggedIn && (
+          <button
+            style={{ marginRight: "-0.25rem" }}
+            type="submit"
+            onClick={() => {
+              if (isBookmarked) {
+                removeBookmark(section.crn);
+              } else {
+                addBookmark(section.crn);
+              }
+            }}
+          >
+            {isBookmarked ? (
+              <>
+                <MdStar
+                  aria-hidden="true"
+                  title="Remove from Bookmarks"
+                  color={bookmarkAdded}
+                />
+                <span className="visually-hidden">Remove from Bookmarks</span>
+              </>
+            ) : (
+              <>
+                <MdStarBorder aria-hidden="true" title="Add to Bookmarks" />
+                <span className="visually-hidden">Add to Bookmarks</span>
+              </>
+            )}
+          </button>
+        )}
       </div>
       {section.slots.map((slot) => (
         <Slot key={slot._id} slot={slot} />

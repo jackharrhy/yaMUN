@@ -18,12 +18,13 @@ function Routes() {
     (actions) => actions.fetchPossibleCourseFilters
   );
 
-  const username = useStoreState((state) => state.username);
-  const isLoggedIn = username !== undefined;
+  const loggedIn = useStoreState((state) => state.loggedIn);
+  const fetchBookmarks = useStoreActions((actions) => actions.fetchBookmarks);
 
   useEffect(() => {
     fetchLoginStatus();
     fetchPossibleCourseFilters();
+    fetchBookmarks();
   }, []);
 
   return (
@@ -35,7 +36,7 @@ function Routes() {
         <FindCourses />
       </Route>
       <Route path="/schedules">
-        {isLoggedIn ? (
+        {loggedIn ? (
           <p>Schedules</p>
         ) : (
           <>
@@ -45,7 +46,7 @@ function Routes() {
         )}
       </Route>
       <Route path="/bookmarks">
-        {isLoggedIn ? (
+        {loggedIn ? (
           <ViewBookmarks />
         ) : (
           <>
@@ -55,7 +56,7 @@ function Routes() {
         )}
       </Route>
       <Route path="/(login|create-account)">
-        {isLoggedIn ? (
+        {loggedIn ? (
           <LoggedIn />
         ) : (
           <>

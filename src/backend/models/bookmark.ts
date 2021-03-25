@@ -2,6 +2,7 @@ import debugFactory from "debug";
 import mongoose, { Schema, Document, Model, Types } from "mongoose";
 
 import { BadRequest, NotFoundError } from "../api/errors";
+import { MAX_BOOKMARKS } from "../consts";
 import Course from "./course";
 import { IUserDocument } from "./user";
 
@@ -45,6 +46,11 @@ BookmarkSchema.statics.findOrCreateByUserId = async function (
 
 BookmarkSchema.methods.addCourse = async function (crn: number) {
   debug("addCourse", crn);
+
+  if (this.courses.length > MAX_BOOKMARKS) {
+    throw new Error(`you can't have more than ${MAX_BOOKMARKS} bookmarks`);
+  }
+
   const course = await Course.findOneByCrn(crn);
   if (course === null) {
     throw new NotFoundError("course not found");

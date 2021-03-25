@@ -4,7 +4,9 @@ import { useQueryParams, StringParam, NumberParam } from "use-query-params";
 import { useStoreActions } from "../store";
 import { ICourseFilters } from "../store/courses";
 
-export default function useCourseQueryParams(filters: ICourseFilters) {
+// TODO write function to pull from course filters localStorage here
+
+export default function usePersistCourseFilters(filters: ICourseFilters) {
   const setCourseFilters = useStoreActions(
     (actions) => actions.setCourseFilters
   );

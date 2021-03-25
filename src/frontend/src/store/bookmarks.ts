@@ -24,7 +24,6 @@ export const bookmarkFields: IStoreBookmarkFields = {
     if (resp.ok) {
       actions.setBookmarks(json.courses);
     } else {
-      toast.error(json.error);
       actions.setBookmarks(undefined);
     }
   }),
@@ -32,7 +31,7 @@ export const bookmarkFields: IStoreBookmarkFields = {
     const resp = await api.addBookmark(crn);
 
     if (resp.ok) {
-      toast.success(`Added '${crn}' to bookmarks!`);
+      toast.success(`Added '${crn}' to bookmarks`);
       actions.fetchBookmarks();
     } else {
       const json = await resp.json();
@@ -43,6 +42,7 @@ export const bookmarkFields: IStoreBookmarkFields = {
     const resp = await api.removeBookmark(crn);
 
     if (resp.ok) {
+      toast.success(`Removed '${crn}' from bookmarks`);
       actions.fetchBookmarks();
     } else {
       const json = await resp.json();
