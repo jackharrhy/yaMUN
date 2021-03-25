@@ -1,53 +1,25 @@
+import { StoreProvider } from "easy-peasy";
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import { QueryParamProvider } from "use-query-params";
 
-import BannerTest from "./components/BannerTest";
-import CreateAccount from "./components/CreateAccount";
-import FindCourses from "./components/FindCourses";
-import LoggedIn from "./components/LoggedIn";
-import Login from "./components/Login";
+import Routes from "./Routes";
 import NavBar from "./components/NavBar";
-import useLoginStatus from "./hooks/useLoginStatus";
+import { store } from "./store";
 
 export default function App() {
-  const { refetch: refetchLoginStatus, error, username } = useLoginStatus();
-
   return (
-    <Router>
-      <QueryParamProvider ReactRouterRoute={Route}>
-        <NavBar />
-        <div id="content" className="pt-5">
-          <Switch>
-            <Route path="/banner-test">
-              <BannerTest />
-            </Route>
-            <Route path="/find-courses">
-              <FindCourses />
-            </Route>
-            <Route path="/schedules">Schedule</Route>
-            <Route path="/bookmarks">Bookmarks</Route>
-            <Route path="/(login|create-account)">
-              {username ? (
-                <LoggedIn
-                  username={username}
-                  refetchLoginStatus={refetchLoginStatus}
-                />
-              ) : (
-                <>
-                  <Route path="/login">
-                    <Login refetchLoginStatus={refetchLoginStatus} />
-                  </Route>
-                  <Route path="/create-account">
-                    <CreateAccount refetchLoginStatus={refetchLoginStatus} />
-                  </Route>
-                </>
-              )}
-            </Route>
-            <Route path="/">Home Page</Route>
-          </Switch>
-        </div>
-      </QueryParamProvider>
-    </Router>
+    <StoreProvider store={store}>
+      <Toaster />
+      <Router>
+        <QueryParamProvider ReactRouterRoute={Route}>
+          <NavBar />
+          <div id="content" className="pt-5">
+            <Routes />
+          </div>
+        </QueryParamProvider>
+      </Router>
+    </StoreProvider>
   );
 }

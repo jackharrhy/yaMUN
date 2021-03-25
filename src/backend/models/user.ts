@@ -3,12 +3,13 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 
 import { checkPassword, hashPassword } from "../api/auth";
 import { BadRequest } from "../api/errors";
+import {
+  MAX_PASSWORD_LENGTH,
+  MAX_USERNAME_LENGTH,
+  MIN_PASSWORD_LENGTH,
+  MIN_USERNAME_LENGTH,
+} from "../consts";
 import Bookmark from "./bookmark";
-
-const MIN_USERNAME_LENGTH = 3;
-const MAX_USERNAME_LENGTH = 20;
-const MIN_PASSWORD_LENGTH = 8;
-const MAX_PASSWORD_LENGTH = 64;
 
 export interface IUserDocument extends Document {
   username: string;
@@ -57,8 +58,9 @@ UserSchema.statics.createUser = async function (
     // 11000 is duplicate entry, to avoid multiple users with the same username
     if (err instanceof MongoError && err.code == 11000) {
       throw new BadRequest("username already exists");
+    } else {
+      throw err;
     }
-    throw err;
   }
 
   await Bookmark.findOrCreateByUserId(user.id);

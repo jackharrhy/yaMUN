@@ -36,7 +36,7 @@ describe("backend/api/controllers/bookmarks", function () {
     await agent.put(`/bookmarks/courses/${testSemester1Crns[0]}`).expect(204);
     await agent.put(`/bookmarks/courses/${testSemester1Crns[1]}`).expect(204);
 
-    const resp = await agent.get("/bookmarks/courses").expect(200);
+    const resp = await agent.get("/bookmarks").expect(200);
     expect(resp.body.courses).to.have.lengthOf(2);
     expect(resp.body.courses[0]).to.equal(testSemester1Crns[0]);
     expect(resp.body.courses[1]).to.equal(testSemester1Crns[1]);
@@ -44,9 +44,9 @@ describe("backend/api/controllers/bookmarks", function () {
 
   it("add the same courses to bookmarks twice", async function () {
     await agent.put(`/bookmarks/courses/${testSemester1Crns[0]}`).expect(204);
-    await agent.put(`/bookmarks/courses/${testSemester1Crns[0]}`).expect(204);
+    await agent.put(`/bookmarks/courses/${testSemester1Crns[0]}`).expect(400);
 
-    const resp = await agent.get("/bookmarks/courses").expect(200);
+    const resp = await agent.get("/bookmarks").expect(200);
     expect(resp.body.courses).to.have.lengthOf(1);
     expect(resp.body.courses[0]).to.equal(testSemester1Crns[0]);
   });
@@ -57,7 +57,7 @@ describe("backend/api/controllers/bookmarks", function () {
       .delete(`/bookmarks/courses/${testSemester1Crns[0]}`)
       .expect(204);
 
-    const resp = await agent.get("/bookmarks/courses").expect(200);
+    const resp = await agent.get("/bookmarks").expect(200);
     expect(resp.body.courses).to.have.lengthOf(0);
   });
 
@@ -66,12 +66,12 @@ describe("backend/api/controllers/bookmarks", function () {
       .delete(`/bookmarks/courses/${testSemester1Crns[0]}`)
       .expect(204);
 
-    const resp = await agent.get("/bookmarks/courses").expect(200);
+    const resp = await agent.get("/bookmarks").expect(200);
     expect(resp.body.courses).to.have.lengthOf(0);
   });
 
   it("get bookmarks before creating any", async function () {
-    const resp = await agent.get("/bookmarks/courses").expect(200);
+    const resp = await agent.get("/bookmarks").expect(200);
     expect(resp.body.courses).to.have.lengthOf(0);
   });
 
@@ -86,11 +86,11 @@ describe("backend/api/controllers/bookmarks", function () {
   });
 
   it("be unable to request any bookmarks endpoint when logged out", async function () {
-    await agent.get("/bookmarks/courses").expect(200);
+    await agent.get("/bookmarks").expect(200);
 
     await agent.get(`/logout`).expect(204);
 
-    await agent.get("/bookmarks/courses").expect(403);
+    await agent.get("/bookmarks").expect(403);
     await agent.put(`/bookmarks/courses/${testSemester1Crns[0]}`).expect(403);
     await agent
       .delete(`/bookmarks/courses/${testSemester1Crns[0]}`)

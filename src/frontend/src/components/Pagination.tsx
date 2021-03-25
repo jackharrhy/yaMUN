@@ -4,7 +4,7 @@ import { COURSE_SEARCH_PAGINATION_LIMIT } from "../../../backend/api/controllers
 
 type PaginationProps = {
   page: number;
-  results: number;
+  results?: number;
   nextPage: () => void;
   previousPage: () => void;
 };
@@ -19,8 +19,9 @@ function Pagination({
 
   const backDisabled = page <= 0;
   const nextDisabled = results !== COURSE_SEARCH_PAGINATION_LIMIT;
+  const lacksResults = results === 0 || results === undefined;
 
-  if ((backDisabled && nextDisabled) || results === 0) {
+  if (lacksResults) {
     return null;
   }
 

@@ -9,10 +9,10 @@ import { stringToNumber } from "../utils";
 const debug = debugFactory("backend/api/controllers/bookmarks");
 
 const bookmarksController = {
-  async getCourseBookmarks(req: express.Request, res: express.Response) {
+  async getBookmarks(req: express.Request, res: express.Response) {
     const userId = await expectUserId(req);
     const bookmark = await Bookmark.findByUserId(userId);
-    debug("getCourseBookmarks", userId);
+    debug("getBookmarks", userId);
 
     if (bookmark === null) {
       throw new NotFoundError("bookmarks not found");
