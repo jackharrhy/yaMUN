@@ -177,6 +177,7 @@ function SetFilters({ defaults }: { defaults: ICourseFilters }) {
         <input
           className="w-full py-0.5 mt-4 border bg-red-50 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-200"
           type="submit"
+          value="Submit"
         />
       </form>
     </Box>

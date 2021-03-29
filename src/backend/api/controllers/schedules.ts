@@ -7,7 +7,7 @@ import { ISemester } from "../../models/semester";
 import { handleRequestBody } from "../../utils/ajv";
 import { expectUserId, freshUserIdOrUndefined } from "../auth";
 import { Forbidden } from "../errors";
-import { stringToNumber, stringToObjectId } from "../utils";
+import { stringToObjectId } from "../utils";
 
 const debug = debugFactory("backend/api/controllers/schedules");
 
@@ -136,14 +136,14 @@ const schedulesController = {
   async addCourse(req: express.Request, res: express.Response) {
     const userId = await expectUserId(req);
     const scheduleId = req.params.scheduleId;
-    const crn = stringToNumber(req.params.crn, "crn");
+    const sid = req.params.sid;
 
     const schedule: IScheduleDocument | null = await Schedule.findById(
       scheduleId
     ).exec();
 
     if (schedule !== null && userId.equals(schedule.owner)) {
-      await schedule.addCourse(crn);
+      await schedule.addCourse(sid);
       res.sendStatus(204);
     } else {
       throw new Forbidden("not authorized");
@@ -153,14 +153,14 @@ const schedulesController = {
   async removeCourse(req: express.Request, res: express.Response) {
     const userId = await expectUserId(req);
     const scheduleId = req.params.scheduleId;
-    const crn = stringToNumber(req.params.crn, "crn");
+    const sid = req.params.sid;
 
     const schedule: IScheduleDocument | null = await Schedule.findById(
       scheduleId
     ).exec();
 
     if (schedule !== null && userId.equals(schedule.owner)) {
-      await schedule.removeCourse(crn);
+      await schedule.removeCourse(sid);
       res.sendStatus(204);
     } else {
       throw new Forbidden("not authorized");

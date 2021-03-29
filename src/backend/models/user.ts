@@ -56,7 +56,7 @@ UserSchema.statics.createUser = async function (
     user = await User.create({ username, passwordHash });
   } catch (err) {
     // 11000 is duplicate entry, to avoid multiple users with the same username
-    if (err instanceof MongoError && err.code == 11000) {
+    if (err instanceof MongoError && err.code === 11000) {
       throw new BadRequest("username already exists");
     } else {
       throw err;

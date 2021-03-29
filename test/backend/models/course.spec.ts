@@ -2,18 +2,18 @@ import { expect } from "chai";
 import { describe } from "mocha";
 
 import Course from "../../../src/backend/models/course";
-import { testSemester1Crns } from "../../test-data";
+import { testSemester1Sids } from "../../test-data";
 
 describe("backend/models/course", function () {
-  it("find course by crn", async function () {
-    const course = await Course.findOneByCrn(testSemester1Crns[0]);
+  it("find course by sid", async function () {
+    const course = await Course.findOneBySid(testSemester1Sids[0]);
     expect(course).to.have.property("subject");
     expect(course).to.have.property("number");
     expect(course).to.have.property("name");
   });
 
-  it("try find course with non-existant crn", async function () {
-    const course = await Course.findOneByCrn(-1);
+  it("try find course with non-existant sid", async function () {
+    const course = await Course.findOneBySid("-1");
     expect(course).to.be.null;
   });
 

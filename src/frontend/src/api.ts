@@ -37,11 +37,11 @@ export const api = {
   bookmarks: async (): Promise<Response> => {
     return await fetch(`${API_BASE}/bookmarks`);
   },
-  addBookmark: async (crn: number): Promise<Response> => {
-    return await put(`${API_BASE}/bookmarks/courses/${crn}`);
+  addBookmark: async (sid: string): Promise<Response> => {
+    return await put(`${API_BASE}/bookmarks/courses/${sid}`);
   },
-  removeBookmark: async (crn: number): Promise<Response> => {
-    return await del(`${API_BASE}/bookmarks/courses/${crn}`);
+  removeBookmark: async (sid: string): Promise<Response> => {
+    return await del(`${API_BASE}/bookmarks/courses/${sid}`);
   },
   courseFilters: async (): Promise<Response> => {
     return await fetch(`${API_BASE}/course-filters`);
