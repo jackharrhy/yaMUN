@@ -4,10 +4,10 @@ import { toast } from "react-hot-toast";
 import { IStore } from ".";
 import { IPossibleFilters } from "../../../backend/api/controllers/courses";
 import { ICourseDocument } from "../../../backend/models/course";
-import { api } from "../api";
+import { api, ErrorResponse } from "../api";
 
 export type ICourseFilters = {
-  page: number;
+  page?: number;
   semesterYear?: number;
   semesterTerm?: number;
   semesterLevel?: number;
@@ -17,7 +17,7 @@ export type ICourseFilters = {
 export interface IStoreCourseFields {
   courses?: ICourseDocument[];
   setCourses: Action<IStore, ICourseDocument[]>;
-  courseFilters: ICourseFilters;
+  courseFilters?: ICourseFilters;
   setCourseFilters: Action<IStore, ICourseFilters>;
   searchCourses: ThunkOn<IStore, ICourseFilters>;
   possibleCourseFilters?: IPossibleFilters;
@@ -30,10 +30,7 @@ export const courseFields: IStoreCourseFields = {
   setCourses: action((state, courses) => {
     state.courses = courses;
   }),
-  courseFilters: {
-    // TODO pull from usePersistCourseFilters
-    page: 0,
-  },
+  courseFilters: undefined,
   setCourseFilters: action((state, filters) => {
     state.courseFilters = filters;
   }),
@@ -46,16 +43,16 @@ export const courseFields: IStoreCourseFields = {
 
       const params = new URLSearchParams({
         ...cleanedFilters,
-        page: event.payload.page.toString(),
+        page: event.payload.page?.toString() ?? "0",
       });
 
       const resp = await api.courseSearch(params);
       const json = await resp.json();
 
       if (resp.ok) {
-        actions.setCourses(json);
+        actions.setCourses(json as ICourseDocument[]);
       } else {
-        toast.error(json.error);
+        toast.error((json as ErrorResponse).error);
         actions.setCourses([]);
       }
     }

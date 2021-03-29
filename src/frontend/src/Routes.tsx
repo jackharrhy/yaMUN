@@ -4,7 +4,9 @@ import { Switch, Route } from "react-router-dom";
 import BannerTest from "./components/BannerTest";
 import CreateAccount from "./components/CreateAccount";
 import DisplayError from "./components/DisplayError";
+import ErrorBoundary from "./components/ErrorBoundary";
 import FindCourses from "./components/FindCourses";
+import Home from "./components/Home";
 import LoggedIn from "./components/LoggedIn";
 import Login from "./components/Login";
 import ViewBookmarks from "./components/ViewBookmarks";
@@ -30,46 +32,60 @@ function Routes() {
   return (
     <Switch>
       <Route path="/banner-test">
-        <BannerTest />
+        <ErrorBoundary>
+          <BannerTest />
+        </ErrorBoundary>
       </Route>
       <Route path="/find-courses">
-        <FindCourses />
+        <ErrorBoundary>
+          <FindCourses />
+        </ErrorBoundary>
       </Route>
       <Route path="/schedules">
-        {loggedIn ? (
-          <p>Schedules</p>
-        ) : (
-          <>
-            <DisplayError error="Login required!" />
-            <Login />
-          </>
-        )}
+        <ErrorBoundary>
+          {loggedIn ? (
+            <p>Schedules</p>
+          ) : (
+            <>
+              <DisplayError error="Login required!" />
+              <Login />
+            </>
+          )}
+        </ErrorBoundary>
       </Route>
       <Route path="/bookmarks">
-        {loggedIn ? (
-          <ViewBookmarks />
-        ) : (
-          <>
-            <DisplayError error="Login required!" />
-            <Login />
-          </>
-        )}
+        <ErrorBoundary>
+          {loggedIn ? (
+            <ViewBookmarks />
+          ) : (
+            <>
+              <DisplayError error="Login required!" />
+              <Login />
+            </>
+          )}
+        </ErrorBoundary>
       </Route>
       <Route path="/(login|create-account)">
-        {loggedIn ? (
-          <LoggedIn />
-        ) : (
-          <>
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route path="/create-account">
-              <CreateAccount />
-            </Route>
-          </>
-        )}
+        <ErrorBoundary>
+          {loggedIn ? (
+            <LoggedIn />
+          ) : (
+            <>
+              <Route path="/login">
+                <Login />
+              </Route>
+              <Route path="/create-account">
+                <CreateAccount />
+              </Route>
+            </>
+          )}
+        </ErrorBoundary>
       </Route>
-      <Route path="/">Home Page</Route>
+      <Route path="/">
+        <ErrorBoundary>
+          <Home />
+        </ErrorBoundary>
+      </Route>
     </Switch>
   );
 }

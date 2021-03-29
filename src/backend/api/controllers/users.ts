@@ -15,6 +15,11 @@ declare module "express-session" {
 
 const debug = debugFactory("backend/api/controllers/users");
 
+export interface IUserSelfInfo {
+  _id: string;
+  username: string;
+}
+
 interface ICreateUserInput {
   username: IUserDocument["username"];
   password: string;
@@ -77,7 +82,7 @@ const usersController = {
     res.json({
       _id: user._id,
       username: user.username,
-    });
+    } as IUserSelfInfo);
   },
 };
 

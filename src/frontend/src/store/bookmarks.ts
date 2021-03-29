@@ -2,11 +2,12 @@ import { thunk, Thunk, action, Action } from "easy-peasy";
 import { toast } from "react-hot-toast";
 
 import { IStore } from ".";
+import { IBookmarkDocument } from "../../../backend/models/bookmark";
 import { api } from "../api";
 
 export interface IStoreBookmarkFields {
-  bookmarks?: string[];
-  setBookmarks: Action<IStore, string[] | undefined>;
+  bookmarks?: IBookmarkDocument;
+  setBookmarks: Action<IStore, IBookmarkDocument | undefined>;
   fetchBookmarks: Thunk<IStore>;
   addBookmark: Thunk<IStore, string>;
   removeBookmark: Thunk<IStore, string>;
@@ -22,7 +23,7 @@ export const bookmarkFields: IStoreBookmarkFields = {
     const json = await resp.json();
 
     if (resp.ok) {
-      actions.setBookmarks(json.courses);
+      actions.setBookmarks(json);
     } else {
       actions.setBookmarks(undefined);
     }

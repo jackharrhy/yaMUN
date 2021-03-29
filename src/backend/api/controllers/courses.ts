@@ -3,7 +3,7 @@ import express from "express";
 
 import Course from "../../models/course";
 import { NotFoundError, BadRequest } from "../errors";
-import { maybeStringToNumber, stringToNumber } from "../utils";
+import { maybeStringToNumber } from "../utils";
 
 const debug = debugFactory("backend/api/controllers/courses");
 

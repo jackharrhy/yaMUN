@@ -4,7 +4,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
   plugins: [reactRefresh()],
   server: {
-    hmr: false,
+    hmr: true,
     proxy: {
       "/api": {
         target: "http://localhost:4000/",

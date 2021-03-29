@@ -87,6 +87,10 @@ function SetFilters({ defaults }: { defaults: ICourseFilters }) {
     });
   };
 
+  if (filters === undefined) {
+    return null;
+  }
+
   return (
     <Box>
       <form className="p-5 mb-4" onSubmit={handleSubmit(onSubmit)}>
@@ -94,7 +98,7 @@ function SetFilters({ defaults }: { defaults: ICourseFilters }) {
           <Controller
             name="semesterYear"
             control={control}
-            defaultValue={filters.semesterYear}
+            defaultValue={defaults.semesterYear ?? NaN}
             render={(props) => (
               <Select
                 className="inline-block w-1/3 pr-2"
@@ -114,6 +118,7 @@ function SetFilters({ defaults }: { defaults: ICourseFilters }) {
           <Controller
             name="semesterTerm"
             control={control}
+            defaultValue={defaults.semesterTerm ?? NaN}
             render={(props) => (
               <Select
                 className="inline-block w-1/3"
@@ -133,6 +138,7 @@ function SetFilters({ defaults }: { defaults: ICourseFilters }) {
           <Controller
             name="semesterLevel"
             control={control}
+            defaultValue={defaults.semesterLevel ?? NaN}
             render={(props) => (
               <Select
                 className="inline-block w-1/3 pl-2"
@@ -153,7 +159,7 @@ function SetFilters({ defaults }: { defaults: ICourseFilters }) {
         <Controller
           name="subject"
           control={control}
-          defaultValue={filters.subject ?? ""}
+          defaultValue={defaults.subject ?? ""}
           render={(props) => (
             <Select
               styles={customSelectStyles}
