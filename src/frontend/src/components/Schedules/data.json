@@ -1,0 +1,100 @@
+{
+  "courses": [93095],
+  "resolvedCourses": [
+    {
+      "_id": "6060f72bf6c2042e89d70c4a",
+      "semester": {
+        "_id": "6060f72bf6c2042e89d70c4b",
+        "year": 2020,
+        "term": 1,
+        "level": 1
+      },
+      "campus": "St. John's",
+      "session": "Full Term",
+      "subject": "ARCH",
+      "number": "3510",
+      "name": "The Ancient Americas       ",
+      "sections": [
+        {
+          "_id": "6060f72bf6c2042e89d70c4c",
+          "section": "001",
+          "crn": 72838,
+          "scheduleType": "LEC",
+          "phoneOne": "Y",
+          "phoneTwo": "Y",
+          "waitList": true,
+          "preCheck": true,
+          "attr": "     ",
+          "creditHours": 3,
+          "billedHours": 3,
+          "primaryInstructor": "M Burchell",
+          "secondaryInstructor": null,
+          "slots": [
+            {
+              "days": ["W"],
+              "_id": "6060f72bf6c2042e89d70c4d",
+              "slot": "18  ",
+              "beginTime": 0,
+              "endTime": 1100
+            }
+          ]
+        }
+      ],
+      "__v": 0,
+      "id": "6060f72bf6c2042e89d70c4a"
+    },
+    {
+      "_id": "6060f72bf6c2042e89d70c4a",
+      "semester": {
+        "_id": "6060f72bf6c2042e89d70c4b",
+        "year": 2020,
+        "term": 1,
+        "level": 1
+      },
+      "campus": "St. John's",
+      "session": "Full Term",
+      "subject": "ARCH",
+      "number": "3510",
+      "name": "The Ancient Americas       ",
+      "sections": [
+        {
+          "_id": "6060f72bf6c2042e89d70c4c",
+          "section": "001",
+          "crn": 72838,
+          "scheduleType": "LEC",
+          "phoneOne": "Y",
+          "phoneTwo": "Y",
+          "waitList": true,
+          "preCheck": true,
+          "attr": "     ",
+          "creditHours": 3,
+          "billedHours": 3,
+          "primaryInstructor": "M Burchell",
+          "secondaryInstructor": null,
+          "slots": [
+            {
+              "days": ["T", "R"],
+              "_id": "6060f72bf6c2042e89d70c4d",
+              "slot": "18  ",
+              "beginTime": 1030,
+              "endTime": 1145
+            }
+          ]
+        }
+      ],
+      "__v": 0,
+      "id": "6060f72bf6c2042e89d70c4a"
+    }
+  ],
+  "_id": "6060fe73f6c2042e89d7794e",
+  "title": "Test semester",
+  "description": "A Test Semester",
+  "semester": {
+    "_id": "6060fe73f6c2042e89d7794f",
+    "year": 2019,
+    "term": 2,
+    "level": 1
+  },
+  "owner": "6060f846f6c2042e89d778eb",
+  "__v": 1
+}
