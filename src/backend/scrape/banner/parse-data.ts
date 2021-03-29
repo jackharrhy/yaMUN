@@ -73,8 +73,8 @@ const parseCourseData = (semester: ISemester, data: string[]): ICourse[] => {
     const sectionMatch = SECTION_REGEX.exec(line);
     if (sectionMatch !== null) {
       if (course !== null) {
-        section = matchToSection(sectionMatch);
-        debug("section", section.crn);
+        section = matchToSection(semester, sectionMatch);
+        debug("section", section.sid);
         course.sections.push(section);
       } else {
         // ignore for now because its kinda broken with some entries

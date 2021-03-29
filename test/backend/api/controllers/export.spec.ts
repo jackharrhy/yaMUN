@@ -7,7 +7,7 @@ import request, { SuperAgentTest } from "supertest";
 import api from "../../../../src/backend/api";
 import Schedule from "../../../../src/backend/models/schedule";
 import User from "../../../../src/backend/models/user";
-import { testSemester2, testSemester2Crns } from "../../../test-data";
+import { testSemester2, testSemester2Sids } from "../../../test-data";
 import { dropCollection } from "../../../test-utils";
 
 describe("backend/api/controllers/exports", function () {
@@ -49,11 +49,11 @@ describe("backend/api/controllers/exports", function () {
       .expect(200);
 
     await agent
-      .put(`/schedules/${scheduleCreateResp.body._id}/${testSemester2Crns[0]}`)
+      .put(`/schedules/${scheduleCreateResp.body._id}/${testSemester2Sids[0]}`)
       .expect(204);
 
     await agent
-      .put(`/schedules/${scheduleCreateResp.body._id}/${testSemester2Crns[1]}`)
+      .put(`/schedules/${scheduleCreateResp.body._id}/${testSemester2Sids[1]}`)
       .expect(204);
 
     const exportResp = await agent.get(

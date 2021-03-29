@@ -5,7 +5,7 @@ import { Types } from "mongoose";
 import { NotFoundError } from "../../../src/backend/api/errors";
 import Schedule from "../../../src/backend/models/schedule";
 import User from "../../../src/backend/models/user";
-import { testSemester1, testSemester1Crns } from "../../test-data";
+import { testSemester1, testSemester1Sids } from "../../test-data";
 
 describe("backend/models/schedule", function () {
   let userId: Types.ObjectId;
@@ -44,7 +44,7 @@ describe("backend/models/schedule", function () {
     });
     expect(schedule).property("owner").to.equal(userId);
     expect(schedule).property("courses").to.be.length(0);
-    await schedule.addCourse(testSemester1Crns[0]);
+    await schedule.addCourse(testSemester1Sids[0]);
     expect(schedule).property("courses").to.be.length(1);
   });
 
@@ -55,10 +55,10 @@ describe("backend/models/schedule", function () {
     });
     expect(schedule).property("owner").to.equal(userId);
     expect(schedule).property("courses").to.be.length(0);
-    await schedule.addCourse(testSemester1Crns[0]);
-    await schedule.addCourse(testSemester1Crns[1]);
+    await schedule.addCourse(testSemester1Sids[0]);
+    await schedule.addCourse(testSemester1Sids[1]);
     expect(schedule).property("courses").to.be.length(2);
-    await schedule.removeCourse(testSemester1Crns[1]);
+    await schedule.removeCourse(testSemester1Sids[1]);
     expect(schedule).property("courses").to.be.length(1);
   });
 
@@ -69,10 +69,10 @@ describe("backend/models/schedule", function () {
     });
     expect(schedule).property("owner").to.equal(userId);
     expect(schedule).property("courses").to.be.length(0);
-    await schedule.addCourse(testSemester1Crns[0]);
-    await schedule.addCourse(testSemester1Crns[1]);
+    await schedule.addCourse(testSemester1Sids[0]);
+    await schedule.addCourse(testSemester1Sids[1]);
     expect(schedule).property("courses").to.be.length(2);
-    await schedule.removeCourse(testSemester1Crns[1]);
+    await schedule.removeCourse(testSemester1Sids[1]);
     expect(schedule).property("courses").to.be.length(1);
   });
 
@@ -116,7 +116,7 @@ describe("backend/models/schedule", function () {
     });
     expect(schedule).property("owner").to.equal(userId);
     expect(schedule).property("courses").to.be.length(0);
-    const invalidCourseAdd = schedule.addCourse(-1);
+    const invalidCourseAdd = schedule.addCourse("-1");
     await expect(invalidCourseAdd).to.be.eventually.rejectedWith(
       NotFoundError,
       "course not found"

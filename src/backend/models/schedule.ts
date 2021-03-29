@@ -17,7 +17,7 @@ export interface IScheduleDocument extends Document {
   title: string;
   description: string;
   semester: ISemester;
-  courses: number[];
+  courses: string[];
   owner: IUserDocument["_id"];
   public: boolean;
   updateMeta: (
@@ -25,8 +25,8 @@ export interface IScheduleDocument extends Document {
     description: string,
     isPublic: boolean
   ) => Promise<void>;
-  addCourse: (crn: Number) => Promise<void>;
-  removeCourse: (crn: Number) => Promise<void>;
+  addCourse: (sid: string) => Promise<void>;
+  removeCourse: (sid: string) => Promise<void>;
 }
 
 export interface IScheduleModel extends Model<IScheduleDocument> {
@@ -37,7 +37,7 @@ export const ScheduleSchema = new Schema<IScheduleDocument>({
   title: { type: String, required: false },
   description: { type: String, required: false },
   semester: { type: SemesterSchema, required: true },
-  courses: [Number],
+  courses: [String],
   owner: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -57,15 +57,15 @@ ScheduleSchema.methods.updateMeta = async function (
   await this.save();
 };
 
-ScheduleSchema.methods.addCourse = async function (crn: number) {
-  debug("addCourse", this.id, crn);
-  const course = await Course.findOneByCrn(crn);
+ScheduleSchema.methods.addCourse = async function (sid: string) {
+  debug("addCourse", this.id, sid);
+  const course = await Course.findOneBySid(sid);
 
   if (course === null) {
     throw new NotFoundError("course not found");
   } else {
     if (semestersEqual(this.semester, course.semester)) {
-      this.courses.push(crn);
+      this.courses.push(sid);
       await this.save();
     } else {
       throw new BadRequest("course's semester must match that of the schedule");
@@ -73,9 +73,9 @@ ScheduleSchema.methods.addCourse = async function (crn: number) {
   }
 };
 
-ScheduleSchema.methods.removeCourse = async function (crn: number) {
-  debug("removeCourse", this.id, crn);
-  this.courses = this.courses.filter((courseCrn) => courseCrn !== crn);
+ScheduleSchema.methods.removeCourse = async function (sid: string) {
+  debug("removeCourse", this.id, sid);
+  this.courses = this.courses.filter((courseSid) => courseSid !== sid);
   await this.save();
 };
 

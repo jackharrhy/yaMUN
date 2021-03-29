@@ -1,5 +1,26 @@
 import { Schema, Document } from "mongoose";
 
+export const semesterToString = (semester: ISemester): string => {
+  let letter: string;
+
+  if (semester.term === 1) {
+    letter = "f";
+  } else if (semester.term === 2) {
+    letter = "w";
+  } else if (semester.term === 3) {
+    letter = "s";
+  } else {
+    throw new Error("invalid semester");
+  }
+
+  let postfix = "";
+  if (semester.level === 2) {
+    postfix = "g";
+  }
+
+  return `${letter}${semester.year}${postfix}`;
+};
+
 export interface ISemester {
   year: number;
   term: number;

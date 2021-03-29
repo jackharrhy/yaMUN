@@ -1,6 +1,7 @@
 import { JSONSchemaType } from "ajv";
 
-import { ISection } from "../../../models/section";
+import { createSID, ISection } from "../../../models/section";
+import { ISemester } from "../../../models/semester";
 import { handleMatch } from "../../../utils/ajv";
 import { stringToBool, stringToNumberOrNull } from "../../../utils/misc";
 
@@ -53,14 +54,21 @@ const sectionSchema: JSONSchemaType<ISectionMatch> = {
   additionalProperties: false,
 };
 
-export function matchToSection(match: RegExpExecArray): ISection {
+export function matchToSection(
+  semester: ISemester,
+  match: RegExpExecArray
+): ISection {
   const sectionMatch = handleMatch(sectionSchema, match);
+
+  const crn = parseInt(sectionMatch.crn, 10);
+  const sid = createSID(semester, crn);
 
   return {
     ...sectionMatch,
+    sid,
     primaryInstructor: sectionMatch.primaryInstructor?.trim() ?? null,
     secondaryInstructor: sectionMatch.secondaryInstructor?.trim() ?? null,
-    crn: parseInt(sectionMatch.crn, 10),
+    crn,
     waitList: stringToBool(sectionMatch.waitList),
     preCheck: stringToBool(sectionMatch.preCheck),
     creditHours: stringToNumberOrNull(sectionMatch.creditHours),

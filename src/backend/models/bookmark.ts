@@ -10,9 +10,9 @@ const debug = debugFactory("backend/models/bookmark");
 
 export interface IBookmarkDocument extends Document {
   owner: IUserDocument["_id"];
-  courses: number[];
-  addCourse: (crn: Number) => Promise<void>;
-  removeCourse: (crn: Number) => Promise<void>;
+  courses: string[];
+  addCourse: (sid: string) => Promise<void>;
+  removeCourse: (sid: string) => Promise<void>;
 }
 
 export interface IBookmarkModel extends Model<IBookmarkDocument> {
@@ -20,14 +20,29 @@ export interface IBookmarkModel extends Model<IBookmarkDocument> {
   findOrCreateByUserId: (userId: Types.ObjectId) => Promise<IBookmarkDocument>;
 }
 
-export const BookmarkSchema = new Schema<IBookmarkDocument>({
-  owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  courses: [Number],
+export const BookmarkSchema = new Schema<IBookmarkDocument>(
+  {
+    owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    courses: [String],
+  },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
+
+BookmarkSchema.virtual("resolvedCourses", {
+  ref: "Course",
+  localField: "courses",
+  foreignField: "sections.sid",
+  justOne: false,
 });
 
 BookmarkSchema.statics.findByUserId = async function (userId: Types.ObjectId) {
   debug("findByUserId", userId);
-  return await this.findOne({ owner: userId }).exec();
+  return await this.findOne({ owner: userId })
+    .populate("resolvedCourses")
+    .exec();
 };
 
 BookmarkSchema.statics.findOrCreateByUserId = async function (
@@ -44,30 +59,30 @@ BookmarkSchema.statics.findOrCreateByUserId = async function (
   }
 };
 
-BookmarkSchema.methods.addCourse = async function (crn: number) {
-  debug("addCourse", crn);
+BookmarkSchema.methods.addCourse = async function (sid: string) {
+  debug("addCourse", sid);
 
   if (this.courses.length > MAX_BOOKMARKS) {
     throw new Error(`you can't have more than ${MAX_BOOKMARKS} bookmarks`);
   }
 
-  const course = await Course.findOneByCrn(crn);
+  const course = await Course.findOneBySid(sid);
   if (course === null) {
     throw new NotFoundError("course not found");
   } else {
-    const alreadyAdded = this.courses.find((courseCrn) => courseCrn === crn);
+    const alreadyAdded = this.courses.find((courseSid) => courseSid === sid);
     if (alreadyAdded) {
       throw new BadRequest("course already added to bookmarks");
     } else {
-      this.courses.push(crn);
+      this.courses.push(sid);
       await this.save();
     }
   }
 };
 
-BookmarkSchema.methods.removeCourse = async function (crn: number) {
-  debug("removeCourse", crn);
-  this.courses = this.courses.filter((courseCrn) => courseCrn !== crn);
+BookmarkSchema.methods.removeCourse = async function (sid: string) {
+  debug("removeCourse", sid);
+  this.courses = this.courses.filter((courseSid) => courseSid !== sid);
   await this.save();
 };
 

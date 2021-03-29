@@ -90,10 +90,10 @@ const coursesController = {
 
     res.json(results);
   },
-  async courseByCrn(req: express.Request, res: express.Response) {
-    const crn = stringToNumber(req.params.crn, "crn");
-    const course = await Course.findOneByCrn(crn);
-    debug("courseByCrn", crn);
+  async courseBySid(req: express.Request, res: express.Response) {
+    const sid = req.params.sid;
+    const course = await Course.findOneBySid(sid);
+    debug("courseBySid", sid);
 
     if (course === null) {
       throw new NotFoundError("course not found");

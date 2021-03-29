@@ -71,7 +71,7 @@ export interface ICourseModelSearchQuery {
 }
 
 export interface ICourseModel extends Model<ICourseDocument> {
-  findOneByCrn(crn: number): Promise<ICourse | null>;
+  findOneBySid(sid: string): Promise<ICourse | null>;
   search(args: ICourseModelSearch): Promise<ICourse[]>;
 }
 
@@ -98,12 +98,12 @@ CourseSchema.virtual("info", {
   justOne: true,
 });
 
-CourseSchema.statics.findOneByCrn = async function (
-  crn: number
+CourseSchema.statics.findOneBySid = async function (
+  sid: string
 ): Promise<ICourse> {
-  debug("findOneByCrn", crn);
+  debug("findOneBySid", sid);
   return await this.findOne({
-    sections: { $elemMatch: { crn } },
+    sections: { $elemMatch: { sid } },
   }).exec();
 };
 

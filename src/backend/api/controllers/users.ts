@@ -54,8 +54,8 @@ const usersController = {
 
     const userId = await User.login(loginInput.username, loginInput.password);
 
-    if (userId == null) {
-      throw new Forbidden("incorrect password");
+    if (userId === null) {
+      throw new Forbidden("incorrect password / user not found");
     } else {
       req.session.userId = userId;
       res.sendStatus(204);

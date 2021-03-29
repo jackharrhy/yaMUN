@@ -7,7 +7,7 @@ import request, { SuperAgentTest } from "supertest";
 import api from "../../../../src/backend/api";
 import Schedule from "../../../../src/backend/models/schedule";
 import User from "../../../../src/backend/models/user";
-import { testSemester1, testSemester1Crns } from "../../../test-data";
+import { testSemester1, testSemester1Sids } from "../../../test-data";
 import { dropCollection } from "../../../test-utils";
 
 describe("backend/api/controllers/schedules", function () {
@@ -258,10 +258,10 @@ describe("backend/api/controllers/schedules", function () {
       .expect(200);
 
     await agent
-      .put(`/schedules/${createResp.body._id}/${testSemester1Crns[0]}`)
+      .put(`/schedules/${createResp.body._id}/${testSemester1Sids[0]}`)
       .expect(204);
     await agent
-      .put(`/schedules/${createResp.body._id}/${testSemester1Crns[1]}`)
+      .put(`/schedules/${createResp.body._id}/${testSemester1Sids[1]}`)
       .expect(204);
 
     const resp = await agent
@@ -269,8 +269,8 @@ describe("backend/api/controllers/schedules", function () {
       .expect(200);
 
     expect(resp.body.courses).to.deep.equal([
-      testSemester1Crns[0],
-      testSemester1Crns[1],
+      testSemester1Sids[0],
+      testSemester1Sids[1],
     ]);
   });
 
@@ -306,17 +306,17 @@ describe("backend/api/controllers/schedules", function () {
       .expect(200);
 
     await agent
-      .put(`/schedules/${createResp.body._id}/${testSemester1Crns[0]}`)
+      .put(`/schedules/${createResp.body._id}/${testSemester1Sids[0]}`)
       .expect(204);
 
     const respBeforeDelete = await agent
       .get(`/schedules/${createResp.body._id}`)
       .expect(200);
 
-    expect(respBeforeDelete.body.courses).to.deep.equal([testSemester1Crns[0]]);
+    expect(respBeforeDelete.body.courses).to.deep.equal([testSemester1Sids[0]]);
 
     await agent
-      .delete(`/schedules/${createResp.body._id}/${testSemester1Crns[0]}`)
+      .delete(`/schedules/${createResp.body._id}/${testSemester1Sids[0]}`)
       .expect(204);
 
     const respAfterDelete = await agent
@@ -337,7 +337,6 @@ describe("backend/api/controllers/schedules", function () {
       })
       .expect(200);
 
-    await agent.put(`/schedules/${createResp.body._id}/{invalid}`).expect(400);
     await agent.put(`/schedules/${createResp.body._id}/-1`).expect(404);
 
     const resp = await agent

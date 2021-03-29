@@ -7,7 +7,7 @@ export const dropCollection = async (collectionName: string) => {
     await database.collection(collectionName).drop();
   } catch (err) {
     // 26 is namespace not found, aka a collection that does not exist
-    if (err instanceof MongoError && err.code == 26) {
+    if (err instanceof MongoError && err.code === 26) {
       return;
     } else {
       throw err;

@@ -43,11 +43,13 @@ const exportsController = {
     const endDate: DateArray = [startYear + 1, 4, 15, 16, 0];
 
     await Promise.all(
-      schedule.courses.map(async (courseCrn) => {
-        const course: ICourse | null = await Course.findOneByCrn(courseCrn);
+      schedule.courses.map(async (courseSid) => {
+        const course: ICourse | null = await Course.findOneBySid(courseSid);
 
         if (course === null) {
-          throw new BadRequest(`can't export schedule with missing course, found invalid crn '${courseCrn}'`);
+          throw new BadRequest(
+            `can't export schedule with missing course, found invalid sid '${courseSid}'`
+          );
         }
 
         course.sections.forEach((curSection) => {

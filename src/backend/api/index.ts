@@ -27,9 +27,9 @@ const asyncCatchWrapper = (
 const acw = asyncCatchWrapper;
 
 const defineRoutes = (app: Express) => {
-  // courses - searching for courses by query param filters, and finding specific courses by crn
+  // courses - searching for courses by query param filters, and finding specific courses by sid
   app.get("/courses", acw(coursesController.search));
-  app.get("/courses/:crn", acw(coursesController.courseByCrn));
+  app.get("/courses/:sid", acw(coursesController.courseBySid));
   app.get("/course-filters", acw(coursesController.filters));
   app.get("/subjects", acw(coursesController.subjects));
   app.get("/campuses", acw(coursesController.campuses));
@@ -59,9 +59,9 @@ const defineRoutes = (app: Express) => {
   app.post("/schedules", acw(schedulesController.create));
   app.get("/schedules/:scheduleId", acw(schedulesController.getById));
   app.put("/schedules/:scheduleId", acw(schedulesController.updateMeta));
-  app.put("/schedules/:scheduleId/:crn", acw(schedulesController.addCourse));
+  app.put("/schedules/:scheduleId/:sid", acw(schedulesController.addCourse));
   app.delete(
-    "/schedules/:scheduleId/:crn",
+    "/schedules/:scheduleId/:sid",
     acw(schedulesController.removeCourse)
   );
   app.delete("/schedules/:scheduleId", acw(schedulesController.delete));
@@ -69,11 +69,11 @@ const defineRoutes = (app: Express) => {
   // bookmarks - endpoints for viewing, adding, and removing course bookmarks
   app.get("/bookmarks", acw(bookmarksController.getBookmarks));
   app.put(
-    "/bookmarks/courses/:crn",
+    "/bookmarks/courses/:sid",
     acw(bookmarksController.addCourseBookmark)
   );
   app.delete(
-    "/bookmarks/courses/:crn",
+    "/bookmarks/courses/:sid",
     acw(bookmarksController.deleteCourseBookmark)
   );
 
@@ -86,6 +86,8 @@ const defineRoutes = (app: Express) => {
 
 export default () => {
   const app = express();
+
+  app.set("json spaces", 2);
 
   app.use(express.json());
 

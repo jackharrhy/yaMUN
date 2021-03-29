@@ -1,8 +1,14 @@
 import { Schema, Document } from "mongoose";
 
+import { ISemester, semesterToString } from "./semester";
 import { ISlot, ISlotDocument, SlotSchema } from "./slot";
 
+export const createSID = (semester: ISemester, crn: number) => {
+  return `${semesterToString(semester)}-${crn}`;
+};
+
 export interface ISection {
+  sid: string;
   section: string;
   crn: number;
   scheduleType: string | null; // TODO enum?
@@ -24,6 +30,7 @@ export interface ISectionDocument extends Document, ISection {
 }
 
 export const SectionSchema = new Schema<ISectionDocument>({
+  sid: { type: String, required: true },
   section: { type: String, required: true },
   crn: { type: Number, required: true },
   scheduleType: { type: String },

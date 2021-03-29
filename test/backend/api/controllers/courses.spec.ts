@@ -5,7 +5,7 @@ import request from "supertest";
 
 import api from "../../../../src/backend/api";
 import { COURSE_SEARCH_PAGINATION_LIMIT } from "../../../../src/backend/api/controllers/courses";
-import { testSemester2Crns } from "../../../test-data";
+import { testSemester2Sids } from "../../../test-data";
 
 describe("backend/api/controllers/courses", function () {
   let app: Express;
@@ -56,17 +56,12 @@ describe("backend/api/controllers/courses", function () {
     );
   });
 
-  it("finding course with valid crn", async function () {
-    await request(app).get(`/courses/${testSemester2Crns[1]}`).expect(200);
+  it("finding course with valid sid", async function () {
+    await request(app).get(`/courses/${testSemester2Sids[1]}`).expect(200);
   });
 
-  it("finding course with crn that won't be found", async function () {
+  it("finding course with sid that won't be found", async function () {
     const resp = await request(app).get(`/courses/-1`).expect(404);
     expect(resp.body.error).to.match(/course not found/);
-  });
-
-  it("finding course with invalid crn", async function () {
-    const resp = await request(app).get(`/courses/{blarg}`).expect(400);
-    expect(resp.body.error).to.match(/crn wasn't a valid number/);
   });
 });

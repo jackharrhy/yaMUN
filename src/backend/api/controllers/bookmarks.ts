@@ -23,26 +23,26 @@ const bookmarksController = {
 
   async addCourseBookmark(req: express.Request, res: express.Response) {
     const userId = await expectUserId(req);
-    const crn = stringToNumber(req.params.crn, "crn");
-    debug("addCourseBookmark", userId, crn);
+    const sid = req.params.sid;
+    debug("addCourseBookmark", userId, sid);
 
     const bookmark = await Bookmark.findOrCreateByUserId(userId);
 
-    await bookmark.addCourse(crn);
+    await bookmark.addCourse(sid);
     res.sendStatus(204);
   },
 
   async deleteCourseBookmark(req: express.Request, res: express.Response) {
     const userId = await expectUserId(req);
-    const crn = stringToNumber(req.params.crn, "crn");
-    debug("deleteCourseBookmark", userId, crn);
+    const sid = req.params.sid;
+    debug("deleteCourseBookmark", userId, sid);
 
     const bookmark = await Bookmark.findByUserId(userId);
 
     if (bookmark === null) {
       throw new NotFoundError("bookmarks not found");
     } else {
-      await bookmark.removeCourse(crn);
+      await bookmark.removeCourse(sid);
       res.sendStatus(204);
     }
   },

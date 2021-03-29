@@ -13,7 +13,7 @@ function Section({ section }: { section: ISectionDocument }) {
   const bookmarks = useStoreState((state) => state.bookmarks);
   const loggedIn = useStoreState((state) => state.loggedIn);
 
-  const isBookmarked = bookmarks?.includes(section.crn);
+  const isBookmarked = bookmarks?.includes(section.sid);
 
   const instructor = section.primaryInstructor
     ? ` - ${section.primaryInstructor}`
@@ -32,9 +32,9 @@ function Section({ section }: { section: ISectionDocument }) {
             type="submit"
             onClick={() => {
               if (isBookmarked) {
-                removeBookmark(section.crn);
+                removeBookmark(section.sid);
               } else {
-                addBookmark(section.crn);
+                addBookmark(section.sid);
               }
             }}
           >

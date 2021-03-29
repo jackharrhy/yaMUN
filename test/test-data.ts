@@ -1,3 +1,4 @@
+import { createSID } from "../src/backend/models/section";
 import { ISemester } from "../src/backend/models/semester";
 
 export const fakeUniCalPage1Dept = "COMP";
@@ -91,6 +92,11 @@ export const testSemester1: ISemester = {
 };
 
 export const testSemester1Crns = [60053, 90446];
+
+export const testSemester1Sids = [
+  createSID(testSemester1, testSemester1Crns[0]),
+  createSID(testSemester1, testSemester1Crns[1]),
+];
 
 export const testSemester1Data = `
 Level: Undergraduate
@@ -196,6 +202,11 @@ export const testSemester2: ISemester = {
 };
 
 export const testSemester2Crns = [94400, 92045];
+
+export const testSemester2Sids = [
+  createSID(testSemester2, testSemester2Crns[0]),
+  createSID(testSemester2, testSemester2Crns[1]),
+];
 
 export const testSemester2Data = `
 Level: Undergraduate

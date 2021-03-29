@@ -5,11 +5,11 @@ import { IStore } from ".";
 import { api } from "../api";
 
 export interface IStoreBookmarkFields {
-  bookmarks?: number[];
-  setBookmarks: Action<IStore, number[] | undefined>;
+  bookmarks?: string[];
+  setBookmarks: Action<IStore, string[] | undefined>;
   fetchBookmarks: Thunk<IStore>;
-  addBookmark: Thunk<IStore, number>;
-  removeBookmark: Thunk<IStore, number>;
+  addBookmark: Thunk<IStore, string>;
+  removeBookmark: Thunk<IStore, string>;
 }
 
 export const bookmarkFields: IStoreBookmarkFields = {
@@ -27,22 +27,22 @@ export const bookmarkFields: IStoreBookmarkFields = {
       actions.setBookmarks(undefined);
     }
   }),
-  addBookmark: thunk(async (actions, crn) => {
-    const resp = await api.addBookmark(crn);
+  addBookmark: thunk(async (actions, sid) => {
+    const resp = await api.addBookmark(sid);
 
     if (resp.ok) {
-      toast.success(`Added '${crn}' to bookmarks`);
+      toast.success(`Added '${sid}' to bookmarks`);
       actions.fetchBookmarks();
     } else {
       const json = await resp.json();
       toast.error(json.error);
     }
   }),
-  removeBookmark: thunk(async (actions, crn) => {
-    const resp = await api.removeBookmark(crn);
+  removeBookmark: thunk(async (actions, sid) => {
+    const resp = await api.removeBookmark(sid);
 
     if (resp.ok) {
-      toast.success(`Removed '${crn}' from bookmarks`);
+      toast.success(`Removed '${sid}' from bookmarks`);
       actions.fetchBookmarks();
     } else {
       const json = await resp.json();

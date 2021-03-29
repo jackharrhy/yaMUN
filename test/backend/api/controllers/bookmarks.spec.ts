@@ -6,7 +6,7 @@ import request, { SuperAgentTest } from "supertest";
 import api from "../../../../src/backend/api";
 import Bookmark from "../../../../src/backend/models/bookmark";
 import User from "../../../../src/backend/models/user";
-import { testSemester1Crns } from "../../../test-data";
+import { testSemester1Sids } from "../../../test-data";
 import { dropCollection } from "../../../test-utils";
 
 describe("backend/api/controllers/bookmarks", function () {
@@ -33,28 +33,28 @@ describe("backend/api/controllers/bookmarks", function () {
   });
 
   it("add two different courses to bookmarks", async function () {
-    await agent.put(`/bookmarks/courses/${testSemester1Crns[0]}`).expect(204);
-    await agent.put(`/bookmarks/courses/${testSemester1Crns[1]}`).expect(204);
+    await agent.put(`/bookmarks/courses/${testSemester1Sids[0]}`).expect(204);
+    await agent.put(`/bookmarks/courses/${testSemester1Sids[1]}`).expect(204);
 
     const resp = await agent.get("/bookmarks").expect(200);
     expect(resp.body.courses).to.have.lengthOf(2);
-    expect(resp.body.courses[0]).to.equal(testSemester1Crns[0]);
-    expect(resp.body.courses[1]).to.equal(testSemester1Crns[1]);
+    expect(resp.body.courses[0]).to.equal(testSemester1Sids[0]);
+    expect(resp.body.courses[1]).to.equal(testSemester1Sids[1]);
   });
 
   it("add the same courses to bookmarks twice", async function () {
-    await agent.put(`/bookmarks/courses/${testSemester1Crns[0]}`).expect(204);
-    await agent.put(`/bookmarks/courses/${testSemester1Crns[0]}`).expect(400);
+    await agent.put(`/bookmarks/courses/${testSemester1Sids[0]}`).expect(204);
+    await agent.put(`/bookmarks/courses/${testSemester1Sids[0]}`).expect(400);
 
     const resp = await agent.get("/bookmarks").expect(200);
     expect(resp.body.courses).to.have.lengthOf(1);
-    expect(resp.body.courses[0]).to.equal(testSemester1Crns[0]);
+    expect(resp.body.courses[0]).to.equal(testSemester1Sids[0]);
   });
 
   it("add course to bookmarks, and then remove it", async function () {
-    await agent.put(`/bookmarks/courses/${testSemester1Crns[0]}`).expect(204);
+    await agent.put(`/bookmarks/courses/${testSemester1Sids[0]}`).expect(204);
     await agent
-      .delete(`/bookmarks/courses/${testSemester1Crns[0]}`)
+      .delete(`/bookmarks/courses/${testSemester1Sids[0]}`)
       .expect(204);
 
     const resp = await agent.get("/bookmarks").expect(200);
@@ -63,7 +63,7 @@ describe("backend/api/controllers/bookmarks", function () {
 
   it("remove a course that already doesn't exist in bookmarks", async function () {
     await agent
-      .delete(`/bookmarks/courses/${testSemester1Crns[0]}`)
+      .delete(`/bookmarks/courses/${testSemester1Sids[0]}`)
       .expect(204);
 
     const resp = await agent.get("/bookmarks").expect(200);
@@ -80,20 +80,15 @@ describe("backend/api/controllers/bookmarks", function () {
     expect(resp.body.error).to.match(/course not found/);
   });
 
-  it("add invalid course bookmarks", async function () {
-    const resp = await agent.put(`/bookmarks/courses/abc`).expect(400);
-    expect(resp.body.error).to.match(/crn wasn't a valid number/);
-  });
-
   it("be unable to request any bookmarks endpoint when logged out", async function () {
     await agent.get("/bookmarks").expect(200);
 
     await agent.get(`/logout`).expect(204);
 
     await agent.get("/bookmarks").expect(403);
-    await agent.put(`/bookmarks/courses/${testSemester1Crns[0]}`).expect(403);
+    await agent.put(`/bookmarks/courses/${testSemester1Sids[0]}`).expect(403);
     await agent
-      .delete(`/bookmarks/courses/${testSemester1Crns[0]}`)
+      .delete(`/bookmarks/courses/${testSemester1Sids[0]}`)
       .expect(403);
   });
 });
