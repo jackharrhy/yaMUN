@@ -3,7 +3,7 @@ import mongoose, { Schema, Document, Model, Types } from "mongoose";
 
 import { BadRequest, NotFoundError } from "../api/errors";
 import { MAX_BOOKMARKS } from "../consts";
-import Course from "./course";
+import Course, { ICourseDocument } from "./course";
 import { IUserDocument } from "./user";
 
 const debug = debugFactory("backend/models/bookmark");
@@ -11,6 +11,7 @@ const debug = debugFactory("backend/models/bookmark");
 export interface IBookmarkDocument extends Document {
   owner: IUserDocument["_id"];
   courses: string[];
+  resolvedCourses: ICourseDocument[][];
   addCourse: (sid: string) => Promise<void>;
   removeCourse: (sid: string) => Promise<void>;
 }

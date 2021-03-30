@@ -10,7 +10,7 @@ function DisplayError({ error }: DisplayErrorProps) {
   }
 
   return (
-    <p className="m-4 text-md text-center text-red-900 font-bold">{error}</p>
+    <p className="m-2 text-md text-center text-red-900 font-bold">{error}</p>
   );
 }
 

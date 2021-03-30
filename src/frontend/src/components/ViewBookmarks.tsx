@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 
+import { ICourseDocument } from "../../../backend/models/course";
 import { useStoreActions, useStoreState } from "../store";
+import DisplayCourses from "./Course/DisplayCourses";
 
 function ViewBookmarks() {
   const bookmarks = useStoreState((state) => state.bookmarks);
@@ -10,16 +12,27 @@ function ViewBookmarks() {
     fetchBookmarks();
   }, []);
 
-  if (bookmarks === undefined) {
-    // TODO loading state?
-    return null;
+  const bookmarkedCourses = useMemo(() => {
+    if (bookmarks?.resolvedCourses === undefined) {
+      return undefined;
+    }
+
+    const bookmarkedCourses = bookmarks.resolvedCourses.flat();
+
+    const uniqueBookmarkedCourses = Array.from(
+      new Set(bookmarkedCourses.map((c) => c._id))
+    ).map(
+      (id) => bookmarkedCourses.find((c) => c._id === id) as ICourseDocument
+    );
+
+    return uniqueBookmarkedCourses;
+  }, [bookmarks]);
+
+  if (bookmarkedCourses?.length === 0) {
+    return <p className="text-center">No bookmarks.</p>;
   }
 
-  return (
-    <pre>
-      <code>{JSON.stringify(bookmarks, null, 2)}</code>
-    </pre>
-  );
+  return <DisplayCourses courses={bookmarkedCourses} />;
 }
 
 export default ViewBookmarks;

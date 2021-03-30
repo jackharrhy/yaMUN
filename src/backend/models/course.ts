@@ -202,11 +202,13 @@ CourseSchema.statics.search = async function (
     }
   }
 
-  debug("query", JSON.stringify(query, null, 2), args.page, args.limit);
+  const skip = args.page * args.limit;
+  debug("query", JSON.stringify(query, null, 2), args.page, args.limit, skip);
+
   return await this.find(query)
-    .skip(args.page * args.limit)
-    .limit(args.limit)
     .sort({ "semester.year": -1 })
+    .skip(skip)
+    .limit(args.limit)
     .populate("info")
     .exec();
 };

@@ -7,6 +7,7 @@ type PaginationProps = {
   results?: number;
   nextPage: () => void;
   previousPage: () => void;
+  isFooter?: boolean;
 };
 
 function Pagination({
@@ -14,16 +15,16 @@ function Pagination({
   results,
   nextPage,
   previousPage,
+  isFooter = false,
 }: PaginationProps) {
   const userPage = page + 1;
 
-  const backDisabled = page <= 0;
-  const nextDisabled = results !== COURSE_SEARCH_PAGINATION_LIMIT;
   const lacksResults = results === 0 || results === undefined;
+  const hide = lacksResults && page !== 0 && !isFooter;
+  if (hide) return null;
 
-  if (lacksResults) {
-    return null;
-  }
+  const nextDisabled = results !== COURSE_SEARCH_PAGINATION_LIMIT;
+  const backDisabled = page <= 0;
 
   return (
     <div className="flex place-content-between my-4">
