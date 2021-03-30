@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import Logo from "./Logo";
+
 function Option({ link, text }: { link: string; text: string }) {
   return (
     <li>
@@ -19,10 +21,11 @@ function NavBar() {
     <nav className="flex items-center pl-3.5 shadow-md bg-red-500">
       <div className="pr-10">
         <Link
+          style={{ fontSize: "0.7rem" }}
           to="/"
-          className="text-3xl py-2 leading-6 text-white font-bold hover:text-gray-200 focus:outline-none border-b-2 border-transparent focus:border-red-900"
+          className="py-2 leading-6 text-white font-bold hover:text-gray-200 focus:outline-none border-b-2 border-transparent focus:border-red-900"
         >
-          yaMUN
+          <Logo />
         </Link>
       </div>
       <ul className="flex items-center justify-between text-base">
