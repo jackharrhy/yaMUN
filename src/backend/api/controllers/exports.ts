@@ -52,10 +52,7 @@ const exportsController = {
       "endMonth"
     );
 
-    const endDateDay = stringToNumber(
-      req.query.endDay?.toString(),
-      "endDay"
-    );
+    const endDateDay = stringToNumber(req.query.endDay?.toString(), "endDay");
 
     const schedule: IScheduleDocument | null = await Schedule.findById(
       scheduleId

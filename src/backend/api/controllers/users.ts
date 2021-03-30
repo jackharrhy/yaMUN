@@ -20,7 +20,7 @@ export interface IUserSelfInfo {
   username: string;
 }
 
-interface ICreateUserInput {
+export interface ICreateUserInput {
   username: IUserDocument["username"];
   password: string;
 }

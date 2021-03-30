@@ -29,8 +29,9 @@ export interface ISemester {
 
 export interface ISemesterDocument extends Document, ISemester {}
 
+/** equality is based on years and terms being equal, level is ignored */
 export function semestersEqual(a: ISemester, b: ISemester): boolean {
-  return a.year === b.year && a.term === b.term && a.level === b.level;
+  return a.year === b.year && a.term === b.term;
 }
 
 export const SemesterSchema = new Schema<ISemesterDocument>({

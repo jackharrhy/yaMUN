@@ -11,17 +11,17 @@ import { stringToObjectId } from "../utils";
 
 const debug = debugFactory("backend/api/controllers/schedules");
 
-interface ICreateScheduleInput {
+export interface ICreateScheduleInput {
   title: IScheduleDocument["title"];
   description: IScheduleDocument["description"];
-  public: IScheduleDocument["public"];
+  isPublic: IScheduleDocument["isPublic"];
   semester: ISemester;
 }
 
-interface IUpdateScheduleMeta {
+export interface IUpdateScheduleMeta {
   title: IScheduleDocument["title"];
   description: IScheduleDocument["description"];
-  public: IScheduleDocument["public"];
+  isPublic: IScheduleDocument["isPublic"];
 }
 
 const createScheduleInputSchema: JSONSchemaType<ICreateScheduleInput> = {
@@ -29,7 +29,7 @@ const createScheduleInputSchema: JSONSchemaType<ICreateScheduleInput> = {
   properties: {
     title: { type: "string" },
     description: { type: "string" },
-    public: { type: "boolean" },
+    isPublic: { type: "boolean" },
     semester: {
       type: "object",
       properties: {
@@ -50,13 +50,22 @@ const updateMetaInputSchema: JSONSchemaType<IUpdateScheduleMeta> = {
   properties: {
     title: { type: "string" },
     description: { type: "string" },
-    public: { type: "boolean" },
+    isPublic: { type: "boolean" },
   },
-  required: ["title", "description", "public"],
+  required: ["title", "description", "isPublic"],
   additionalProperties: false,
 };
 
 const schedulesController = {
+  // TODO test route
+  async getCurrentUsersSchedules(req: express.Request, res: express.Response) {
+    const userId = await expectUserId(req);
+    const schedules: IScheduleDocument[] = await Schedule.find({
+      owner: userId,
+    }).exec();
+    res.json(schedules);
+  },
+
   async getById(req: express.Request, res: express.Response) {
     const userId = await freshUserIdOrUndefined(req);
     const scheduleId = stringToObjectId(req.params.scheduleId, "scheduleId");
@@ -64,11 +73,13 @@ const schedulesController = {
 
     const schedule: IScheduleDocument | null = await Schedule.findById(
       scheduleId
-    ).exec();
+    )
+      .populate("resolvedCourses")
+      .exec();
 
     if (
       schedule !== null &&
-      (schedule.public || userId?.equals(schedule.owner))
+      (schedule.isPublic || userId?.equals(schedule.owner))
     ) {
       res.json(schedule);
     } else {
@@ -108,7 +119,7 @@ const schedulesController = {
       await schedule.updateMeta(
         updateMetaInput.title,
         updateMetaInput.description,
-        updateMetaInput.public
+        updateMetaInput.isPublic
       );
       res.sendStatus(204);
     } else {

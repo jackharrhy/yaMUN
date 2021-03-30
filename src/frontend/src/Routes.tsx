@@ -7,9 +7,11 @@ import DisplayError from "./components/DisplayError";
 import ErrorBoundary from "./components/ErrorBoundary";
 import FindCourses from "./components/FindCourses";
 import Home from "./components/Home";
-import Schedules from "./components/Schedules";
 import LoggedIn from "./components/LoggedIn";
 import Login from "./components/Login";
+import Schedules from "./components/Schedules";
+import Create from "./components/Schedules/Create";
+import FullScheduleView from "./components/Schedules/FullScheduleView";
 import ViewBookmarks from "./components/ViewBookmarks";
 import { useStoreActions, useStoreState } from "./store";
 
@@ -45,7 +47,18 @@ function Routes() {
       <Route path="/schedules">
         <ErrorBoundary>
           {loggedIn ? (
-            <Schedules />
+            <>
+              <Route exact path="/schedules">
+                <Schedules />
+              </Route>
+              <Route exact path="/schedules/create">
+                <Create />
+              </Route>
+              <Route
+                path="/schedules/:scheduleId"
+                children={<FullScheduleView />}
+              />
+            </>
           ) : (
             <>
               <DisplayError error="Login required!" />

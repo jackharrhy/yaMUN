@@ -53,7 +53,7 @@ describe("backend/api/controllers/schedules", function () {
       .send({
         title: "foo",
         description: "bar",
-        public: false,
+        isPublic: false,
         semester: testSemester1,
       })
       .expect(200);
@@ -76,7 +76,7 @@ describe("backend/api/controllers/schedules", function () {
       .send({
         title,
         description,
-        public: isPublic,
+        isPublic,
         semester,
       })
       .expect(200);
@@ -91,7 +91,7 @@ describe("backend/api/controllers/schedules", function () {
       .to.be.an("array")
       .that.is.lengthOf(0);
     expect(scheduleCreateResp.body.semester).to.deep.equal(semester);
-    expect(scheduleCreateResp.body.public).to.be.false;
+    expect(scheduleCreateResp.body.isPublic).to.be.false;
 
     const resp = await agent.get(`/schedules/${scheduleCreateResp.body._id}`);
 
@@ -104,7 +104,7 @@ describe("backend/api/controllers/schedules", function () {
       .send({
         title: "one",
         description: "one",
-        public: false,
+        isPublic: false,
         semester: testSemester1,
       })
       .expect(200);
@@ -115,7 +115,7 @@ describe("backend/api/controllers/schedules", function () {
       .send({
         title: "one",
         description: "one",
-        public: false,
+        isPublic: false,
         semester: testSemester1,
       })
       .expect(200);
@@ -130,7 +130,7 @@ describe("backend/api/controllers/schedules", function () {
       .send({
         title: "mine",
         description: "and only mine",
-        public: false,
+        isPublic: false,
         semester: testSemester1,
       })
       .expect(200);
@@ -145,7 +145,7 @@ describe("backend/api/controllers/schedules", function () {
       .send({
         title: NaN,
         description: "one",
-        public: false,
+        isPublic: false,
         foo: null,
         semester: testSemester1,
       })
@@ -162,7 +162,7 @@ describe("backend/api/controllers/schedules", function () {
       .send({
         title: "title meta",
         description: "description meta",
-        public: false,
+        isPublic: false,
         semester: testSemester1,
       })
       .expect(200);
@@ -175,7 +175,7 @@ describe("backend/api/controllers/schedules", function () {
       .send({
         title: "title new meta",
         description: "description new meta",
-        public: false,
+        isPublic: false,
       })
       .expect(204);
 
@@ -193,7 +193,7 @@ describe("backend/api/controllers/schedules", function () {
       .send({
         title: "title",
         description: "description",
-        public: false,
+        isPublic: false,
         semester: testSemester1,
       })
       .expect(200);
@@ -209,7 +209,7 @@ describe("backend/api/controllers/schedules", function () {
       .send({
         title: "title",
         description: "description",
-        public: true,
+        isPublic: true,
       })
       .expect(204);
 
@@ -226,7 +226,7 @@ describe("backend/api/controllers/schedules", function () {
       .send({
         title: "title",
         description: "description",
-        public: true,
+        isPublic: true,
         semester: testSemester1,
       })
       .expect(200);
@@ -252,7 +252,7 @@ describe("backend/api/controllers/schedules", function () {
       .send({
         title: "title",
         description: "description",
-        public: true,
+        isPublic: true,
         semester: testSemester1,
       })
       .expect(200);
@@ -280,7 +280,7 @@ describe("backend/api/controllers/schedules", function () {
       .send({
         title: "title",
         description: "description",
-        public: true,
+        isPublic: true,
         semester: testSemester1,
       })
       .expect(200);
@@ -300,7 +300,7 @@ describe("backend/api/controllers/schedules", function () {
       .send({
         title: "title",
         description: "description",
-        public: true,
+        isPublic: true,
         semester: testSemester1,
       })
       .expect(200);
@@ -332,7 +332,7 @@ describe("backend/api/controllers/schedules", function () {
       .send({
         title: "title",
         description: "description",
-        public: true,
+        isPublic: true,
         semester: testSemester1,
       })
       .expect(200);

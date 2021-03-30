@@ -54,7 +54,7 @@ export default function usePersistCourseFilters(filters?: ICourseFilters) {
   }, []);
 
   useEffect(() => {
-    if (defaults !== null) {
+    if (defaults !== undefined) {
       setCourseFilters({
         ...defaults,
         page: defaults?.page ?? 0,

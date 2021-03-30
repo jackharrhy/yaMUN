@@ -19,7 +19,7 @@ export interface IScheduleDocument extends Document {
   semester: ISemester;
   courses: string[];
   owner: IUserDocument["_id"];
-  public: boolean;
+  isPublic: boolean;
   updateMeta: (
     title: string,
     description: string,
@@ -42,7 +42,14 @@ export const ScheduleSchema = new Schema<IScheduleDocument>({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
-  public: Boolean,
+  isPublic: Boolean,
+});
+
+ScheduleSchema.virtual("resolvedCourses", {
+  ref: "Course",
+  localField: "courses",
+  foreignField: "sections.sid",
+  justOne: false,
 });
 
 ScheduleSchema.methods.updateMeta = async function (
@@ -53,7 +60,7 @@ ScheduleSchema.methods.updateMeta = async function (
   debug("updateMeta", this.id, title, description, isPublic);
   this.title = title;
   this.description = description;
-  this.public = isPublic;
+  this.isPublic = isPublic;
   await this.save();
 };
 

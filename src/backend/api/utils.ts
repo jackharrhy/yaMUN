@@ -2,9 +2,12 @@ import { isValidObjectId, Types } from "mongoose";
 
 import { BadRequest } from "./errors";
 
-export function stringToNumber(string: string | undefined, context: string): number {
+export function stringToNumber(
+  string: string | undefined,
+  context: string
+): number {
   const converted = Number(string);
-  if(string === undefined) {
+  if (string === undefined) {
     throw new BadRequest(`${context} wasn't given`);
   } else if (Number.isNaN(converted)) {
     throw new BadRequest(`${context} wasn't a valid number`);
