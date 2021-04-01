@@ -8,7 +8,7 @@ import Course, { ICourse } from "../../models/course";
 import Schedule, { IScheduleDocument } from "../../models/schedule";
 import { expectUserId } from "../auth";
 import { BadRequest, Forbidden } from "../errors";
-import { stringToObjectId, maybeStringToNumber } from "../utils";
+import { stringToObjectId, stringToNumber } from "../utils";
 
 const debug = debugFactory("backend/api/controllers/exports");
 
@@ -27,41 +27,35 @@ const exportsController = {
     const userId = await expectUserId(req);
     const scheduleId = stringToObjectId(req.params.scheduleId, "scheduleId");
 
-    const startDateYear: number | undefined = maybeStringToNumber(
+    const startDateYear: number = stringToNumber(
       req.query.startYear?.toString(),
       "startYear"
     );
-    const startDateMonth: number | undefined = maybeStringToNumber(
+
+    const startDateMonth: number = stringToNumber(
       req.query.startMonth?.toString(),
       "startMonth"
     );
-    const startDateDay: number | undefined = maybeStringToNumber(
+
+    const startDateDay: number | undefined = stringToNumber(
       req.query.startDay?.toString(),
       "startDay"
     );
-    const endDateYear: number | undefined = maybeStringToNumber(
+
+    const endDateYear: number | undefined = stringToNumber(
       req.query.endYear?.toString(),
       "endYear"
     );
-    const endDateMonth: number | undefined = maybeStringToNumber(
+
+    const endDateMonth: number | undefined = stringToNumber(
       req.query.endMonth?.toString(),
       "endMonth"
     );
-    const endDateDay: number | undefined = maybeStringToNumber(
+
+    const endDateDay: number | undefined = stringToNumber(
       req.query.endDay?.toString(),
       "endDay"
     );
-
-    if (
-      startDateYear === undefined ||
-      startDateMonth === undefined ||
-      startDateDay === undefined ||
-      endDateYear === undefined ||
-      endDateMonth === undefined ||
-      endDateDay === undefined
-    ) {
-      throw new BadRequest("missing or incomplete dates provided");
-    }
 
     const schedule: IScheduleDocument | null = await Schedule.findById(
       scheduleId
