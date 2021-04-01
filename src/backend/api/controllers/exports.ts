@@ -27,32 +27,32 @@ const exportsController = {
     const userId = await expectUserId(req);
     const scheduleId = stringToObjectId(req.params.scheduleId, "scheduleId");
 
-    const startDateYear: number = stringToNumber(
+    const startDateYear = stringToNumber(
       req.query.startYear?.toString(),
       "startYear"
     );
 
-    const startDateMonth: number = stringToNumber(
+    const startDateMonth = stringToNumber(
       req.query.startMonth?.toString(),
       "startMonth"
     );
 
-    const startDateDay: number | undefined = stringToNumber(
+    const startDateDay = stringToNumber(
       req.query.startDay?.toString(),
       "startDay"
     );
 
-    const endDateYear: number | undefined = stringToNumber(
+    const endDateYear = stringToNumber(
       req.query.endYear?.toString(),
       "endYear"
     );
 
-    const endDateMonth: number | undefined = stringToNumber(
+    const endDateMonth = stringToNumber(
       req.query.endMonth?.toString(),
       "endMonth"
     );
 
-    const endDateDay: number | undefined = stringToNumber(
+    const endDateDay = stringToNumber(
       req.query.endDay?.toString(),
       "endDay"
     );
