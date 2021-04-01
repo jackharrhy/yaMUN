@@ -8,7 +8,7 @@ import Course, { ICourse } from "../../models/course";
 import Schedule, { IScheduleDocument } from "../../models/schedule";
 import { expectUserId } from "../auth";
 import { BadRequest, Forbidden } from "../errors";
-import { stringToObjectId } from "../utils";
+import { stringToObjectId, maybeStringToNumber } from "../utils";
 
 const debug = debugFactory("backend/api/controllers/exports");
 
@@ -27,6 +27,42 @@ const exportsController = {
     const userId = await expectUserId(req);
     const scheduleId = stringToObjectId(req.params.scheduleId, "scheduleId");
 
+    const startDateYear: number | undefined = maybeStringToNumber(
+      req.query.beginTimeMax?.toString(),
+      "startYear"
+    );
+    const startDateMonth: number | undefined = maybeStringToNumber(
+      req.query.beginTimeMax?.toString(),
+      "startMonth"
+    );
+    const startDateDay: number | undefined = maybeStringToNumber(
+      req.query.beginTimeMax?.toString(),
+      "startDay"
+    );
+    const endDateYear: number | undefined = maybeStringToNumber(
+      req.query.beginTimeMax?.toString(),
+      "endYear"
+    );
+    const endDateMonth: number | undefined = maybeStringToNumber(
+      req.query.beginTimeMax?.toString(),
+      "endMonth"
+    );
+    const endDateDay: number | undefined = maybeStringToNumber(
+      req.query.beginTimeMax?.toString(),
+      "endDay"
+    );
+
+    if (
+      startDateYear === undefined ||
+      startDateMonth === undefined ||
+      startDateDay === undefined ||
+      endDateYear === undefined ||
+      endDateMonth === undefined ||
+      endDateDay === undefined
+    ) {
+      throw new BadRequest("missing or incomplete dates provided");
+    }
+
     const schedule: IScheduleDocument | null = await Schedule.findById(
       scheduleId
     ).exec();
@@ -39,8 +75,14 @@ const exportsController = {
 
     const semester = schedule.semester;
     const startYear = semester.year;
-    const startDate: DateArray = [startYear, 9, 2, 11, 0]; // NEEDS TO BE CHANGED TO USER INPUT
-    const endDate: DateArray = [startYear + 1, 4, 15, 16, 0];
+    const startDate: DateArray = [
+      startDateYear,
+      startDateMonth,
+      startDateDay,
+      0,
+      0,
+    ];
+    const endDate: DateArray = [endDateYear, endDateMonth, endDateDay, 0, 0];
 
     await Promise.all(
       schedule.courses.map(async (courseSid) => {
@@ -86,7 +128,7 @@ const exportsController = {
             });
             events.push({
               start: startDate,
-              title: course.name.concat("-", curSection.section), // CHECK CONCATENATE
+              title: course.name.concat(" - ", curSection.section), // CHECK CONCATENATE
               location: curSlot.room ?? undefined,
               recurrenceRule: rule.toString().replace("RRULE:", ""),
               duration: {
@@ -101,7 +143,13 @@ const exportsController = {
 
     createEvents(events, (error, value) => {
       if (error) throw new Error();
-      res.set({ "Content-Disposition": 'attachment; filename="schedule.ics"' });
+
+      // Filter everything but alphanumeric characters and _ to prevent header injection
+      const scheduleName = schedule.title.replace(/\W/g, "");
+
+      res.set({
+        "Content-Disposition": `attachment; filename="${scheduleName}.ics"`,
+      });
       res.status(200).send(eol.crlf(value));
     });
   },
