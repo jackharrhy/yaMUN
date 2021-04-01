@@ -28,27 +28,27 @@ const exportsController = {
     const scheduleId = stringToObjectId(req.params.scheduleId, "scheduleId");
 
     const startDateYear: number | undefined = maybeStringToNumber(
-      req.query.beginTimeMax?.toString(),
+      req.query.startYear?.toString(),
       "startYear"
     );
     const startDateMonth: number | undefined = maybeStringToNumber(
-      req.query.beginTimeMax?.toString(),
+      req.query.startMonth?.toString(),
       "startMonth"
     );
     const startDateDay: number | undefined = maybeStringToNumber(
-      req.query.beginTimeMax?.toString(),
+      req.query.startDay?.toString(),
       "startDay"
     );
     const endDateYear: number | undefined = maybeStringToNumber(
-      req.query.beginTimeMax?.toString(),
+      req.query.endYear?.toString(),
       "endYear"
     );
     const endDateMonth: number | undefined = maybeStringToNumber(
-      req.query.beginTimeMax?.toString(),
+      req.query.endMonth?.toString(),
       "endMonth"
     );
     const endDateDay: number | undefined = maybeStringToNumber(
-      req.query.beginTimeMax?.toString(),
+      req.query.endDay?.toString(),
       "endDay"
     );
 
