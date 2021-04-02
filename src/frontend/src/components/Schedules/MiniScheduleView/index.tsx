@@ -2,10 +2,10 @@ import React from "react";
 import { HiExternalLink } from "react-icons/hi";
 import { useHistory } from "react-router";
 
-import { IScheduleDocument } from "../../../../backend/models/schedule";
-import Box from "../Box";
+import { IScheduleDocument } from "../../../../../backend/models/schedule";
+import Box from "../../Box";
 
-function View({ schedule }: { schedule: IScheduleDocument }) {
+function MiniScheduleView({ schedule }: { schedule: IScheduleDocument }) {
   const history = useHistory();
 
   return (
@@ -29,7 +29,7 @@ function View({ schedule }: { schedule: IScheduleDocument }) {
   );
 }
 
-function ViewList({ schedules }: { schedules?: IScheduleDocument[] }) {
+function MiniScheduleViews({ schedules }: { schedules?: IScheduleDocument[] }) {
   if (schedules === undefined) {
     // TODO loading state?
     return null;
@@ -38,10 +38,10 @@ function ViewList({ schedules }: { schedules?: IScheduleDocument[] }) {
   return (
     <>
       {schedules.map((schedule) => (
-        <View schedule={schedule} />
+        <MiniScheduleView key={schedule._id} schedule={schedule} />
       ))}
     </>
   );
 }
 
-export default ViewList;
+export default MiniScheduleViews;

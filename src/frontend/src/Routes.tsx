@@ -11,7 +11,7 @@ import LoggedIn from "./components/LoggedIn";
 import Login from "./components/Login";
 import Schedules from "./components/Schedules";
 import Create from "./components/Schedules/Create";
-import FullScheduleView from "./components/Schedules/FullScheduleView";
+import ScheduleView from "./components/Schedules/ScheduleView";
 import ViewBookmarks from "./components/ViewBookmarks";
 import { useStoreActions, useStoreState } from "./store";
 
@@ -56,7 +56,7 @@ function Routes() {
               </Route>
               <Route
                 path="/schedules/:scheduleId"
-                children={<FullScheduleView />}
+                children={<ScheduleView />}
               />
             </>
           ) : (

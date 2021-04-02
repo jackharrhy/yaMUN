@@ -12,6 +12,7 @@ export interface IStoreScheduleFields {
   fetchSchedules: Thunk<IStore>;
   currentSchedule?: IScheduleDocument;
   setCurrentSchedule: Action<IStore, IScheduleDocument | undefined>;
+  fetchNewCurrentSchedule: Thunk<IStore, { scheduleId: string }>;
   createSchedule: Thunk<IStore, ICreateScheduleInput>;
   addCourseToSchedule: Thunk<IStore, { scheduleId: string; sid: string }>;
 }
@@ -34,6 +35,17 @@ export const scheduleFields: IStoreScheduleFields = {
   currentSchedule: undefined,
   setCurrentSchedule: action((state, currentSchedule) => {
     state.currentSchedule = currentSchedule;
+  }),
+  fetchNewCurrentSchedule: thunk(async (actions, { scheduleId }) => {
+    const resp = await api.schedule(scheduleId);
+    const json = await resp.json();
+
+    if (resp.ok) {
+      actions.setCurrentSchedule(json as IScheduleDocument);
+    } else {
+      toast.error((json as ErrorResponse).error);
+      actions.setCurrentSchedule(undefined);
+    }
   }),
   createSchedule: thunk(
     async (actions, { title, description, isPublic, semester }) => {
@@ -58,7 +70,7 @@ export const scheduleFields: IStoreScheduleFields = {
 
     if (resp.ok) {
       toast.success(`Added '${sid}' to current schedule`);
-      // TODO fetch current schedule again
+      actions.fetchNewCurrentSchedule({ scheduleId });
     } else {
       const json = (await resp.json()) as ErrorResponse;
       toast.error(json.error);

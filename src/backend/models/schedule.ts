@@ -2,7 +2,7 @@ import debugFactory from "debug";
 import mongoose, { Model, Schema, Document } from "mongoose";
 
 import { BadRequest, NotFoundError } from "../api/errors";
-import Course from "./course";
+import Course, { ICourseDocument } from "./course";
 import {
   ISemester,
   ISemesterDocument,
@@ -18,6 +18,7 @@ export interface IScheduleDocument extends Document {
   description: string;
   semester: ISemester;
   courses: string[];
+  resolvedCourses?: ICourseDocument[][];
   owner: IUserDocument["_id"];
   isPublic: boolean;
   updateMeta: (
@@ -33,17 +34,23 @@ export interface IScheduleModel extends Model<IScheduleDocument> {
   semester: ISemesterDocument;
 }
 
-export const ScheduleSchema = new Schema<IScheduleDocument>({
-  title: { type: String, required: false },
-  description: { type: String, required: false },
-  semester: { type: SemesterSchema, required: true },
-  courses: [String],
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
+export const ScheduleSchema = new Schema<IScheduleDocument>(
+  {
+    title: { type: String, required: false },
+    description: { type: String, required: false },
+    semester: { type: SemesterSchema, required: true },
+    courses: [String],
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    isPublic: Boolean,
   },
-  isPublic: Boolean,
-});
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
 
 ScheduleSchema.virtual("resolvedCourses", {
   ref: "Course",

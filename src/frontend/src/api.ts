@@ -69,6 +69,11 @@ export const api = {
   schedules: async (): Promise<TypedResponse<IScheduleDocument[]>> => {
     return await fetch(`${API_BASE}/schedules`);
   },
+  schedule: async (
+    scheduleId: string
+  ): Promise<TypedResponse<IScheduleDocument | ErrorResponse>> => {
+    return await fetch(`${API_BASE}/schedules/${scheduleId}`);
+  },
   createSchedule: async (
     title: string,
     description: string,
