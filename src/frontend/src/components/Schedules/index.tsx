@@ -1,17 +1,26 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import { useStoreActions, useStoreState } from "../../store";
 import MiniScheduleViews from "./MiniScheduleView";
 
 function Schedules() {
+  const history = useHistory();
+
   const userSchedules = useStoreState((state) => state.usersSchedules);
+  const currentSchedule = useStoreState((state) => state.currentSchedule);
 
   const fetchSchedules = useStoreActions((actions) => actions.fetchSchedules);
 
   useEffect(() => {
     fetchSchedules();
   }, []);
+
+  useEffect(() => {
+    if (currentSchedule !== undefined) {
+      history.push(`/schedules/${currentSchedule._id}`);
+    }
+  }, [currentSchedule]);
 
   return (
     <>

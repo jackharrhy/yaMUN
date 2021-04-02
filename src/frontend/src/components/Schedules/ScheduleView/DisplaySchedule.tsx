@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { useParams } from "react-router-dom";
 
+import { ICourseDocument } from "../../../../../backend/models/course";
 import { IScheduleDocument } from "../../../../../backend/models/schedule";
 import Column, { IColumn } from "./Column";
 import HourCell from "./HourCell";
@@ -49,13 +50,10 @@ const getConflicts = (courses: ICourse[]) => {
 };
 */
 
-function DisplaySchedule({ schedule }: { schedule: IScheduleDocument }) {
-  const { resolvedCourses } = schedule;
-
-  if (resolvedCourses === undefined) {
-    throw new Error(
-      "was given schedule without resolvedCourses being populated, can't render"
-    );
+function DisplaySchedule({ courses }: { courses?: ICourseDocument[] }) {
+  if (courses === undefined) {
+    // TODO loading state?
+    return null;
   }
 
   const [columns, maxTime, minTime] = useMemo(() => {
@@ -70,34 +68,32 @@ function DisplaySchedule({ schedule }: { schedule: IScheduleDocument }) {
     );
     let lastMaxTime = 0;
     let lastMinTime = Number.MAX_VALUE;
-    resolvedCourses
-      .flat()
-      .forEach(({ _id, sections, name, number, subject }) => {
-        sections.forEach(({ slots }) => {
-          slots.forEach(({ days, beginTime, endTime }) => {
-            if (beginTime === null || endTime === null) {
-              // TODO ensure these skipped slots are displayed elsewhere
-              return;
-            }
+    courses.forEach(({ _id, sections, name, number, subject }) => {
+      sections.forEach(({ slots }) => {
+        slots.forEach(({ days, beginTime, endTime }) => {
+          if (beginTime === null || endTime === null) {
+            // TODO ensure these skipped slots are displayed elsewhere
+            return;
+          }
 
-            if (lastMaxTime < beginTime) lastMaxTime = beginTime;
-            if (lastMinTime > endTime) lastMinTime = endTime;
-            if (lastMinTime > beginTime) lastMinTime = beginTime;
-            if (lastMaxTime < endTime) lastMaxTime = endTime;
+          if (lastMaxTime < beginTime) lastMaxTime = beginTime;
+          if (lastMinTime > endTime) lastMinTime = endTime;
+          if (lastMinTime > beginTime) lastMinTime = beginTime;
+          if (lastMaxTime < endTime) lastMaxTime = endTime;
 
-            days.forEach((day) => {
-              columnsMap[day].courses.push({
-                _id,
-                number,
-                subject,
-                beginTime,
-                endTime,
-                name,
-              });
+          days.forEach((day) => {
+            columnsMap[day].courses.push({
+              _id,
+              number,
+              subject,
+              beginTime,
+              endTime,
+              name,
             });
           });
         });
       });
+    });
     return [
       Object.entries(columnsMap).map(([, value]) => value),
       Math.min((Math.floor(lastMaxTime / 100) + 1) * 100, 2300),
