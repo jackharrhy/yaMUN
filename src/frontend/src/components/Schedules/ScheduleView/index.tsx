@@ -54,7 +54,9 @@ function ScheduleView() {
       >
         <p className="text-sm text-center mt-1 mb-3">Back to Schedules</p>
       </Link>
-      <DisplaySchedule courses={courses} />
+      <p className="text-3xl font-medium mt-6 mb-4">{currentSchedule.title}</p>
+      <p className="text-md mb-6">{currentSchedule.description}</p>
+      <DisplaySchedule courses={courses} sids={currentSchedule.courses} />
       <DisplayCourses courses={courses} />
     </>
   );

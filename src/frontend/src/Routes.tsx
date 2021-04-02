@@ -9,6 +9,7 @@ import FindCourses from "./components/FindCourses";
 import Home from "./components/Home";
 import LoggedIn from "./components/LoggedIn";
 import Login from "./components/Login";
+import NotFound from "./components/NotFound";
 import Schedules from "./components/Schedules";
 import Create from "./components/Schedules/Create";
 import ScheduleView from "./components/Schedules/ScheduleView";
@@ -44,20 +45,20 @@ function Routes() {
           <FindCourses />
         </ErrorBoundary>
       </Route>
-      <Route path="/schedules">
+      <Route path="/(schedules|create-schedule)">
         <ErrorBoundary>
           {loggedIn ? (
             <>
               <Route exact path="/schedules">
                 <Schedules />
               </Route>
-              <Route exact path="/schedules/create">
-                <Create />
-              </Route>
               <Route
                 path="/schedules/:scheduleId"
                 children={<ScheduleView />}
               />
+              <Route exact path="/create-schedule">
+                <Create />
+              </Route>
             </>
           ) : (
             <>
@@ -95,9 +96,14 @@ function Routes() {
           )}
         </ErrorBoundary>
       </Route>
-      <Route path="/">
+      <Route exact path="/">
         <ErrorBoundary>
           <Home />
+        </ErrorBoundary>
+      </Route>
+      <Route path="/">
+        <ErrorBoundary>
+          <NotFound />
         </ErrorBoundary>
       </Route>
     </Switch>

@@ -79,8 +79,13 @@ ScheduleSchema.methods.addCourse = async function (sid: string) {
     throw new NotFoundError("course not found");
   } else {
     if (semestersEqual(this.semester, course.semester)) {
-      this.courses.push(sid);
-      await this.save();
+      if (this.courses.includes(sid)) {
+        // TODO write test for this condition
+        throw new BadRequest("course already added to schedule");
+      } else {
+        this.courses.push(sid);
+        await this.save();
+      }
     } else {
       throw new BadRequest("course's semester must match that of the schedule");
     }

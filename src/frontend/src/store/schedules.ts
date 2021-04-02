@@ -14,7 +14,9 @@ export interface IStoreScheduleFields {
   setCurrentSchedule: Action<IStore, IScheduleDocument | undefined>;
   fetchNewCurrentSchedule: Thunk<IStore, { scheduleId: string }>;
   createSchedule: Thunk<IStore, ICreateScheduleInput>;
+  removeSchedule: Thunk<IStore, { scheduleId: string }>;
   addCourseToSchedule: Thunk<IStore, { scheduleId: string; sid: string }>;
+  removeCourseFromSchedule: Thunk<IStore, { scheduleId: string; sid: string }>;
 }
 
 export const scheduleFields: IStoreScheduleFields = {
@@ -65,11 +67,33 @@ export const scheduleFields: IStoreScheduleFields = {
       }
     }
   ),
+  removeSchedule: thunk(async (actions, { scheduleId }) => {
+    const resp = await api.removeSchedule(scheduleId);
+
+    if (resp.ok) {
+      toast.success(`Removed schedule`);
+      actions.fetchSchedules();
+    } else {
+      const json = (await resp.json()) as ErrorResponse;
+      toast.error(json.error);
+    }
+  }),
   addCourseToSchedule: thunk(async (actions, { scheduleId, sid }) => {
     const resp = await api.addCourseToSchedule(scheduleId, sid);
 
     if (resp.ok) {
       toast.success(`Added '${sid}' to current schedule`);
+      actions.fetchNewCurrentSchedule({ scheduleId });
+    } else {
+      const json = (await resp.json()) as ErrorResponse;
+      toast.error(json.error);
+    }
+  }),
+  removeCourseFromSchedule: thunk(async (actions, { scheduleId, sid }) => {
+    const resp = await api.removeCourseFromSchedule(scheduleId, sid);
+
+    if (resp.ok) {
+      toast.success(`Removed '${sid}' from current schedule`);
       actions.fetchNewCurrentSchedule({ scheduleId });
     } else {
       const json = (await resp.json()) as ErrorResponse;

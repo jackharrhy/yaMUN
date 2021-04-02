@@ -52,14 +52,17 @@ const Column = ({
 
         return (
           <div
-            key={_id}
-            className="flex-1 text-center text-white text-xs absolute bg-red-600 rounded"
+            key={`${beginTime}-${endTime}-${_id}`}
+            className="flex-1 w-full text-center text-white text-xs absolute bg-red-600 rounded-sm border border-red-800 "
             style={{
               height: `${distHour * 2 + distHalf}rem`,
               top: `${beginHour * 2 + beginHalf}rem`,
             }}
           >
-            {subject} {number} - {name}
+            <p>
+              {subject} {number}
+            </p>
+            <p>{name}</p>
           </div>
         );
       })}

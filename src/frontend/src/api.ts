@@ -89,6 +89,9 @@ export const api = {
 
     return await post(`${API_BASE}/schedules/`, data);
   },
+  removeSchedule: async (scheduleId: string): Promise<Response> => {
+    return await del(`${API_BASE}/schedules/${scheduleId}`);
+  },
   addCourseToSchedule: async (
     scheduleId: string,
     sid: string

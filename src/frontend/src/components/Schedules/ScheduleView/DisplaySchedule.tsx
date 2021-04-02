@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
-import { useParams } from "react-router-dom";
 
 import { ICourseDocument } from "../../../../../backend/models/course";
-import { IScheduleDocument } from "../../../../../backend/models/schedule";
 import Column, { IColumn } from "./Column";
 import HourCell from "./HourCell";
-import semester from "./data.json";
+
+const MIN_TIME = 0;
+const MAX_TIME = 2400;
 
 const days = [
   ["M", "Monday"],
@@ -50,10 +50,15 @@ const getConflicts = (courses: ICourse[]) => {
 };
 */
 
-function DisplaySchedule({ courses }: { courses?: ICourseDocument[] }) {
+function DisplaySchedule({ courses, sids }: { courses?: ICourseDocument[], sids: string[] }) {
   if (courses === undefined) {
     // TODO loading state?
     return null;
+  }
+
+  if (courses.length === 0) {
+    // TODO empty state?
+    return <p className="text-center">No courses to display</p>;
   }
 
   const [columns, maxTime, minTime] = useMemo(() => {
@@ -66,10 +71,14 @@ function DisplaySchedule({ courses }: { courses?: ICourseDocument[] }) {
         },
       ])
     );
-    let lastMaxTime = 0;
-    let lastMinTime = Number.MAX_VALUE;
+    let lastMaxTime = MIN_TIME;
+    let lastMinTime = MAX_TIME;
     courses.forEach(({ _id, sections, name, number, subject }) => {
-      sections.forEach(({ slots }) => {
+      sections.forEach(({ sid, slots }) => {
+        if (!sids.includes(sid)) {
+          return;
+        }
+
         slots.forEach(({ days, beginTime, endTime }) => {
           if (beginTime === null || endTime === null) {
             // TODO ensure these skipped slots are displayed elsewhere
@@ -94,12 +103,13 @@ function DisplaySchedule({ courses }: { courses?: ICourseDocument[] }) {
         });
       });
     });
+
     return [
       Object.entries(columnsMap).map(([, value]) => value),
       Math.min((Math.floor(lastMaxTime / 100) + 1) * 100, 2300),
       Math.max((Math.floor(lastMinTime / 100) - 1) * 100, 0),
     ];
-  }, []);
+  }, [courses, sids]);
 
   const hours = Math.floor(maxTime / 100) - Math.floor(minTime / 100) + 1;
   const hoursMap = Array.apply(null, new Array(hours)).map((_, i) => i);
@@ -109,7 +119,7 @@ function DisplaySchedule({ courses }: { courses?: ICourseDocument[] }) {
 
   return (
     <div className="flex mb-8" style={{ height: `${hours * 2 + 2}rem` }}>
-      <div className="flex border flex-1">
+      <div className="flex border flex-1 shadow-md rounded">
         <div className="flex-1 flex-col flex">
           <div className="flex bg-gray-100 py-1 border-b text-sm justify-center">
             Time

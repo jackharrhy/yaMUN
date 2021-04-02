@@ -1,5 +1,5 @@
 import React from "react";
-import { IoMdAddCircleOutline } from "react-icons/io";
+import { IoMdAddCircleOutline, IoMdRemoveCircleOutline } from "react-icons/io";
 import { MdStar, MdStarBorder } from "react-icons/md";
 
 import { ISectionDocument } from "../../../../backend/models/section";
@@ -14,15 +14,14 @@ function Section({ section }: { section: ISectionDocument }) {
   const addBookmark = useStoreActions((actions) => actions.addBookmark);
   const removeBookmark = useStoreActions((actions) => actions.removeBookmark);
   const bookmarks = useStoreState((state) => state.bookmarks);
+  const isBookmarked = bookmarks?.courses.includes(section.sid);
 
   const addCourseToSchedule = useStoreActions(
     (actions) => actions.addCourseToSchedule
   );
+  const removeCourseFromSchedule = useStoreActions((actions) => actions.removeCourseFromSchedule);
   const currentSchedule = useStoreState((state) => state.currentSchedule);
-
-  const isAddedToCurrentSchedule = false;
-
-  const isBookmarked = bookmarks?.courses.includes(section.sid);
+  const isAddedToCurrentSchedule = currentSchedule?.courses.includes(section.sid);
 
   const instructor = section.primaryInstructor
     ? ` - ${section.primaryInstructor}`
@@ -42,7 +41,10 @@ function Section({ section }: { section: ISectionDocument }) {
                 type="submit"
                 onClick={() => {
                   if (isAddedToCurrentSchedule) {
-                    alert("remove");
+                    removeCourseFromSchedule({
+                      scheduleId: currentSchedule._id,
+                      sid: section.sid,
+                    });
                   } else {
                     addCourseToSchedule({
                       scheduleId: currentSchedule._id,
@@ -53,10 +55,9 @@ function Section({ section }: { section: ISectionDocument }) {
               >
                 {isAddedToCurrentSchedule ? (
                   <>
-                    <IoMdAddCircleOutline
+                    <IoMdRemoveCircleOutline
                       aria-hidden="true"
                       title="Remove from Current Schedule"
-                      color={bookmarkAdded}
                     />
                     <span className="visually-hidden">
                       Remove from Current Schedule

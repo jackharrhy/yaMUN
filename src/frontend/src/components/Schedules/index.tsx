@@ -24,7 +24,7 @@ function Schedules() {
 
   return (
     <>
-      <Link to="/schedules/create">
+      <Link to="/create-schedule">
         <p className="text-sm text-center mt-1 mb-3">Create Schedule</p>
       </Link>
       <MiniScheduleViews schedules={userSchedules} />
