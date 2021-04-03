@@ -5,6 +5,7 @@ import { ICourseDocument } from "../../../../../backend/models/course";
 import { useStoreActions, useStoreState } from "../../../store";
 import DisplayCourses from "../../Course/DisplayCourses";
 import DisplaySchedule from "./DisplaySchedule";
+import Export from "./Export";
 
 interface IFullScheduleViewParams {
   scheduleId: string;
@@ -57,9 +58,7 @@ function ScheduleView() {
       <p className="text-3xl font-medium mt-6">{currentSchedule.title}</p>
       <p className="text-md mb-6">{currentSchedule.description}</p>
       <DisplaySchedule courses={courses} sids={currentSchedule.courses} />
-      <a href={`/api/export/schedules/${currentSchedule._id}/ics`} download>
-        <p className="text-center text-lg mb-8">Export as .ics</p>
-      </a>
+      <Export schedule={currentSchedule} />
       <DisplayCourses courses={courses} />
     </>
   );
