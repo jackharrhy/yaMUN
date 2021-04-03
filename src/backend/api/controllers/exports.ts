@@ -64,17 +64,6 @@ const exportsController = {
 
     const events: EventAttributes[] = [];
 
-    const semester = schedule.semester;
-    const startYear = semester.year;
-    const startDate: DateArray = [
-      startDateYear,
-      startDateMonth,
-      startDateDay,
-      0,
-      0,
-    ];
-    const endDate: DateArray = [endDateYear, endDateMonth, endDateDay, 0, 0];
-
     await Promise.all(
       schedule.courses.map(async (courseSid) => {
         const course: ICourse | null = await Course.findOneBySid(courseSid);
@@ -88,8 +77,17 @@ const exportsController = {
         course.sections.forEach((curSection) => {
           curSection.slots.forEach((curSlot) => {
             if (curSlot.endTime === null || curSlot.beginTime === null) {
-              return;
+              curSlot.beginTime = 1200;
+              curSlot.endTime = 1201;
             }
+            const startDate: DateArray = [
+              startDateYear,
+              startDateMonth,
+              startDateDay,
+              Math.round(curSlot.beginTime / 100),
+              Math.round(curSlot.beginTime % 100)
+            ];
+            const endDate: DateArray = [endDateYear, endDateMonth, endDateDay, Math.round(curSlot.endTime / 100), Math.round(curSlot.endTime % 100)];
 
             const duration = curSlot.endTime - curSlot.beginTime;
 

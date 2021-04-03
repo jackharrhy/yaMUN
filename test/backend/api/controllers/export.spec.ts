@@ -57,7 +57,7 @@ describe("backend/api/controllers/exports", function () {
       .expect(204);
 
     const exportResp = await agent.get(
-      `/export/schedules/${scheduleCreateResp.body._id}/ics`
+      `/export/schedules/${scheduleCreateResp.body._id}/ics/?startYear=2020&startMonth=01&startDay=01&endYear=2021&endMonth=02&endDay=02`
     );
 
     expect(exportResp.text)
@@ -67,7 +67,7 @@ describe("backend/api/controllers/exports", function () {
 
   it("exporting schedule that won't be found", async function () {
     const fakeObjectId = Types.ObjectId();
-    await agent.get(`/export/schedules/${fakeObjectId}/ics`).expect(403);
+    await agent.get(`/export/schedules/${fakeObjectId}/ics/?startYear=2020&startMonth=01&startDay=01&endYear=2021&endMonth=02&endDay=02`).expect(403);
   });
 
   it("exporting schedule that you are not authorized to view", async function () {
