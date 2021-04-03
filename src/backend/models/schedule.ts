@@ -2,7 +2,7 @@ import debugFactory from "debug";
 import mongoose, { Model, Schema, Document } from "mongoose";
 
 import { BadRequest, NotFoundError } from "../api/errors";
-import Course from "./course";
+import Course, { ICourseDocument } from "./course";
 import {
   ISemester,
   ISemesterDocument,
@@ -18,8 +18,9 @@ export interface IScheduleDocument extends Document {
   description: string;
   semester: ISemester;
   courses: string[];
+  resolvedCourses?: ICourseDocument[][];
   owner: IUserDocument["_id"];
-  public: boolean;
+  isPublic: boolean;
   updateMeta: (
     title: string,
     description: string,
@@ -33,16 +34,29 @@ export interface IScheduleModel extends Model<IScheduleDocument> {
   semester: ISemesterDocument;
 }
 
-export const ScheduleSchema = new Schema<IScheduleDocument>({
-  title: { type: String, required: false },
-  description: { type: String, required: false },
-  semester: { type: SemesterSchema, required: true },
-  courses: [String],
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
+export const ScheduleSchema = new Schema<IScheduleDocument>(
+  {
+    title: { type: String, required: false },
+    description: { type: String, required: false },
+    semester: { type: SemesterSchema, required: true },
+    courses: [String],
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    isPublic: Boolean,
   },
-  public: Boolean,
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
+
+ScheduleSchema.virtual("resolvedCourses", {
+  ref: "Course",
+  localField: "courses",
+  foreignField: "sections.sid",
+  justOne: false,
 });
 
 ScheduleSchema.methods.updateMeta = async function (
@@ -53,7 +67,7 @@ ScheduleSchema.methods.updateMeta = async function (
   debug("updateMeta", this.id, title, description, isPublic);
   this.title = title;
   this.description = description;
-  this.public = isPublic;
+  this.isPublic = isPublic;
   await this.save();
 };
 
@@ -65,8 +79,13 @@ ScheduleSchema.methods.addCourse = async function (sid: string) {
     throw new NotFoundError("course not found");
   } else {
     if (semestersEqual(this.semester, course.semester)) {
-      this.courses.push(sid);
-      await this.save();
+      if (this.courses.includes(sid)) {
+        // TODO write test for this condition
+        throw new BadRequest("course already added to schedule");
+      } else {
+        this.courses.push(sid);
+        await this.save();
+      }
     } else {
       throw new BadRequest("course's semester must match that of the schedule");
     }

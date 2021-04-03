@@ -11,7 +11,7 @@ const debug = debugFactory("backend/models/bookmark");
 export interface IBookmarkDocument extends Document {
   owner: IUserDocument["_id"];
   courses: string[];
-  resolvedCourses: ICourseDocument[][];
+  resolvedCourses?: ICourseDocument[][];
   addCourse: (sid: string) => Promise<void>;
   removeCourse: (sid: string) => Promise<void>;
 }

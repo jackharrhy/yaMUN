@@ -43,7 +43,7 @@ describe("backend/api/controllers/exports", function () {
       .send({
         title,
         description,
-        public: isPublic,
+        isPublic,
         semester: testSemester2,
       })
       .expect(200);
@@ -80,7 +80,7 @@ describe("backend/api/controllers/exports", function () {
       .send({
         title,
         description,
-        public: isPublic,
+        isPublic,
         semester: testSemester2,
       })
       .expect(200);

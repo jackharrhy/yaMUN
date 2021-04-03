@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "tslint -c tslint.json -p tsconfig.json --fix",
     "dev": "nodemon -e ts --exec \"npm run start\"",
-    "start": "tsc && node -r ts-node/register ./src/backend/index.ts",
+    "start": "tsc --resolveJsonModule && node -r ts-node/register ./src/backend/index.ts",
     "prettier": "prettier --write ./src ./test",
     "test": "mocha",
     "coverage": "nyc npm run test"

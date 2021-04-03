@@ -15,11 +15,19 @@ const dayToColor = {
 
 type Day = keyof typeof dayToColor;
 
-function formatTime(time: number): string {
+function generateModifiedTime(time: number): string {
+  let modifiedTime: string | number = time;
+  if (time >= 1300) {
+    modifiedTime -= 1200;
+  } else if (time < 100) {
+    modifiedTime += 1200;
+  }
+  return modifiedTime.toString();
+}
+
+export function formatTime(time: number): string {
   const postfix = time >= 1200 ? "pm" : "am";
-
-  const modifiedTime = `${time >= 1300 ? time - 1200 : time}`;
-
+  const modifiedTime = generateModifiedTime(time);
   return `${modifiedTime.slice(0, -2)}:${modifiedTime.slice(-2)}${postfix}`;
 }
 

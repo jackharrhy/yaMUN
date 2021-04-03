@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { useForm, Controller } from "react-hook-form";
 import Select, { OptionTypeBase, StylesConfig } from "react-select";
 
+import { IPossibleFilters } from "../../../../backend/api/controllers/courses";
 import { useStoreActions, useStoreState } from "../../store";
 import { ICourseFilters } from "../../store/courses";
 import Box from "../Box";
@@ -27,7 +28,7 @@ const subjectToOption = (subject: string) => ({
   label: subject,
 });
 
-const customSelectStyles: StylesConfig<OptionTypeBase, false> = {
+export const customSelectStyles: StylesConfig<OptionTypeBase, false> = {
   control: (provided) => ({
     ...provided,
     borderColor: "#e5e7eb",
@@ -42,18 +43,10 @@ const customSelectStyles: StylesConfig<OptionTypeBase, false> = {
   }),
 };
 
-function SetFilters({ defaults }: { defaults: ICourseFilters }) {
-  const { control, register, handleSubmit } = useForm<ICourseFilters>();
-
-  const filters = useStoreState((state) => state.courseFilters);
-  const possibleCourseFilters = useStoreState(
-    (state) => state.possibleCourseFilters
-  );
-  const setCourseFilters = useStoreActions(
-    (actions) => actions.setCourseFilters
-  );
-
-  const options = useMemo(() => {
+export const usePossibleCourseFilterOptions = (
+  possibleCourseFilters?: IPossibleFilters
+) =>
+  useMemo(() => {
     if (possibleCourseFilters === undefined) {
       return { years: [], terms: [], levels: [], subjects: [] };
     }
@@ -69,6 +62,19 @@ function SetFilters({ defaults }: { defaults: ICourseFilters }) {
       ),
     };
   }, [possibleCourseFilters]);
+
+function SetFilters({ defaults }: { defaults: ICourseFilters }) {
+  const { control, register, handleSubmit } = useForm<ICourseFilters>();
+
+  const filters = useStoreState((state) => state.courseFilters);
+  const possibleCourseFilters = useStoreState(
+    (state) => state.possibleCourseFilters
+  );
+  const setCourseFilters = useStoreActions(
+    (actions) => actions.setCourseFilters
+  );
+
+  const options = usePossibleCourseFilterOptions(possibleCourseFilters);
 
   const onSubmit = (data: ICourseFilters) => {
     setCourseFilters({

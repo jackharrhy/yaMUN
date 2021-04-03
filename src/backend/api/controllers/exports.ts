@@ -52,10 +52,7 @@ const exportsController = {
       "endMonth"
     );
 
-    const endDateDay = stringToNumber(
-      req.query.endDay?.toString(),
-      "endDay"
-    );
+    const endDateDay = stringToNumber(req.query.endDay?.toString(), "endDay");
 
     const schedule: IScheduleDocument | null = await Schedule.findById(
       scheduleId
@@ -91,8 +88,7 @@ const exportsController = {
         course.sections.forEach((curSection) => {
           curSection.slots.forEach((curSlot) => {
             if (curSlot.endTime === null || curSlot.beginTime === null) {
-              curSlot.beginTime = 1200;
-              curSlot.endTime = 1201;
+              return;
             }
 
             const duration = curSlot.endTime - curSlot.beginTime;

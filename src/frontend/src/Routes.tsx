@@ -9,6 +9,11 @@ import FindCourses from "./components/FindCourses";
 import Home from "./components/Home";
 import LoggedIn from "./components/LoggedIn";
 import Login from "./components/Login";
+import NotFound from "./components/NotFound";
+import People from "./components/People";
+import Schedules from "./components/Schedules";
+import Create from "./components/Schedules/Create";
+import ScheduleView from "./components/Schedules/ScheduleView";
 import ViewBookmarks from "./components/ViewBookmarks";
 import { useStoreActions, useStoreState } from "./store";
 
@@ -41,10 +46,29 @@ function Routes() {
           <FindCourses />
         </ErrorBoundary>
       </Route>
-      <Route path="/schedules">
+      <Route path="/people">
+        <ErrorBoundary>
+          <Route exact path="/people">
+            <People />
+          </Route>
+          <Route path="/people/:name" children={<People />} />
+        </ErrorBoundary>
+      </Route>
+      <Route path="/(schedules|create-schedule)">
         <ErrorBoundary>
           {loggedIn ? (
-            <p>Schedules</p>
+            <>
+              <Route exact path="/schedules">
+                <Schedules />
+              </Route>
+              <Route
+                path="/schedules/:scheduleId"
+                children={<ScheduleView />}
+              />
+              <Route exact path="/create-schedule">
+                <Create />
+              </Route>
+            </>
           ) : (
             <>
               <DisplayError error="Login required!" />
@@ -81,9 +105,14 @@ function Routes() {
           )}
         </ErrorBoundary>
       </Route>
-      <Route path="/">
+      <Route exact path="/">
         <ErrorBoundary>
           <Home />
+        </ErrorBoundary>
+      </Route>
+      <Route path="/">
+        <ErrorBoundary>
+          <NotFound />
         </ErrorBoundary>
       </Route>
     </Switch>

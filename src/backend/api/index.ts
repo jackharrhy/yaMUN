@@ -30,6 +30,7 @@ const defineRoutes = (app: Express) => {
   // courses - searching for courses by query param filters, and finding specific courses by sid
   app.get("/courses", acw(coursesController.search));
   app.get("/courses/:sid", acw(coursesController.courseBySid));
+
   app.get("/course-filters", acw(coursesController.filters));
   app.get("/subjects", acw(coursesController.subjects));
   app.get("/campuses", acw(coursesController.campuses));
@@ -56,6 +57,7 @@ const defineRoutes = (app: Express) => {
 
   // schedules - endpoints for users to create, modify, view, and delete their
   // potentially many schedules, and to access other peoples schedules
+  app.get("/schedules", acw(schedulesController.getCurrentUsersSchedules));
   app.post("/schedules", acw(schedulesController.create));
   app.get("/schedules/:scheduleId", acw(schedulesController.getById));
   app.put("/schedules/:scheduleId", acw(schedulesController.updateMeta));
