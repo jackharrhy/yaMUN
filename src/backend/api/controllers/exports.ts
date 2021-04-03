@@ -88,8 +88,7 @@ const exportsController = {
         course.sections.forEach((curSection) => {
           curSection.slots.forEach((curSlot) => {
             if (curSlot.endTime === null || curSlot.beginTime === null) {
-              curSlot.beginTime = 1200;
-              curSlot.endTime = 1201;
+              return;
             }
 
             const duration = curSlot.endTime - curSlot.beginTime;

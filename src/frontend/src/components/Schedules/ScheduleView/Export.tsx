@@ -38,9 +38,9 @@ function Export({ schedule }: { schedule: IScheduleDocument }) {
       startYear: startYear.toString(),
       startMonth: startMonth.toString(),
       startDay: startDay.toString(),
-      endYear: startYear.toString(),
-      endMonth: startMonth.toString(),
-      endDay: startDay.toString(),
+      endYear: endYear.toString(),
+      endMonth: endMonth.toString(),
+      endDay: endDay.toString(),
     });
 
     const uri = `/api/export/schedules/${schedule._id}/ics?${params}`;
