@@ -6,6 +6,7 @@ import {
 } from "../../backend/api/controllers/users";
 import { IBookmarkDocument } from "../../backend/models/bookmark";
 import { ICourseDocument } from "../../backend/models/course";
+import { IPeopleDocument } from "../../backend/models/people";
 import { IScheduleDocument } from "../../backend/models/schedule";
 import { ISemester } from "../../backend/models/semester";
 
@@ -111,5 +112,10 @@ export const api = {
     params: URLSearchParams
   ): Promise<TypedResponse<ICourseDocument[] | ErrorResponse>> => {
     return await fetch(`${API_BASE}/courses/?${params}`);
+  },
+  peopleSearch: async (
+    params: URLSearchParams
+  ): Promise<TypedResponse<IPeopleDocument[] | ErrorResponse>> => {
+    return await fetch(`${API_BASE}/people/?${params}`);
   },
 };

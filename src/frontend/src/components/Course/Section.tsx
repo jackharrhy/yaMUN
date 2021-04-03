@@ -1,6 +1,7 @@
 import React from "react";
 import { IoMdAddCircleOutline, IoMdRemoveCircleOutline } from "react-icons/io";
 import { MdStar, MdStarBorder } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 import { ISectionDocument } from "../../../../backend/models/section";
 import { useStoreActions, useStoreState } from "../../store";
@@ -19,20 +20,27 @@ function Section({ section }: { section: ISectionDocument }) {
   const addCourseToSchedule = useStoreActions(
     (actions) => actions.addCourseToSchedule
   );
-  const removeCourseFromSchedule = useStoreActions((actions) => actions.removeCourseFromSchedule);
+  const removeCourseFromSchedule = useStoreActions(
+    (actions) => actions.removeCourseFromSchedule
+  );
   const currentSchedule = useStoreState((state) => state.currentSchedule);
-  const isAddedToCurrentSchedule = currentSchedule?.courses.includes(section.sid);
-
-  const instructor = section.primaryInstructor
-    ? ` - ${section.primaryInstructor}`
-    : "";
+  const isAddedToCurrentSchedule = currentSchedule?.courses.includes(
+    section.sid
+  );
 
   return (
     <div className="pt-1 pb-1.5 px-2 border-2 rounded shadow-sm">
       <div className="flex items-start justify-between">
         <p>
           <code>{section.crn}</code>
-          {instructor}
+          {section.primaryInstructor && (
+            <Link to={`/people/${section.primaryInstructor}`}>
+              {" - "}
+              <span className="text-blue-800 underline">
+                {section.primaryInstructor}
+              </span>
+            </Link>
+          )}
         </p>
         {loggedIn && (
           <div>

@@ -32,6 +32,7 @@ function NavBar() {
         <Option link="/find-courses" text="Find Courses" />
         <Option link="/schedules" text="Schedules" />
         <Option link="/bookmarks" text="Bookmarks" />
+        <Option link="/people" text="People" />
         <Option link="/login" text="Login" />
       </ul>
     </nav>

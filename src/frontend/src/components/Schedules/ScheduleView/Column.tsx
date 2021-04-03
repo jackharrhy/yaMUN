@@ -1,4 +1,6 @@
+import randomColor from "randomcolor";
 import React from "react";
+import ReactTooltip from "react-tooltip";
 
 export interface IColumn {
   _id: string;
@@ -49,16 +51,33 @@ const Column = ({
         const beginHalf = (beginTime - beginHour * 100 - minTime) / 30;
         const distHour = Math.floor((endTime - beginTime) / 100);
         const distHalf = (endTime - beginTime - distHour * 100) / 30;
+        const color = randomColor({
+          luminosity: "dark",
+          seed: subject,
+        });
+
+        const key = `${beginTime}-${endTime}-${_id}`;
 
         return (
           <div
-            key={`${beginTime}-${endTime}-${_id}`}
-            className="flex-1 w-full text-center text-white text-xs absolute bg-red-600 rounded-sm border border-red-800 "
+            data-tip
+            data-for={key}
+            key={key}
+            className="flex-1 w-full text-center text-white text-xs absolute rounded-sm"
             style={{
+              backgroundColor: color,
               height: `${distHour * 2 + distHalf}rem`,
               top: `${beginHour * 2 + beginHalf}rem`,
             }}
           >
+            <ReactTooltip id={key}>
+              <span>
+                {subject} {number}
+              </span>
+              <br />
+              <span>{name}</span>
+            </ReactTooltip>
+
             <p>
               {subject} {number}
             </p>

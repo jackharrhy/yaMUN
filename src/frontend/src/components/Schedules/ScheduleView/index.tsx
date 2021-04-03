@@ -54,9 +54,12 @@ function ScheduleView() {
       >
         <p className="text-sm text-center mt-1 mb-3">Back to Schedules</p>
       </Link>
-      <p className="text-3xl font-medium mt-6 mb-4">{currentSchedule.title}</p>
+      <p className="text-3xl font-medium mt-6">{currentSchedule.title}</p>
       <p className="text-md mb-6">{currentSchedule.description}</p>
       <DisplaySchedule courses={courses} sids={currentSchedule.courses} />
+      <a href={`/api/export/schedules/${currentSchedule._id}/ics`} download>
+        <p className="text-center text-lg mb-8">Export as .ics</p>
+      </a>
       <DisplayCourses courses={courses} />
     </>
   );

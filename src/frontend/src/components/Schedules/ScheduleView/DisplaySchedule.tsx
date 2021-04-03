@@ -50,7 +50,13 @@ const getConflicts = (courses: ICourse[]) => {
 };
 */
 
-function DisplaySchedule({ courses, sids }: { courses?: ICourseDocument[], sids: string[] }) {
+function DisplaySchedule({
+  courses,
+  sids,
+}: {
+  courses?: ICourseDocument[];
+  sids: string[];
+}) {
   if (courses === undefined) {
     // TODO loading state?
     return null;

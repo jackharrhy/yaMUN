@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { FiInfo } from "react-icons/fi";
 
 import { ICourseDocument } from "../../../../backend/models/course";
 import { ISemesterDocument } from "../../../../backend/models/semester";
@@ -28,9 +29,12 @@ function formatSemester(semester: ISemesterDocument): string {
 function Course({ course }: { course: ICourseDocument }) {
   const name = course.info?.title ?? course.name;
   const semester = formatSemester(course.semester);
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const canExpand = course.info?.description !== undefined;
 
   return (
-    <Box className="p-5 mb-4">
+    <Box className="px-5 pt-4 pb-2 mb-4">
       <p className="text-xl font-medium mb-2">
         {course.subject} {course.number} - {name}
       </p>
@@ -41,6 +45,36 @@ function Course({ course }: { course: ICourseDocument }) {
           <Section key={section._id} section={section} />
         ))}
       </div>
+      {canExpand && (
+        <button
+          style={{ marginLeft: "-0.25rem" }}
+          type="submit"
+          onClick={() => {
+            setIsExpanded(!isExpanded);
+          }}
+        >
+          {isExpanded ? (
+            <>
+              <FiInfo aria-hidden="true" title="Close More Info" />
+              <span className="visually-hidden">Close More Info</span>
+            </>
+          ) : (
+            <>
+              <FiInfo aria-hidden="true" title="Open More Info" />
+              <span className="visually-hidden">Open More Info</span>
+            </>
+          )}
+        </button>
+      )}
+      {isExpanded && (
+        <>
+          <p>
+            <span className="font-bold">{course.info?.title}</span>{" "}
+            {course.info?.description}
+          </p>
+          <p className="mt-2 text-sm">{course.info?.attributes}</p>
+        </>
+      )}
     </Box>
   );
 }

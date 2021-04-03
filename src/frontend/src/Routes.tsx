@@ -10,6 +10,7 @@ import Home from "./components/Home";
 import LoggedIn from "./components/LoggedIn";
 import Login from "./components/Login";
 import NotFound from "./components/NotFound";
+import People from "./components/People";
 import Schedules from "./components/Schedules";
 import Create from "./components/Schedules/Create";
 import ScheduleView from "./components/Schedules/ScheduleView";
@@ -43,6 +44,14 @@ function Routes() {
       <Route path="/find-courses">
         <ErrorBoundary>
           <FindCourses />
+        </ErrorBoundary>
+      </Route>
+      <Route path="/people">
+        <ErrorBoundary>
+          <Route exact path="/people">
+            <People />
+          </Route>
+          <Route path="/people/:name" children={<People />} />
         </ErrorBoundary>
       </Route>
       <Route path="/(schedules|create-schedule)">

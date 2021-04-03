@@ -34,7 +34,9 @@ function MiniScheduleView({ schedule }: { schedule: IScheduleDocument }) {
             className="relative top-0 right-0"
             type="submit"
             onClick={() => {
-              const choice = confirm("Are you sure you want to delete this schedule?");
+              const choice = confirm(
+                "Are you sure you want to delete this schedule?"
+              );
 
               if (choice) {
                 removeSchedule({ scheduleId: schedule._id });

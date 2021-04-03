@@ -13,6 +13,8 @@ function FindCourses() {
     (actions) => actions.setCourseFilters
   );
 
+  const currentSchedule = useStoreState((state) => state.currentSchedule);
+
   const { defaults } = useCourseQueryParams(filters);
 
   const page = filters?.page;
@@ -41,6 +43,12 @@ function FindCourses() {
   return (
     <>
       <SetFilters defaults={defaults} />
+      {currentSchedule !== undefined && (
+        <p className="text-lg text-center my-4">
+          <span className="font-bold">Current Schedule: </span>
+          {currentSchedule.title}
+        </p>
+      )}
       <Pagination
         page={page}
         results={courses?.length}
