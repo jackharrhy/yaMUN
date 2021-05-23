@@ -1,0 +1,6 @@
+{
+  "db": {
+    "connectionString": "postgres://postgres:password@localhost:5432/postgres"
+  },
+  "outDir": "./src"
+}
