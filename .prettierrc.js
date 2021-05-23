@@ -1,5 +1,4 @@
 module.exports = {
-  "importOrder": ["^[./]"],
-  "importOrderSeparation": true,
+  importOrder: ["^[./]"],
+  importOrderSeparation: true,
 };
-
