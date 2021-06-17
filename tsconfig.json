@@ -1,17 +1,15 @@
 {
   "compilerOptions": {
-    "lib": ["es2020"],
-    "jsx": "react",
-    "module": "commonjs",
-    "target": "es2020",
+    "lib": ["ESNext", "DOM"],
+    "target": "ES6",
+    "module": "CommonJS",
     "strict": true,
-    "esModuleInterop": true,
+    "moduleResolution": "node",
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "dist"
   },
   "include": [
-    "src/**/*",
-    "test/**/*"
+    "src/**/*"
   ]
 }

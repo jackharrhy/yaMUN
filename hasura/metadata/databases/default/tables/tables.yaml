@@ -1,0 +1,6 @@
+- "!include public_course_number.yaml"
+- "!include public_people.yaml"
+- "!include public_people_campus.yaml"
+- "!include public_people_department.yaml"
+- "!include public_session.yaml"
+- "!include public_subject.yaml"

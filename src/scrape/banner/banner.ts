@@ -1,0 +1,69 @@
+import debugFactory from "debug";
+
+import { YEAR_TO_START_FETCHING_COURSES_FROM } from "../../config";
+import { ICourse, ISemester } from "../../types";
+import fetchCourseData from "./fetch-data";
+import insertCourses from "./insert";
+import parsePageData from "./parse-page-data";
+
+const debug = debugFactory("backend/scrape/banner");
+
+const TERMS = [1, 2, 3];
+const LEVELS = [1, 2];
+
+export const coursesFromSemester = async (
+  semester: ISemester
+): Promise<ICourse[] | null> => {
+  const unprocessedData = await fetchCourseData(semester);
+  return parsePageData(semester, unprocessedData);
+};
+
+export async function populateCourses() {
+  // TODO handle checking for existing courses
+  const existingCourse = null;
+
+  if (existingCourse === null) {
+    console.log("populating courses...");
+    const minYear = YEAR_TO_START_FETCHING_COURSES_FROM;
+    const curYear = new Date().getFullYear();
+    const maxYear = curYear + 2;
+
+    const years = [...Array(maxYear - minYear).keys()].map(
+      (y) => y + YEAR_TO_START_FETCHING_COURSES_FROM
+    );
+
+    const insertionPromises = [];
+
+    outer: for (const year of years) {
+      for (const term of TERMS) {
+        for (const level of LEVELS) {
+          const semester: ISemester = { year, term, level };
+          debug("semester", semester);
+          const courses = await coursesFromSemester(semester);
+
+          if (courses === null) {
+            if (year < curYear) {
+              debug(
+                "semester produced no courses, but was before current year"
+              );
+            } else {
+              debug(
+                "stopped parsing at ",
+                semester,
+                ", found no more course data"
+              );
+              break outer;
+            }
+          } else {
+            insertionPromises.push(insertCourses(courses));
+          }
+        }
+      }
+    }
+
+    await Promise.all(insertionPromises);
+    console.log("populated courses!");
+  } else {
+    console.log("no need to populate courses, already existing data");
+  }
+}

@@ -1,14 +1,28 @@
 version: "3"
 
 services:
-  mongo:
-    image: mongo:latest
-    restart: always
+  postgres:
+    image: postgres:12
     ports:
-      - 127.0.0.1:27017:27017
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
 
-  mongo-express:
-    image: mongo-express:latest
-    restart: always
+  hasura:
+    image: hasura/graphql-engine:v2.0.0-alpha.10
     ports:
-      - 127.0.0.1:8081:8081
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      - "postgres"
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:password@postgres:5432/postgres
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "false"
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ADMIN_SECRET: password
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
+
+volumes:
+  db:
