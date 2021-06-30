@@ -3,13 +3,17 @@ import { JSDOM } from "jsdom";
 import fetch from "node-fetch";
 
 import { ICourseInfo } from "../../types";
+import { insertCourseInfo } from "./insert";
 import { LISTINGS, LISTING_BASE } from "./listings";
 
-const debug = debugFactory("backend/scrape/calendar");
+const debug = debugFactory("scrape/calendar/calendar");
 
 const HEADERS = {
   "User-Agent": "github.com/jackharrhy/yamun - src/backend/scrape/calendar",
 };
+
+export const courseInfoKey = (courseInfo: ICourseInfo) =>
+  `${courseInfo.subject.name}${courseInfo.number.name}`;
 
 export const fetchListingBySectionNo = async (
   listingSectionNo: string
@@ -40,7 +44,6 @@ export const parseListingsPage = (
 
     if (numberElm === null || titleElm === null) {
       throw new Error("failed to parse course div");
-      continue;
     }
 
     const descriptionElm: HTMLDivElement | null =
@@ -76,13 +79,6 @@ export const parseListingsPage = (
   return courseInfos;
 };
 
-export const insertCourseInfo = async (courseInfo: ICourseInfo[]) => {
-  debug("starting to course-info...");
-  // TODO insert course info
-  // await CourseInfo.create(courseInfo);
-  debug("done inserting course-info!");
-};
-
 export const populateCourseInfo = async () => {
   // TODO check for existing course info
   const existingCourseInfo = null;
@@ -109,7 +105,7 @@ export const populateCourseInfo = async () => {
     const dedupedCourseInfo: { [key: string]: ICourseInfo | undefined } = {};
 
     allCourseInfo.forEach((courseInfo) => {
-      const key = `${courseInfo.subject}${courseInfo.number}`;
+      const key = courseInfoKey(courseInfo);
 
       if (dedupedCourseInfo.hasOwnProperty(key)) {
         debug("duplicate course", key);

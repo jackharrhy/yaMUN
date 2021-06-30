@@ -1,0 +1,1 @@
+CREATE TABLE "public"."slot" ("id" serial NOT NULL, "slot" text NOT NULL, "days" text[] NOT NULL, "beginTime" integer, "endTime" integer, "room" text NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("room") REFERENCES "public"."room"("name") ON UPDATE cascade ON DELETE restrict);

@@ -4,7 +4,7 @@ import { URLSearchParams } from "url";
 
 import { ISemester } from "../../types";
 
-const debug = debugFactory("backend/scrape/banner/fetch-data");
+const debug = debugFactory("scrape/banner/fetch-data");
 
 const HEADERS = {
   "User-Agent": "github.com/jackharrhy/yamun - src/backend/scrape/banner",

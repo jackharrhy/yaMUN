@@ -6,8 +6,8 @@ import { populatePeople } from "./scrape/people/people";
 (async () => {
   try {
     // await populateCourses();
-    // await populateCourseInfo();
-    await populatePeople();
+    await populateCourseInfo();
+    // await populatePeople();
     pool.end();
   } catch (err) {
     console.error(err);

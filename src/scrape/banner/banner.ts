@@ -6,7 +6,7 @@ import fetchCourseData from "./fetch-data";
 import insertCourses from "./insert";
 import parsePageData from "./parse-page-data";
 
-const debug = debugFactory("backend/scrape/banner");
+const debug = debugFactory("scrape/banner/banner");
 
 const TERMS = [1, 2, 3];
 const LEVELS = [1, 2];
