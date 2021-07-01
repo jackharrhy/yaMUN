@@ -3,6 +3,7 @@ import { JSDOM } from "jsdom";
 import fetch from "node-fetch";
 
 import { ICourseInfo } from "../../types";
+import { sleep } from "../../utils/misc";
 import { insertCourseInfo } from "./insert";
 import { LISTINGS, LISTING_BASE } from "./listings";
 
@@ -87,9 +88,11 @@ export const populateCourseInfo = async () => {
     console.log("populating course-info...");
     const allCourseInfo = (
       await Promise.all(
-        Object.entries(LISTINGS).map(async ([subject, sectionNumbers]) => {
+        Object.entries(LISTINGS).map(async ([subject, sectionNumbers], index) => {
           return await Promise.all(
             sectionNumbers.map(async (sectionNumber) => {
+              const sleepFor = index * 2000;
+              debug(`sleeping for ${sleepFor}, for ${sectionNumber}`)
               const data = await fetchListingBySectionNo(sectionNumber);
               const courseInfos = parseListingsPage(subject, data);
               console.log(

@@ -11,7 +11,7 @@ export const stringToNumberOrNull = (str: string): number | null => {
   return Number.isInteger(converted) ? converted : null;
 };
 
-const semesterToString = (semester: ISemester): string => {
+export const semesterToString = (semester: ISemester): string => {
   let letter: string;
 
   if (semester.term === 1) {
@@ -37,6 +37,7 @@ export const createSID = (semester: ISemester, crn: number) => {
 };
 
 /** equality is based on years and terms being equal, level is ignored */
-function semestersEqual(a: ISemester, b: ISemester): boolean {
-  return a.year === b.year && a.term === b.term;
-}
+export const semestersEqual = (a: ISemester, b: ISemester): boolean =>
+  a.year === b.year && a.term === b.term;
+
+export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
