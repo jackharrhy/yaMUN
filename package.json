@@ -22,7 +22,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "ics": "^2.27.0",
-    "jsdom": "^16.4.0",
+    "jsdom": "^16.5.0",
     "mongodb": "^3.6.3",
     "mongoose": "^5.11.14",
     "node-fetch": "^2.6.1",
