@@ -1,0 +1,3 @@
+table:
+  name: course_subject
+  schema: public

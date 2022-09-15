@@ -1,0 +1,11 @@
+table:
+  name: people_campus
+  schema: public
+array_relationships:
+- name: people
+  using:
+    foreign_key_constraint_on:
+      column: campus
+      table:
+        name: people
+        schema: public

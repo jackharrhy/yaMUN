@@ -1,0 +1,10 @@
+table:
+  name: people
+  schema: public
+configuration:
+  custom_column_names:
+    banner_name: bannerName
+    display_name: displayName
+    first_name: firstName
+    last_name: lastName
+  custom_root_fields: {}
